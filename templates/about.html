@@ -1,0 +1,117 @@
+<!-- archive.html-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<style>
+  .main {
+    margin: 0 auto;
+    background: hsla(0, 0%, 100%, .60) border-box;
+    font-weight: bold;
+    overflow: hidden;
+    border-radius: .3em;
+    box-shadow: 0 0 0 1px hsla(0, 0%, 100%, .3) inset,
+    0 .5em 1em rgba(0, 0, 0, 0.6);
+    text-shadow: 0 1px 1px hsla(0, 0%, 100%, .3);
+  }
+
+  .main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -30px;
+    z-index: -1;
+    -webkit-filter: blur(20px);
+    filter: blur(20px);
+    max-width: 30em;
+  }
+</style>
+
+
+<body background='/static/image/homebg.jpg' style='background-repeat: no-repeat;' class='container'>
+  <br>
+  <font color='white' size='7px'>Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <font color='white' size='4px'>学习曲线永久保持<b>e<sup>x</sup></b></font>
+  <div style='float:right'>
+    {% if request.user.is_authenticated %}
+    <ul class='navbar'>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <font color='#337ab7' size='3px'>Welcome!&nbsp;&nbsp;{{user.username}}</font>
+          <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href='/logout'>logout</a>
+            </a>
+          </li>
+        </ul>
+    </ul>
+    {% else %}
+    <ul class='navbar'>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <font color='#337ab7' size='3px'>Please&nbsp;login&nbsp;first!</font>
+          <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href='/login'>login</a>
+            </a>
+          </li>
+          <li>
+            <a href='/register'>register</a>
+            </a>
+          </li>
+        </ul>
+    </ul>
+    {% endif %}
+  </div>
+  <nav style='float:right;'>
+    <div class="row">
+      <div class="span8">
+        <br>
+        <ul class="nav nav-pills">
+          <li class="active"><a href="/"><b style='font-size:18px'>Home</b></a></li>
+          <li><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+          <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+          <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+          <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <hr width='100%'>
+  <div class='col-md-1'>
+  </div>
+  <div class='col-md-10'>
+    <aside>
+      <div class="main">
+        <font size='3.7px' class='text-center'>
+          <p>
+            <font size='7px' class='text-center'>About Me</font>
+          </p>
+          <br>
+          <p>网名：ty0207 | 毛毛大王</p>
+          <p>职业：学生 </p>
+          <p>学校：上海交通大学</p>
+          <p>籍贯：重庆市</p>
+          <p>电话：17710375409</p>
+          <p>邮箱：ty0207@sjtu.edu.cn</p>
+          <br>
+        </font>
+      </div>
+    </aside>
+  </div>
+
+  <div class='col-md-1'> </div>
+  <br>
+  <br>
+</body>
+
+</html>
