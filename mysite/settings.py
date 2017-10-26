@@ -121,7 +121,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 SITE_ID= 4
-AUTH_PROFILE_MODULE = 'blog.MyUser'
+LOGIN_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Static files (CSS, JavaScript, Images)
@@ -130,5 +130,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     #'/path/to/others/static/',
-
 )

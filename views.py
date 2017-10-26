@@ -1,17 +1,124 @@
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+from django.conf import settings
 from django.shortcuts import render
-from blog.models import BlogPost
+from blog.models import BlogPost,Article
 from django.views.decorators import csrf
 from datetime import *
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import logout
+#from django.contrib.auth.decorators import login_required
+import markdown
+import codecs
+from markdown.extensions import Extension
+from markdown.util import etree
+from markdown.postprocessors import Postprocessor
+from markdown.preprocessors import Preprocessor
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+header='''
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel='stylesheet' href='/static/css/code.css'>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+</style>
+<style>
+  .carousel-inner img {
+    width: 100%;
+  }
+</style>
+<body>
+  <div style='background:url(/static/image/homebg.jpg) !important;'>
+    <br>
+    <div>
+      <nav>
+        <div class="row">
+          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div style='float:right'>
+            {% if request.user.is_authenticated %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/logout'>logout</a>
+                  </li>
+                </ul>
+            </ul>
+            <div class='showimg'>
+              <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+            </div>
+            {% else %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/login'>login</a>
+                  </li>
+                  <li>
+                    <a href='/register'>register</a>
+                  </li>
+                </ul>
+            </ul>
+            {% endif %}
+          </div>
+          <div class="span8" style='float:right'>
+            <br>
+            <ul class="nav nav-pills">
+              <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+              <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+              <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+              <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <p class='text-center'>
+        <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+        <label class="text-center"><font color='white' size='4px'>technical otaku Save the world</font></label>
+      </p>
+    </div>
+  </div>
+  <div class='col-md-2'></div>
+<div class='col-md-8'>
+    '''
+tail='''</div><div class='col-md-2'>
+</div>/<body></html>'''
 # Create your views here.
 # Finally I choose to write normal html code in template and views just like back-end
+
+
 def archive(request):
     return  render(request,'archive.html')
 # Create your views here
-def blog(request):
+def heartbeats(request):
     if  not request.user.is_authenticated:
         return HttpResponseRedirect('/login')
     if request.POST:
@@ -21,15 +128,53 @@ def blog(request):
         bp.timestamp = datetime.now()
         bp.save()
         posts = BlogPost.objects.all();
-        return render(request, 'blog.html',{'posts':posts})
+        return render(request, 'heartbeats.html',{'posts':posts})
     else:
         posts = BlogPost.objects.all();
-        return render(request, 'blog.html',{'posts':posts})
+        return render(request, 'heartbeats.html',{'posts':posts})
+
 def about(request):
-    return render(request,'about.html')
-def heartbeats(request):
+    return render(request,'about.html',)
+
+
+def blog(request):
     if request.user.is_authenticated:
-        return render(request,'heartbeats.html')
+        if request.method =='POST':
+            total=Article.objects.all().count()
+            Article.objects.create(title=request.POST['title'],author=request.POST['author'],markdown=request.FILES.get('markdown'),simple_production=request.POST['simple_production'],Article_id=total+1)
+            goal =Article.objects.get(Article_id=total+1)
+            input_file = codecs.open(settings.BASE_DIR+goal.markdown.url,'r',encoding='utf-8')
+            text=input_file.read()
+            html = markdown.markdown(text,extensions=[
+                                     'markdown.extensions.extra',
+                                     'markdown.extensions.codehilite',
+                                     'markdown.extensions.toc',
+                                  ])
+            input_file.close()
+            newhtml = codecs.open(settings.BASE_DIR+r'/blog/templates/article'+str(total+1)+'.html','w',encoding='utf-8')
+            newhtml.write(header)
+            newhtml.write(html)
+            newhtml.write(tail)
+            newhtml.close()
+            posts = Article.objects.all()
+            return render(request,'blog.html',{'posts':posts})
+        if request.method=='GET':
+            posts = Article.objects.all()
+            paginator = Paginator(posts, 3)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+                topics = Article.objects.all()[(int(page)-1)*3:int(page)*3]
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+                if Article.objects.all().count()>3:
+                    topics = Article.objects().all()[0:3]
+                else:
+                    topics = Article.objects.all()
+            except EmptyPage:
+                posts = paginator.page(pageinator.num_pages)
+                topics = Article.objects().all()[(pageinator.num_page-1)*3:pageinator.num_pages*3+1]
+            return render(request,'blog.html',{'posts':posts,'topic':topics})
     else:
         return HttpResponseRedirect('/login')
 
@@ -38,7 +183,11 @@ def alogin(request):
     errors= []
     account=None
     password=None
+    if request.method=='GET':
+        request.session['login_from'] = request.META.get('HTTP_REFERER', '/')
+        print request.session['login_from']
     if request.method == 'POST' :
+        print request.session['login_from']
         if not request.POST.get('account'):
             errors.append('Please Enter account')
         else:
@@ -48,13 +197,11 @@ def alogin(request):
         else:
             password= request.POST.get('password')
         if account is not None and password is not None :
-             user = auth.authenticate(username=account,password=password)
+             user = auth.authenticate(username=account,password=password)#for check the name and the password
              if user is not None:
                  if user.is_active:
                      auth.login(request,user)
-                     response= HttpResponseRedirect('/')
-                     response.set_cookie('username',account,3600)
-                     return HttpResponseRedirect('/')
+                     return HttpResponseRedirect(request.session['login_from'])# for  redirect to previous web
                  else:
                      errors.append('disabled account')
              else :
@@ -120,3 +267,11 @@ def register(request):
 def alogout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+def showdetail(request,num):
+    if request.user.is_authenticated:
+        u = 'article'+str(num)+'.html'
+        if request.method=='GET':
+            return render(request,u)
+    else:
+        return HttpResponseRedirect('/login')

@@ -1,5 +1,8 @@
 from django.contrib import admin
 from blog import models
 # Re-register UserAdmin
-admin.site.register(models.MyUser)
-admin.site.register(models.BlogPost)
+from blog.models import *
+# Register your models here.
+admin.site.register(BlogPost)
+admin.site.register(Profile)
+admin.site.register(Article)

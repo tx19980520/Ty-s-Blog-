@@ -33,54 +33,69 @@
     max-width: 30em;
   }
 </style>
+<style>
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+</style>
 
 
-<body background='/static/image/homebg.jpg' style='background-repeat: no-repeat;' class='container'>
+<body background='/static/image/homebg.jpg' style='background-repeat: no-repeat;'>
   <br>
-  <font color='white' size='7px'>Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <font color='white' size='4px'>学习曲线永久保持<b>e<sup>x</sup></b></font>
-  <div style='float:right'>
-    {% if request.user.is_authenticated %}
-    <ul class='navbar'>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          <font color='#337ab7' size='3px'>Welcome!&nbsp;&nbsp;{{user.username}}</font>
-          <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li>
-            <a href='/logout'>logout</a>
-            </a>
-          </li>
-        </ul>
-    </ul>
-    {% else %}
-    <ul class='navbar'>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          <font color='#337ab7' size='3px'>Please&nbsp;login&nbsp;first!</font>
-          <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li>
-            <a href='/login'>login</a>
-            </a>
-          </li>
-          <li>
-            <a href='/register'>register</a>
-            </a>
-          </li>
-        </ul>
-    </ul>
-    {% endif %}
-  </div>
-  <nav style='float:right;'>
+  <nav>
     <div class="row">
-      <div class="span8">
+      <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+      <div style='float:right'>
+        {% if request.user.is_authenticated %}
+        <ul class='navbar'>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
+              <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <ul class="dropdown-menu">
+              <li>
+                <a href='/logout'>logout</a>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <div class='showimg'>
+          <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+        </div> {% else %}
+        <ul class='navbar'>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <font color='white' size='3px'>Please&nbsp;login&nbsp;first!</font>
+              <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <ul class="dropdown-menu">
+              <li>
+                <a href='/login'>login</a>
+              </li>
+              <li>
+                <a href='/register'>register</a>
+              </li>
+            </ul>
+        </ul>
+        {% endif %}
+      </div>
+      <div class="span8" style='float:right'>
         <br>
         <ul class="nav nav-pills">
-          <li class="active"><a href="/"><b style='font-size:18px'>Home</b></a></li>
+          <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
           <li><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
           <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
-          <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+          <li class='active'><a href="/about"><b style='font-size:18px'>About</b></a></li>
           <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
         </ul>
       </div>
@@ -108,7 +123,6 @@
       </div>
     </aside>
   </div>
-
   <div class='col-md-1'> </div>
   <br>
   <br>

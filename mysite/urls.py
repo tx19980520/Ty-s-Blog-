@@ -20,7 +20,7 @@ from blog import views
 from django.conf.urls.static import static
 admin.autodiscover()
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),#it is regex the second arguments
     url(r'^$',views.archive,),
     url(r'^blog/',views.blog,),
     url(r'^heartbeats/',views.heartbeats),
@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^login/$', views.alogin),
     url(r'^logout/$',views.alogout),
     url(r'^register/$',views.register),
+    #url(r'^accounts/login/$', views.alogin, {'template_name': 'login.html'}),
+    url(r'^detail/(.)+/$',views.showdetail),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

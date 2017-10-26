@@ -14,30 +14,45 @@
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<!DOCTYPE html>
-<html>
+<style>
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+</style>
 
 <body>
-  <br>
   <div style='background:url(/static/image/homebg.jpg);'>
+    <br>
     <nav>
       <div class="row">
-        <font color='white' size='7px'>&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <font color='white' size='4px'>学习曲线永久保持<b>e<sup>x</sup></b></font>
+        <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
         <div style='float:right'>
           {% if request.user.is_authenticated %}
           <ul class='navbar'>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
-                <b class="caret"></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <ul class="dropdown-menu">
                 <li>
                   <a href='/logout'>logout</a>
-                  </a>
                 </li>
               </ul>
+            </li>
           </ul>
+          <div class='showimg'>
+            <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+          </div>
           {% else %}
           <ul class='navbar'>
             <li class="dropdown">
@@ -47,7 +62,6 @@
               <ul class="dropdown-menu">
                 <li>
                   <a href='/login'>login</a>
-                  </a>
                 </li>
                 <li>
                   <a href='/register'>register</a>
@@ -70,10 +84,8 @@
       </div>
     </nav>
     <p class='text-center'>
-      <label class='text-center'><font color='white' size='5px'>以下内容纯属虚构，如有雷同一定抄的</font></label>
-    </p>
-    <p class='text-center'>
-      <label class="text-center"><font color='white' size='5px'>每周不定时更新</font></label>
+      <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+      <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
     </p>
   </div>
   <div class='col-md-2'></div>
@@ -87,11 +99,14 @@
           <p>{{post.body}}</p>
           <hr>
         </div> {% endfor %}
-        <form action="blog/" method='post'>
-          {% csrf_token %} title:
-          <input type='text' name="title"><br> Body:
-          <textarea placeholder="Write your thoughts here!" class="form-control" name="body"></textarea>
-          <input type="submit" value="提交">
+        <font size='5px'>title:</font>
+        <input type='text' name="title"><br><br>
+        <font size='5px'>Body:</font>
+        <textarea placeholder="Write your thoughts here!" class="form-control" name="body"></textarea>
+        <p class='text-center'>
+          <br>
+          <button type="submit" value="提交" class='btn btn-default'>提交</button>
+        </p>
         </form>
       </div>
     </div>
