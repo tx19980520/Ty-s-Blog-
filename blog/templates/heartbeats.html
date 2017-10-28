@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-    Ty's Blog!
+    Heartbeats
   </title>
   <!-- Bootstrap -->
   <!--<link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/img/favicon.ico">-->
@@ -27,6 +27,15 @@
     width: 65px;
     height: 65px;
   }
+
+  .sidebar {
+    position: fixed;
+    padding-left: 10px;
+
+    border-left: solid;
+    border-color: black;
+    border-width: 2px;
+  }
 </style>
 
 <body>
@@ -46,6 +55,9 @@
               <ul class="dropdown-menu">
                 <li>
                   <a href='/logout'>logout</a>
+                </li>
+                <li>
+                  <a href='/users'>your imformation</a>
                 </li>
               </ul>
             </li>
@@ -88,7 +100,7 @@
       <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
     </p>
   </div>
-  <div class='col-md-2'></div>
+  <div class='col-md-1'></div>
   <div class='col-md-8'>
     <div>
       <div>
@@ -100,7 +112,7 @@
           <hr>
         </div> {% endfor %}
         <font size='5px'>title:</font>
-        <input type='text' name="title"><br><br>
+        <input type='text' name="title" class='form-control' style='width:200px;'><br><br>
         <font size='5px'>Body:</font>
         <textarea placeholder="Write your thoughts here!" class="form-control" name="body"></textarea>
         <p class='text-center'>
@@ -111,21 +123,20 @@
       </div>
     </div>
   </div>
-  <div class='col-md-2'>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+  <div class='col-md-3'>
     <aside>
-      <div class="about_c main">
+      <div class="sidebar">
         <font size='2.5px'>
+          <p>
+            <font size='5px'>个人简介</font>
+          </p>
           <p>网名：ty0207 | 毛毛大王</p>
           <p>职业：学生 </p>
           <p>籍贯：重庆市</p>
           <p>电话：17710375409</p>
           <p>邮箱：ty0207@sjtu.edu.cn</p>
-        </font>
+          <br>
+          <br>
       </div>
     </aside>
   </div>

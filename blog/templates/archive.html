@@ -27,7 +27,7 @@
   <nav>
     <div class="row">
       <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <font color='white' size='4px'>Practice curves is always<b>e<sup>x</sup></b></font>
+      <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
       <div style='float:right'>
         {% if request.user.is_authenticated %}
         <ul class='navbar'>
@@ -38,7 +38,9 @@
             <ul class="dropdown-menu">
               <li>
                 <a href='/logout'>logout</a>
-                </a>
+              </li>
+              <li>
+                <a href='/users'>your imformation</a>
               </li>
             </ul>
           </li>

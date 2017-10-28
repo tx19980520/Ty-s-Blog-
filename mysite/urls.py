@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^login/$', views.alogin),
     url(r'^logout/$',views.alogout),
     url(r'^register/$',views.register),
-    #url(r'^accounts/login/$', views.alogin, {'template_name': 'login.html'}),
+    url(r'^users/$',views.users),
     url(r'^detail/(.)+/$',views.showdetail),
+    url(r'^passwordchange/$',views.passwordchange),
+    url(r'^avatarchange/$',views.avatarchange)
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

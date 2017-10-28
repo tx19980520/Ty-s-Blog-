@@ -27,32 +27,45 @@
     width: 65px;
     height: 65px;
   }
-</style>
-<style>
+
   .carousel-inner img {
     width: 100%;
+  }
+
+  .sidebar {
+    position: fixed;
+    padding-left: 10px;
+
+    border-left: solid;
+    border-color: black;
+    border-width: 2px;
   }
 </style>
 
 <body>
-  <div style='background:url(/static/image/homebg.jpg) !important;'>
+  <div style='background:url(/static/image/homebg.jpg) '>
     <br>
     <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
-          <div style='float:right'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div style='float:right; position:relative; left:17px;'>
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
-                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
                   </li>
+                  <li>
+                    <a href='/users'>your imformation</a>
+                  </li>
                 </ul>
+              </li>
             </ul>
             <div class='showimg'>
               <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
@@ -60,8 +73,9 @@
             {% else %}
             <ul class='navbar'>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
-                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/login'>login</a>
@@ -74,7 +88,7 @@
             </ul>
             {% endif %}
           </div>
-          <div class="span8" style='float:right'>
+          <div class="span8" style='float:right;position:relative;left:17px;'>
             <br>
             <ul class="nav nav-pills">
               <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
@@ -92,13 +106,13 @@
       </p>
     </div>
   </div>
-  <div class='col-md-2'></div>
+  <div class='col-md-1'></div>
   <div class='col-md-8'>
     {% if posts.number %}
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="0"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1" class="active"></li>
         <li data-target="#carousel-example-generic" data-slide-to="2"></li>
       </ol>
       <div class="carousel-inner">
@@ -106,22 +120,23 @@
           <img src="/static/image/1.png" />
         </div>
         <div class="item">
-          <img src="/static/image/2.png" />
+          <img src="/static/image/3.png" />
         </div>
+        <div class='item'>
+          <img src="/static/image/02.png"></div>
       </div>
-      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev"></a>
-      <span class="glyphicon glyphicon-chevron-left"></span>
-      <span class="sr-only">Previous</span>
-      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"></a>
-      <span class="glyphicon glyphicon-chevron-right"></span>
-      <span class="sr-only">Next</span>
+      <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;
+     </a>
+      <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;
+     </a>
     </div>
-    {% endif %}
+    <hr style=" height:2px;border:none;border-top:2px;background-color:black;" /> {% endif %}
     <div>
       <br> {% for post in topic %}
       <div class=''>
         <h2 class="">{{post.title}}</h2>
         <p class="">{{post.author}}</p>
+        <p class=''><time datetime='{{post.timestamp}}'>{{post.timestamp}}</time></p>
         <p>{{post.simple_production}}</p>
         <p>
           <a href='/detail/{{post.Article_id}}'>more&thinsp;detail</a>
@@ -131,10 +146,10 @@
       <form action="blog/" method='post' enctype="multipart/form-data">
         {% csrf_token %}
         <div class='form-group'><label><font size='3px'>titile</font></label>
-          <input type='text' name="title" class='form-control'><br>
+          <input type='text' name="title" class='form-control' style='width:200px;'><br>
         </div>
         <div class='form-group'><label><font size='3px'>author</font></label>
-          <input type='text' name="author" class='form-control'><br>
+          <input type='text' name="author" class='form-control' style='width:200px;'><br>
         </div>
         <div class="form-group"><label><font size='3px'>simple_production</font></label><br>
           <textarea class="form-control" rows="3" name='simple_production'></textarea>
@@ -163,21 +178,30 @@
       <div class='text-center'><b>Page {{ posts.number }} of {{ posts.paginator.num_pages }}</b></div>
     </p>
   </div>
-  <div class='col-md-2'>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+  <div class='col-md-3'>
     <aside>
-      <div class="about_c main">
+      <div class="sidebar">
         <font size='2.5px'>
+          <p>
+            <font size='5px'>个人简介</font>
+          </p>
           <p>网名：ty0207 | 毛毛大王</p>
           <p>职业：学生 </p>
           <p>籍贯：重庆市</p>
           <p>电话：17710375409</p>
           <p>邮箱：ty0207@sjtu.edu.cn</p>
-        </font>
+          <br>
+          <br>
+          <p>
+            <font size='5px'>其他人还在看</font>
+          </p>
+          {% for link in links %}
+          <p>
+            <a href='/detail/{{link.Article_id}}'>
+              <font>{{link.title}}</a>
+          </p>
+          {% endfor %}
+          </font>
       </div>
     </aside>
   </div>

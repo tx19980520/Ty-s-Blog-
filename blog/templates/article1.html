@@ -88,210 +88,105 @@
   </div>
   <div class='col-md-2'></div>
 <div class='col-md-8'>
-    <h1 id="cs902">CS902</h1>
-<h2 id="921">9.21</h2>
-<p>按位与：都为一则为一</p>
-<p>按位或：两位有1则为1</p>
-<p>按位异：两位不同为1</p>
-<p>按位左移 &lt;&lt; :*2</p>
-<p>按位又移 &gt;&gt; :/2</p>
-<p>负数存储：用2的补码，反过来加1</p>
-<h2 id="1012">10.12</h2>
-<p>注意下python和cpp对于索引，切片都是左闭右开range也是最后一个不索引主义范围，相当于直接是小于符号</p>
-<p>注意python关于函数的操作，字典和列表等高级数据结构（可删减项）不是拷贝一次进入函数，而是直接进入传指针进去，但是string 数字等类型在python中认为是常量，定义了就无法删（加可以的），这样就得注意我们别像原来cpp一样的简单的传进去数组，以为不会改变。</p>
-<p>bool运算符的优先级 not &gt; and &gt; or</p>
-<p>raw_input 只会把接收到的东西弄成字符串，input则是对应有类型。但都很好转型，只要能够用int()</p>
-<p>chr()(Ascii to char) ord()(char to Ascii)</p>
-<p>可以用"\"将两行连接</p>
-<ol>
-<li>python函数定义中有这么两个特点</li>
-</ol>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">funcC</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-  <span class="k">print</span> <span class="n">a</span>
-  <span class="k">print</span> <span class="n">b</span>
-</pre></div>
-
-
-<p>b=0的意思是如果不传参数进来，函数默认此项为0</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">funcD</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">*</span><span class="n">c</span><span class="p">):</span>
-  <span class="k">print</span> <span class="n">a</span>
-  <span class="k">print</span> <span class="n">b</span>
-  <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-  <span class="k">print</span> <span class="n">c</span>
-<span class="n">funcD</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-
-
-<p>c 为(3,4,5)作为一个元组的形式出现</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">funcE</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">c</span><span class="p">):</span>
-  <span class="k">print</span> <span class="n">a</span>
-  <span class="k">print</span> <span class="n">b</span>
-  <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
-    <span class="k">print</span> <span class="n">x</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
-<span class="n">funcE</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Ty&quot;</span><span class="p">,</span><span class="n">age</span> <span class="o">=</span><span class="s2">&quot;19&quot;</span><span class="p">)</span>
-</pre></div>
-
-
-<p>上述的函数中**c是当作一个dictionary来处理的，我们则可以用key-value的方式来检索，dictionary的实际实现是用hash表来实现的，整体来讲类似于STL map （不是multi-map，因为不能有重复的键值）</p>
-<p>python函数参数传递</p>
+    <h1 id="_1">我也不知道那天我就想起来要做的这样一个蠢萌的五子棋</h1>
+<h3 id="background">Background</h3>
+<p>​   鉴于刚刚跟女朋友出去玩完，在寝室也比较无聊，所以想做些事情刺激一下尘封的cpp和Qt5，继而选择了使用Qt制作一个五子棋项目。</p>
+<h3 id="_2">制作的要求</h3>
+<h5 id="11">1.1版本</h5>
+<p>能实现PvP和PvE两种模式，能判断正误，能够展示输赢，拥有用户界面，用户管理（我以前做的所有用户管理都喵的没有能够实现用户修改自己的信息），记录比赛场次的功能，此处的用户管理使用txt文档收录信息。</p>
+<h5 id="12">1.2版本</h5>
+<p>完成管理员角色，实现排行榜和联赛机制，美化视角，配上BGM，此处需要把系统中的文件读写转为使用excel的文档，咱们的UI得有个背景了（TAT我还是不知道背景怎么加）</p>
+<h5 id="13">1.3版本</h5>
+<p>实现人机对战的分级，拥有低难度和高难度的人机（算法不同）。</p>
+<h3 id="_3">制作技术</h3>
+<p>首先仍然是面对对象该做的事情，我们需要对每个自然物质的东西做类。</p>
+<p>不妨回忆下我们的图书管理系统的设计。</p>
+<p>我们仍旧用1句话来描述我们要做的整个事情。</p>
+<p>一个用户使用本系统与计算机或者人进行五子棋游戏并记录输赢与排行。</p>
+<p>这个里面提取出来的类有用户，对战平台（AI）。</p>
+<h5 id="11_1">1.1版本实现</h5>
+<p>仍旧使用people.txt来进行用户信息的储存，人只是一个数据结构（struct），不作为class操作，意思是为，没有自己的操作，数据一旦读入系统中就意味着一定会被重写。</p>
+<p>对战平台有一下的几个部分：</p>
+<p>a)用户管理：用户能够在系统中修改自己的相关信息，正常的登入登出。</p>
+<p>b)对战AI：拥有自己的一个评估系统，能与人对战（想——下）</p>
+<p>c)对战的评判：在完成操作之后进行评测，时候完成对战。</p>
+<p>对于用户：</p>
+<p>我们有以下信息需要填写：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>格式</th>
+<th>样例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>昵称</td>
+<td>string</td>
+<td>ty0207</td>
+</tr>
+<tr>
+<td>签名</td>
+<td>string</td>
+<td>你是不是傻</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>string（要求有数字和字母）</td>
+<td>1234512345qwe</td>
+</tr>
+<tr>
+<td>邮箱</td>
+<td>string（保证格式正确）</td>
+<td>ty0207@sjtu.edu.cn</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">工作日志</h3>
+<h5 id="722">7月22日</h5>
+<p>总结下7月22日之前的工作</p>
 <ol>
 <li>
-<p>按位置来</p>
+<p>实现了背景的添加和QMediaPlayer和QMediaPlaylist的学习和使用。</p>
 </li>
 <li>
-<p>按key-value模式</p>
+<p>通过修改之前wordlist2的文档读入读出，完成程序的登陆系统，资料修改系统的逻辑非常简单，会于23日完成这部分的工作。</p>
 </li>
+<li>
+<p>完成现有的登陆，主页面，编辑窗口的设计，基本还是很好看的，背景图片选得比较好，格局就分开了，跟以前的丑界面比起来还是好了很多</p>
+</li>
+<li>完成了音乐播放器的功能</li>
 </ol>
-<p>​</p>
-<p>变量的作用域：</p>
-<p>跟cpp不一样的是python的作用域直接阐述是如下的</p>
-<ul>
-<li>python能够改变变量作用域的代码段是def、class、lambda.</li>
-<li>if/elif/else、try/except/finally、for/while 并不能涉及变量作用域的更改，也就是说他们的代码块中的变量，在外部也是可以访问的</li>
-<li>变量搜索路径是：本地变量-&gt;全局变量</li>
-</ul>
-<p>这里要强调的是第二条，我们在cpp里面退出循环，else等等的，在其中声明的变量全部消亡。</p>
-<p>妈妈再也不用担心我声明变量在哪里了</p>
-<p>函数若需引用并修改外部变量,可声明全局变量</p>
-<div class="codehilite"><pre><span></span><span class="n">x</span><span class="o">=</span> <span class="mi">10</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
-  <span class="k">global</span> <span class="n">x</span>
-  <span class="n">x</span> <span class="o">+=</span> <span class="mi">10</span>
-  <span class="k">print</span> <span class="n">x</span>
-<span class="k">print</span> <span class="n">x</span>
-</pre></div>
-
-
-<p>如果在local没有找到，在外层找，最后built-in里面去找</p>
-<p>新式类和旧式类的问题</p>
-<p>2.x中我们不显式的写继承于object都是旧式类，3.x中都默认为新式类</p>
-<p>新式类继承是广度优先，旧式类是深度优先</p>
-<div class="codehilite"><pre><span></span><span class="c1">#作者：刘康</span>
-<span class="c1">#链接：https://www.zhihu.com/question/22475395/answer/133787573</span>
-<span class="c1">#来源：知乎</span>
-<span class="c1">#著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span>
-
-<span class="k">class</span> <span class="nc">A</span><span class="p">():</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s2">&quot;This is from A&quot;</span>
-<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-<span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">print</span>  <span class="s2">&quot;This is from C&quot;</span>
-<span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-<span class="n">fun</span> <span class="o">=</span>  <span class="n">D</span><span class="p">()</span>
-<span class="n">fun</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-
-<span class="c1">#经典类的答案： This is from A</span>
-<span class="c1">#新式类的答案： This is from C</span>
-<span class="c1">#发定义方式不同在Python 2.x 版本中，默认类都是旧式类，除非显式继承object。在Python 3.x 版本中，默认类就是新式类，无需显示继承object。在Python 2.x 中，定义旧式类的方式：class A:  # A是旧式类，因为没有显示继承object</span>
-    <span class="k">pass</span>
-
-<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>  <span class="c1"># B是旧式类，因为B的基类A是旧式类</span>
-    <span class="k">pass</span> 
-</pre></div>
-
-
-<p>保持class与type的统一</p>
-<p>对新式类的实例执行a.__class__与type(a)的结果是一致的，对于旧式类来说就不一样了。</p>
-<p>了解一下__init__ ,__new__,__call___ 的区别</p>
-<p>init是常见的初始化函数的，但是他在new被调用之后在运行的</p>
-<p>一般情况我们不会自己写new，会调用父类的new，但必须知道其先于init</p>
-<p>call的意义在于去掉函数和对象的相对概念，你定义的call的函数既可以使用对象名直接写函数，比如：</p>
-<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gender</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gender</span> <span class="o">=</span> <span class="n">gender</span>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">friend</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s1">&#39;My name is </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">print</span> <span class="s1">&#39;My friend is </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="n">friend</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Bob&#39;</span><span class="p">,</span><span class="s1">&#39;male&#39;</span><span class="p">)</span>
-<span class="n">p</span><span class="p">(</span><span class="s1">&#39;Tim&#39;</span><span class="p">)</span>
-<span class="c1">#</span>
-<span class="n">My</span> <span class="n">name</span> <span class="ow">is</span> <span class="n">Bob</span><span class="o">...</span>
-<span class="n">My</span> <span class="n">friend</span> <span class="ow">is</span> <span class="n">Tim</span><span class="o">...</span>
-</pre></div>
-
-
-<p>你可以直接把你的类当作函数来使用，但在使用之前你要对其进行实例化</p>
-<p>在10-14通过实验得知</p>
-<p>关于python私有变量</p>
-<p>_使用于protected，__使用与private</p>
-<p>调用的时候都得是_类名__函数名()</p>
-<p>子类无法调用父类的private函数，这一点和cpp类似</p>
-<p>python的奇怪报错</p>
-<p>Recursion Error: maximum recursion depth exceeded</p>
-<p>python 默认的递归层数只有900层左右，如果需要大规模的递归，可以用以下语法</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">setrecursionlimit</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
-</pre></div>
-
-
-<p>如果不是写面对对象的问题，则我们在函数名前面加一个_是为了表示这是一个以文件为类的函数，仍然为protected，只能在本文档中使用。</p>
-<h2 id="1015">10.15</h2>
-<p>如果你的类表现得像是一个列表，或者需要返回类中某重要列表的长度，则可以声明__len__函数，则你对外可以使用len(类的实例对象)来返回你想返回的值</p>
-<p>python中try/except/else/finally体系的写法：</p>
-<div class="codehilite"><pre><span></span><span class="k">try</span><span class="p">:</span>
-     <span class="n">Normal</span> <span class="n">execution</span> <span class="n">block</span><span class="c1">#首先运行该区域，如果出现异常，交给python解释器进行操作，返回错误，进入except大板块</span>
-<span class="k">except</span> <span class="n">A</span><span class="p">:</span><span class="c1">#下述对于指定的错误有一些输出</span>
-     <span class="ne">Exception</span> <span class="n">A</span> <span class="n">handle</span>
-<span class="k">except</span> <span class="n">B</span><span class="p">:</span>
-     <span class="ne">Exception</span> <span class="n">B</span> <span class="n">handle</span>
-<span class="k">except</span><span class="p">:</span><span class="c1">#当然枚举不是好的想法，就把剩下不重要的错都放到了这里</span>
-     <span class="n">Other</span> <span class="n">exception</span> <span class="n">handle</span>
-<span class="k">else</span><span class="p">:</span><span class="c1">#如果try中的语句完全没有问题，则执行else中的语句，当然你也可以不写</span>
-     <span class="k">if</span> <span class="n">no</span> <span class="n">exception</span><span class="p">,</span><span class="n">get</span> <span class="n">here</span>
-<span class="k">finally</span><span class="p">:</span><span class="c1">#不管出错还是没出错，有没有else finally中的语句是必须执行的</span>
-     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;finally&quot;</span><span class="p">)</span>   
-</pre></div>
-
-
-<p>总结一下python当中asyncio的用法，相当于是创建事件循环，你向其中丢任务即可，对于多线程来讲，尤其是python的处理I\O密集型（HTTP，读写磁盘文件），现我能掌握的方式（非底层的写Threading），则是创建多个现成，向其中抛入在进程中定义的event-loop，我们在进程中产生任务，然后分配给各个线程处理，这比较符合python多线程的实际应用（我的爬虫创建了三个线程来处理获得网页源码，主进程在完成了分配任务之后开始进行对数据的写入文件）</p>
-<p>python 标识符明明规则：</p>
-<p>1.第一位可以是字母和下划线</p>
-<p>2.后面是数字下划线字母都可以</p>
-<p>3.<strong>在3.x的Python中，标识符ASCII字母、下划线以及大多数非英文语言的字母，只要是Unicode编码的字母都可以充当引导字符，后续字符可以是任意引导符，或任意非空格字符，包括Unicode编码中认为是数字的任意字符。</strong></p>
-<p>记住反正是不能有空格的</p>
-<p>姑且总结一下最近接触的Django框架，python主流的网站框架</p>
-<p>Django是MTV的开发模式，我们之前使用PHP写网站的时候，网站的建立都有一个基本的根目录的概念，我之前一直认为所有的软件开发都是这个样子，然后我发现我被打脸了，Django的基本理念是产生app，你访问某个地址，首先调用的是正则对应的函数，所有的地址都是这样，在urls.py中去寻找对应的函数，包括静态的资源。这一点要去适应（我还没适应），因为这样的设置会很多。Django对于面对对象的管理是非常不错的，都是在models.py进行编写的，在HTML当中的“嵌入”也基本上和PHP如出一辙 ，另外在debug和线下测试方面，省去了xampp这一大坨东西，不用去模拟整个状态，直接在cmd里面manage.py runserver 感觉到非常的舒适。</p>
-<h2 id="1023">10.23</h2>
-<p>类中关于 __str__的使用</p>
-<p>这个函数主要是为print提供（或者一些特殊地方的类似print功能的调用和显示）的，你可以返回一些类中的信息。</p>
-<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">user</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">age</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
-  <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s1">&#39;My name is &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s2">&quot;, I&#39;m &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="o">+</span><span class="s1">&#39;.&#39;</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">user</span><span class="p">(</span><span class="s1">&#39;Mike&#39;</span><span class="p">,</span><span class="s1">&#39;15&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">a</span>
-<span class="c1">#result My name is Mike, I&#39;m 15.</span>
-</pre></div>
-
-
-<h1 id="1026">10.26</h1>
-<p>首先面对对象的self不是必须的，只是第一位参数必须得是一个该类的对象，你只要自己知道就好了</p>
-<p>其次__repr__表示不调用print，你在交互模式当中写出一个对象的名字，它返回一个字符串并默认打印在屏幕上，如果你不重定义这个函数的话，将使用object的该函数，返回该对象的类型和地址等等额外的信息</p>
-<p>对于python的运算符重载他不同于cpp的运算符重载，定义方式都是函数的方式，例如重载加法：</p>
-<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">pass</span>
-  <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
-    <span class="k">pass</span>
-  <span class="k">def</span> <span class="fm">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
-    <span class="k">pass</span>
-</pre></div>
-
-
-<p>如果不知道是什么函数了就去文档里面查，以及，如果你想让加法有很多种情况，请自行使用一些方法比如<code>isinstance(a,b)</code>表示判断a,b是不是同一个类型，当然你可以直接索取其类型<code>type(a)</code> 再去比较</p>
-<p>__dict__可以得到该对象的对应的类的所有函数方法，<code>hasattr()</code>判断是否有某个函数</p></div><div class='col-md-2'>
+<h5 id="723">7月23日</h5>
+<p>总结一下7月23日白天的工作  </p>
+<p>略微修改了一下各UI的一些格式，没注意到的注意到的，都改了下。  </p>
+<p>大概查看了一下关于scroll area的实现文档，准备晚上写一些。  </p>
+<p>大致了解了一下类A与类B之间信号槽传递机制，我估计我写的那个也是可以用的。  </p>
+<h5 id="728">7月28日</h5>
+<p>今天大致了解了如何在Qt中读取excel文件的信息，决定回到重庆后实现这个代码，以及修改了本文档的md文档的格式。以及在git-hub上面找到了五子棋的一个源码，供参考。</p>
+<p>我发现我现在还是喜欢用界面为主来写软件界面下面藏内核的写法，或许是能不能把内核单独用一个.h和..cpp的文件写这样界面是独立的。</p>
+<h5 id="728_1">7月28日</h5>
+<p>今天在接近2h的理解之后终于知道了这个程序一直有问题开启不了的问题，把指针都开拓了空间，然后整个程序是能跑动第一步了，算让这玩意的内核我还是没写，之后把样式表的格式改了下，格式基本正确。明天的预计计划是把内部各种附加的功能设计完成。设计好整个对战的面板</p>
+<h5 id="730">7月30日</h5>
+<p>今天下午的debug基本是解决了创建用户和登陆的功能，信号槽的工作在改错别字的debug方式中结尾。</p>
+<p>现如今发现的问题是修改数据的问题，简单的解决方式是在userlist里面把数据改了，每次关程序的时候都把PeopleData.txt rewrite一次基本可以解决问题。</p>
+<p>预计31号能解决的问题是EditDialog能够实现完成，之后是rank的实现，调试音乐部分（做到这一步基本上，就QQ音乐了），最后去查看下我内核的估值算法大概有些什么类型（不能恐慌于自己不会下五子棋）。</p>
+<h5 id="731">7月31日</h5>
+<p>PvP的界面下棋和判断输赢的的功能能够实现，基本完成PvP的功能，决定于8月1日开始建立PvE的模式，模式的算法基本是现成的，需要能够切换算法进行计算，由此认为的落子这个部分能够比较顺畅我们需要能够在之后让界面更加友好，其次需要验证BGM在后台能不能继续播放，因为现在的情况来看，close之后能够再次打开两人的对战，我认为这可以做到控制BGM。</p>
+<p>预计后面两天需要做到的是有一个简单的按值计算的一个估值系统，基本1.1版本就结束工作了（要是闲的没事可以把那个绿色棋子给改了，他们的平级逻辑应该暗示着能够实现）</p>
+<p>修改1.2版本的要求，实现excel读取用户数据，记录比赛，主要是BGM美化之类的1.1版本基本已经做好了，稍微再完善一下就可以了。</p>
+<h5 id="81">8月1日</h5>
+<p>由于有一些事情，因而这一天的工作量大幅度减少，添加了上一步绿子的功能，以及修改了一下chessboard界面的背景，以及添加了棋盘清空功能。</p>
+<p>今天我们先想想AI赋值系统怎么写，涉及哪些方面。</p>
+<p>我自己想的一个评估的标准是发展期望</p>
+<p>我们就是要从第一个子发展到5个子，当然阻断对手的发展也是为了自己的发展，因而我们主要是评判一个子落下之后它的发展会如何。</p>
+<p>首先是落下该子之后是否影响胜负，如果让自己赢，则值肯定是正无穷大，如果让对方赢则一定为0；其次是这个子的发展空间，判断八个方向是不是能够发展的，判定的条件是，异色或者边界为阻断，同色和空地都是通过，当然同色的value会更高，有五个空间的一定大幅高于4个3个空间的。</p>
+<p>以上情况写出来之后，基本上AI可以为暴力进攻方式来发展自己，但是他没有想到自己的对手。</p>
+<p>我们在判断完自己的发展之后，我们要考虑，阻断对方的发展。</p>
+<p>对于一个子下入棋盘，他能阻断对方的发展空间是多少，空间顶板的value高，实际子数达到4也是一个量子级别的value提升。两部分的分值叠加，就可以让AI完成自己的赋值，最终再挑出赋值最高的进行实际落子。</p>
+<p>我在我的AI内核中故意把攻击和防守分开是为了以后能够开发进攻心态和防守心态搬运比较简单。</p>
+<p>我们会发现上面东西可能会有这种情况，就是这几个棋不是连起来的，我们还要对连锁加分</p>
+<h5 id="82">8月2日</h5>
+<p>这个破儿子终于从QQ音乐变成了一个五子棋了，至此，这个混杂物基本实现，剩下的就是提升实现的的细节</p></div><div class='col-md-2'>
 </div>/<body></html>

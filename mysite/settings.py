@@ -117,10 +117,10 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
+SITE_ID = 10
 USE_L10N = True
 USE_TZ = True
-SITE_ID= 4
+
 LOGIN_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

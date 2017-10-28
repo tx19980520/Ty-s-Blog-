@@ -1,9 +1,10 @@
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
+from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.shortcuts import render
-from blog.models import BlogPost,Article
+from blog.models import BlogPost,Article,Profile
 from django.views.decorators import csrf
 from datetime import *
 from django.contrib.auth.models import User
@@ -138,10 +139,9 @@ def about(request):
 
 
 def blog(request):
-    if request.user.is_authenticated:
         if request.method =='POST':
             total=Article.objects.all().count()
-            Article.objects.create(title=request.POST['title'],author=request.POST['author'],markdown=request.FILES.get('markdown'),simple_production=request.POST['simple_production'],Article_id=total+1)
+            Article.objects.create(title=request.POST['title'],author=request.user.username,markdown=request.FILES.get('markdown'),simple_production=request.POST['simple_production'],Article_id=total+1,timestamp=datetime.now())
             goal =Article.objects.get(Article_id=total+1)
             input_file = codecs.open(settings.BASE_DIR+goal.markdown.url,'r',encoding='utf-8')
             text=input_file.read()
@@ -165,29 +165,30 @@ def blog(request):
             try:
                 posts = paginator.page(page)
                 topics = Article.objects.all()[(int(page)-1)*3:int(page)*3]
+                links = Article.objects.all()[:5]
             except PageNotAnInteger:
                 posts = paginator.page(1)
                 if Article.objects.all().count()>3:
-                    topics = Article.objects().all()[0:3]
+                    topics = Article.objects.all()[0:3]
+                    links = Article.objects.all()[:4]
                 else:
                     topics = Article.objects.all()
+                    links = Article.objects.all()
             except EmptyPage:
                 posts = paginator.page(pageinator.num_pages)
                 topics = Article.objects().all()[(pageinator.num_page-1)*3:pageinator.num_pages*3+1]
-            return render(request,'blog.html',{'posts':posts,'topic':topics})
-    else:
-        return HttpResponseRedirect('/login')
-
+            return render(request,'blog.html',{'posts':posts,'topic':topics,'links':links})
 #about log
 def alogin(request):
     errors= []
     account=None
     password=None
+    request.session['login_from'] = '/blog'
     if request.method=='GET':
         request.session['login_from'] = request.META.get('HTTP_REFERER', '/')
-        print request.session['login_from']
+        if request.session['login_from'] == '/':
+            request.session['login_from'] = '/blog'
     if request.method == 'POST' :
-        print request.session['login_from']
         if not request.POST.get('account'):
             errors.append('Please Enter account')
         else:
@@ -197,15 +198,17 @@ def alogin(request):
         else:
             password= request.POST.get('password')
         if account is not None and password is not None :
-             user = auth.authenticate(username=account,password=password)#for check the name and the password
-             if user is not None:
-                 if user.is_active:
-                     auth.login(request,user)
-                     return HttpResponseRedirect(request.session['login_from'])# for  redirect to previous web
-                 else:
-                     errors.append('disabled account')
-             else :
-                  errors.append('invaild user')
+            try:
+                user = User.objects.get(username=account,password=password)#for check the name and the password
+            except ObjectDoesNotExist:
+                errors.append('invaild user')
+                return render(request, 'login.html',{'errors':errors})
+            if user is not None:
+                if user.is_active:
+                    auth.login(request,user)
+                    return HttpResponseRedirect(request.session['login_from'])# for  redirect to previous web
+            else:
+                return render(request,'archive.html')
     return render(request, 'login.html',{'errors':errors})
 
 def register(request):
@@ -215,7 +218,7 @@ def register(request):
     password2=None
     email=None
     CompareFlag=False
-    avatar=None
+    avatar=False
     phone=None
     if request.method == 'POST':
         if not request.POST.get('account'):
@@ -243,22 +246,23 @@ def register(request):
         else:
             email= request.POST.get('email')
 
-        if not request.POST.get('avatar'):
+        if not request.FILES.get('avatar'):
             errors.append('Please Enter your avatar')
         else:
-            avatar = request.FILES.get('avatar')
+            avatar = True
 
         if password is not None and password2 is not None:
             if password == password2:
                 CompareFlag = True
             else :
                 errors.append('password2 is diff password')
-                errors.append(password)
-                errors.append(password2)
-        if account is not None and password is not None and password2 is not None and email is not None and CompareFlag :
-            user=User.objects.create_user(account,email,password)
+        if account is not None and password is not None and password2 is not None and email is not None and CompareFlag and avatar :
+            user=User.objects.create(username=account,password=password,email=email)
             user.is_active=True
             user.save
+            num = User.objects.all().count()
+            profile = Profile.objects.create(user=user,avatar=request.FILES.get('avatar'),phone=phone,idnumber=num)
+            profile.save
             return HttpResponseRedirect('/login')
 
 
@@ -275,3 +279,47 @@ def showdetail(request,num):
             return render(request,u)
     else:
         return HttpResponseRedirect('/login')
+def users(request):
+    if request.method == 'GET':
+        try:
+            myarticles = Article.objects.get(author=request.user.username)
+        except ObjectDoesNotExist:
+            myarticles = []
+        return render(request,'users.html',{'myarticles':myarticles})
+def passwordchange(request):
+    if request.method=='GET':
+        return render(request,'password.html')
+    elif request.method=='POST':
+        errors= []
+        password=None
+        password2=None
+        CompareFlag=False
+        if not request.POST.get('password'):
+            errors.append('Please Enter password')
+        else:
+            password= request.POST.get('password')
+        if not request.POST.get('password2'):
+            errors.append('Please Enter password2')
+        else:
+            password2= request.POST.get('password2')
+        if password is not None and password2 is not None:
+            if password == password2:
+                CompareFlag = True
+            else :
+                errors.append('password2 is diff password')
+        if password is not None and password2 is not None and CompareFlag :
+            User.objects.filter(username=request.user.username).update(password=password)
+            return HttpResponseRedirect('/login')
+def avatarchange(request):
+    if request.method == 'POST':
+        avatar = request.FILES.get('new_avatar')
+        name = avatar.name
+        print name
+        totalname = settings.MEDIA_ROOT+'/photo/'+name;
+        with open(totalname, 'wb+') as destination:
+            for chunk in avatar.chunks():
+                destination.write(chunk)
+        pro = Profile.objects.filter(idnumber=request.user.profile.idnumber).update(avatar=totalname)
+        return HttpResponseRedirect('/')
+    elif request.method == 'GET':
+        return render(request,'avatarchange.html')
