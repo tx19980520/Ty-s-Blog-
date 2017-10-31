@@ -36,6 +36,10 @@
     border-color: black;
     border-width: 2px;
   }
+
+  .highlight {
+    color: 'red';
+  }
 </style>
 
 <body>
@@ -45,7 +49,7 @@
       <div class="row">
         <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
-        <div style='float:right'>
+        <div style='float:right;position:relative;left:16.7px;'>
           {% if request.user.is_authenticated %}
           <ul class='navbar'>
             <li class="dropdown">
@@ -69,7 +73,7 @@
           <ul class='navbar'>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <font color='white' size='3px'>Please&nbsp;login&nbsp;first!</font>
+                <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
                 <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li>
@@ -83,7 +87,7 @@
           </ul>
           {% endif %}
         </div>
-        <div class="span8" style='float:right'>
+        <div class="span8" style='float:right;position:relative;left:16.7px;'>
           <br>
           <ul class="nav nav-pills">
             <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
@@ -104,21 +108,25 @@
   <div class='col-md-8'>
     <div>
       <div>
-        {% for post in posts %}
-        <div class=''>
-          <h2 class="">{{post.title}}</h2>
-          <p class="">{{post.timestamp}}</p>
-          <p>{{post.body}}</p>
-          <hr>
-        </div> {% endfor %}
-        <font size='5px'>title:</font>
-        <input type='text' name="title" class='form-control' style='width:200px;'><br><br>
-        <font size='5px'>Body:</font>
-        <textarea placeholder="Write your thoughts here!" class="form-control" name="body"></textarea>
-        <p class='text-center'>
-          <br>
-          <button type="submit" value="提交" class='btn btn-default'>提交</button>
-        </p>
+        {% if is_search %}
+        <p style='font-size:25px;'>The result of searching <b>{{word}}</b> is :</p><br>{% endif %}{% for post in posts %}
+        <div>
+          <h2>{% for w in post.0.title %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h2>
+          <p>{{post.timestamp}}</p>
+          <img class='avatarshow img-circle' src="{{post.1.avatar.url}}">
+          <h5>{% for w in post.0.body %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>
+          <hr style=" height:2px;border:none;border-top:2px;background-color:black;">
+        </div>{% endfor %}
+        <form action="" method='post' enctype="multipart/form-data">
+          {% csrf_token %}
+          <font size='5px'>title:</font>
+          <input type='text' name="title" class='form-control' style='width:200px;'><br><br>
+          <font size='5px'>Body:</font>
+          <textarea placeholder="Write your thoughts here!" class="form-control" name="body"></textarea>
+          <p class='text-center'>
+            <br>
+            <button type="submit" value="提交" class='btn btn-default'>提交</button>
+          </p>
         </form>
       </div>
     </div>
@@ -126,17 +134,25 @@
   <div class='col-md-3'>
     <aside>
       <div class="sidebar">
-        <font size='2.5px'>
-          <p>
-            <font size='5px'>个人简介</font>
-          </p>
-          <p>网名：ty0207 | 毛毛大王</p>
-          <p>职业：学生 </p>
-          <p>籍贯：重庆市</p>
-          <p>电话：17710375409</p>
-          <p>邮箱：ty0207@sjtu.edu.cn</p>
-          <br>
-          <br>
+        <p>
+          <form name='search' action='' method='post'>
+            {% csrf_token %}
+            <font size='5px'>Search</font><input type='text' class='form-control' name="search" style='width=100px;'>
+            <br>
+            <button type="submit" class='btn btn-default'>Search</button>
+            <br>
+          </form>
+        </p>
+        <p>
+          <font size='5px'>个人简介</font>
+        </p>
+        <p>网名：ty0207 | 毛毛大王</p>
+        <p>职业：学生 </p>
+        <p>籍贯：重庆市</p>
+        <p>电话：17710375409</p>
+        <p>邮箱：ty0207@sjtu.edu.cn</p>
+        <br>
+        <br>
       </div>
     </aside>
   </div>

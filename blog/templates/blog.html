@@ -9,7 +9,7 @@
     Ty's Blog!
   </title>
   <!-- Bootstrap -->
-  <!--<link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/img/favicon.ico">-->
+  <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -39,6 +39,26 @@
     border-left: solid;
     border-color: black;
     border-width: 2px;
+  }
+
+  .showcover {
+    float: left;
+    width: 200px;
+    height: 150px;
+    margin: 5px;
+  }
+
+  .preshow {
+    float: right;
+    position: relative;
+    top: -111px;
+    left: -400px;
+    width: 150px;
+    height: 150px;
+  }
+
+  .showword {
+    margin: 5px;
   }
 </style>
 
@@ -74,7 +94,7 @@
             <ul class='navbar'>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
+                  <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
                   <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul class="dropdown-menu">
                   <li>
@@ -88,123 +108,204 @@
             </ul>
             {% endif %}
           </div>
-          <div class="span8" style='float:right;position:relative;left:17px;'>
-            <br>
-            <ul class="nav nav-pills">
-              <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
-              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
-              <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
-              <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
-              <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
-            </ul>
+          {% if request.user.is_authenticated %}
+          <div class="span8" style='float:right;position:relative;top:-48px;left:16.8px;'>
+            {% else %}
+            <div class="span8" style='float:right;position:relative;top:20px;left:16.8px;'>
+              {% endif %}
+              <ul class="nav nav-pills">
+                <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+                <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+                <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+                <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+                <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+              </ul>
+            </div>
           </div>
-        </div>
       </nav>
       <p class='text-center'>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
-    </div>
-  </div>
-  <div class='col-md-1'></div>
-  <div class='col-md-8'>
-    {% if posts.number %}
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-      </ol>
-      <div class="carousel-inner">
-        <div class="item active">
-          <img src="/static/image/1.png" />
-        </div>
-        <div class="item">
-          <img src="/static/image/3.png" />
-        </div>
-        <div class='item'>
-          <img src="/static/image/02.png"></div>
       </div>
-      <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;
-     </a>
-      <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;
-     </a>
     </div>
-    <hr style=" height:2px;border:none;border-top:2px;background-color:black;" /> {% endif %}
-    <div>
-      <br> {% for post in topic %}
-      <div class=''>
-        <h2 class="">{{post.title}}</h2>
-        <p class="">{{post.author}}</p>
-        <p class=''><time datetime='{{post.timestamp}}'>{{post.timestamp}}</time></p>
-        <p>{{post.simple_production}}</p>
-        <p>
-          <a href='/detail/{{post.Article_id}}'>more&thinsp;detail</a>
-        </p>
-        <hr style=" height:2px;border:none;border-top:2px;background-color:black;" />
-      </div> {% endfor %}
-      <form action="blog/" method='post' enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class='form-group'><label><font size='3px'>titile</font></label>
-          <input type='text' name="title" class='form-control' style='width:200px;'><br>
+    <div class='col-md-1'></div>
+    <div class='col-md-8'>
+      {% if posts.number %}
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0"></li>
+          <li data-target="#myCarousel" data-slide-to="1" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="item active">
+            <img src="/static/image/1.png" />
+          </div>
+          <div class="item">
+            <img src="/static/image/3.png" />
+          </div>
+          <div class='item'>
+            <img src="/static/image/02.png"></div>
         </div>
-        <div class='form-group'><label><font size='3px'>author</font></label>
-          <input type='text' name="author" class='form-control' style='width:200px;'><br>
-        </div>
-        <div class="form-group"><label><font size='3px'>simple_production</font></label><br>
-          <textarea class="form-control" rows="3" name='simple_production'></textarea>
-        </div>
-        <div class='form-group'><label><font size='3px'>markdown</font></label><br>
-          <input type='file' name="markdown">
-        </div>
-        <p class='text-center'>
-          <br>
-          <button type="submit" value="提交" class='btn btn-default'>提交</button>
-        </p>
-      </form>
-    </div>
-    <p>
-      <ul class='pager'>
-        {% if posts.has_previous %}
-        <li class='previous'>
-          <a href="?page={{ posts.previous_page_number }}">Previous</a> {% endif %}
-        </li>
-        {% if posts.has_next %}
-        <li class='next'>
-          <a href="?page={{ posts.next_page_number }}">Next</a>
-        </li>
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;
+     </a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;
+     </a>
+      </div>
+      <hr style=" height:2px;border:none;border-top:2px;background-color:black;" /> {% endif %}
+      <div>
+        <br> {% if isfind %}
+        <p style='font-size:25px;'>The result of searching {% if istag %}tag {% endif %}<b>{{word}}</b> is :</p><br>{% endif %}
+        {% for post in topic %}
+        <div>
+          <a href='/detail/{{post.0.Article_id}}'><img class='showcover' id='mycover'src={{post.0.cover.url}} onmouseover='thick(this)' onmouseout="thin(this)"></a>
+          <div class='showword'>
+            {% if not istag %}
+            <h2>{% for w in post.0.title %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h2>
+            <h5>{% for w in post.0.author %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>
+            <p><time datetime='{{post.0.timestamp}}'>{{post.0.timestamp}}</time></p>
+            <h5>{% for w in post.0.simple_production %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>{% else %}<h2>{{post.0.title}}</h2>
+            <h5>{{post.0.author}}</h5>
+            <p><time datetime='{{post.0.timestamp}}'>{{post.0.timestamp}}</time></p>
+            <h5>{{post.0.simple_production}}</h5>
+            {% endif %}
+            <p>
+              <a href='/detail/{{post.0.Article_id}}'>more&thinsp;detail</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='tagpos' class='glyphicon glyphicon-tags'></span>&nbsp;&nbsp;{% for tag in post.1 %}<a href="/tags/{{tag}}"><span class="label label-info" style='font-size:12px;'>{{tag}}</span></a>&nbsp;&nbsp;{% endfor %}
+            </p>
+          </div>
+          <hr style=" height:2px;border:none;border-top:2px;background-color:black;" />
+        </div> {% endfor %}
+        {% if request.user.is_authenticated %}
+        <form action="blog/" method='post' enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class='form-group'><label><font size='3px'>titile</font></label>
+            <input type='text' name="title" class='form-control' style='width:200px;' required><br>
+          </div>
+          <div class="form-group"><label><font size='3px'>simple_production</font></label><br>
+            <textarea class="form-control" rows="3" name='simple_production' required></textarea>
+          </div>
+          <div class="form-group"><label style='float:left;'><font size='3px'>tags</font></label>
+            <div class='form-group'><label><font size='3px'>tags</font></label>
+              <input type='text' name="tags" class='form-control' style='width:200px;' onblur='add(this)' required>
+              <p id='tags'></p>
+            </div>
+          </div>
+          <!-- /.col-lg-6 -->
+          <div class='form-group'><label><font size='3px'>markdown</font></label><br>
+            <input type='file' id='markdown' name="markdown" onchange='checkmd(this)' required>
+          </div>
+          <div class='form-group'><label><font size='3px'>cover</font></label><br>
+            <input type='file' name='cover' onchange='shownew(this)' required>
+            <img class='preshow' id="cover">
+          </div>
+          <p class='text-center'>
+            <br>
+            <br>
+            <br>
+            <button type="submit" value="提交" class='btn btn-default'>提交</button>
+          </p>
+        </form>
         {% endif %}
-      </ul>
-      <div class='text-center'><b>Page {{ posts.number }} of {{ posts.paginator.num_pages }}</b></div>
-    </p>
-  </div>
-  <div class='col-md-3'>
-    <aside>
-      <div class="sidebar">
-        <font size='2.5px'>
-          <p>
-            <font size='5px'>个人简介</font>
-          </p>
-          <p>网名：ty0207 | 毛毛大王</p>
-          <p>职业：学生 </p>
-          <p>籍贯：重庆市</p>
-          <p>电话：17710375409</p>
-          <p>邮箱：ty0207@sjtu.edu.cn</p>
-          <br>
-          <br>
-          <p>
-            <font size='5px'>其他人还在看</font>
-          </p>
-          {% for link in links %}
-          <p>
-            <a href='/detail/{{link.Article_id}}'>
-              <font>{{link.title}}</a>
-          </p>
-          {% endfor %}
-          </font>
       </div>
-    </aside>
-  </div>
+      <p>
+        <br>
+        <br>
+        <ul class='pager'>
+          {% if posts.has_previous %}
+          <li class='previous'>
+            <a href="?page={{ posts.previous_page_number }}">Previous</a> {% endif %}
+          </li>
+          {% if posts.has_next %}
+          <li class='next'>
+            <a href="?page={{ posts.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+        <div class='text-center'><b>Page {{ posts.number }} of {{ posts.paginator.num_pages }}</b></div>
+        <p>Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="http://hzwer.com">Ty.com</a>&nbsp;All Rights Reserved! Powered by Django </font>
+      </p>
+    </div>
+    <div class='col-md-3'>
+      <aside>
+        <div class="sidebar">
+          <font size='2.5px'>
+            <p>
+              <form name='search' action='' method='post'>
+                {% csrf_token %}
+                <font size='5px'>Search</font><input type='text' class='form-control' name="search" style='width=50px;'>
+                <br>
+                <button type="submit" class='btn btn-default'>Search</button>
+                <br>
+              </form>
+            </p>
+            <p>
+              <font size='5px'>其他人还在看</font>
+            </p>
+            {% for link in links %}
+            <p>
+              <a href='/detail/{{link.Article_id}}'>
+                <font>{{link.title}}</a>
+            </p>
+            {% endfor %}
+            </font>
+          </font>
+        </div>
+      </aside>
+    </div>
+    <div class="footer" id="footer">
 </body>
+<script type="text/javascript">
+  function shownew(source) {
+    var file = source.files[0];
+    if (window.FileReader) {
+      if (!/image\/\w+/.test(file.type)) {
+        alert("We need pictrues!");
+        $('#newcover').val("");
+        return false;
+      }
+      var fr = new FileReader();
+      fr.onloadend = function(e) {
+        document.getElementById("cover").src = e.target.result;
+      };
+      fr.readAsDataURL(file);
+    }
+  }
+
+  function checkmd(source) {
+    file = source.value.substr(source.value.lastIndexOf(".")).toLowerCase();
+    if (file != '.md') {
+      alert("We need .md file!");
+      $('#markdown').val("");
+      return false;
+    }
+  }
+
+  function add(tag) {
+    a = tag.value;
+    tags = a.split(" ");
+    var e = document.getElementById('tags');
+    e.innerHTML = '';
+    for (var i = 0; i < tags.length; ++i) {
+      var span = document.createElement('span');
+      span.className = "label label-info";
+      span.style = "font-size:15px;";
+      var node = document.createTextNode(tags[i]);
+      span.appendChild(node);
+      var element = document.getElementById('tags');
+      element.appendChild(span);
+    }
+  }
+
+  function thick(img)
+  {
+    img.style="border:solid;border-color:rgb(186, 187, 182);";
+  }
+
+  function thin(img)
+  {
+    img.style="";
+  }
+</script>
 
 </html>

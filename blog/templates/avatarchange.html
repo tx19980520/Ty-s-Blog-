@@ -66,12 +66,12 @@
     <form action="" method="post" class='text-center main' enctype="multipart/form-data">
       <br>
       <br>
-      <label class='control-label col-sm-4'><font size='3px'>old avatar</font></label><br>
-      <div class='showimg col-sm-4' style='position:relative;top:-40px;'><img class='img-circle avatarshow' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'></div>
+      <label class='control-label col-sm-4'><font size='3px'>your avatar</font></label><br>
+      <div class='showimg col-sm-4' style='position:relative;top:-40px;'><img class='img-circle avatarshow' id='portrait' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'></div>
       <br><br>
-      <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>new avatar</font></label>
+      <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>new avatar choose</font></label>
         <div class="col-sm-6">
-          <input type='file' name="new_avatar">
+          <input type='file' id='upload' onchange='shownew(this)'>
         </div>
       </div>
       <br>
@@ -88,5 +88,22 @@
   </div>
   <div class='col-md-3'></div>
 </body>
+</script>
 
 </html>
+<script type="text/javascript">
+  function shownew(source) {
+    var file = source.files[0];
+    if (window.FileReader) {
+      if (!/image\/\w+/.test(file.type)) {
+        alert("We need pictrues!");
+        return false;
+      }
+      var fr = new FileReader();
+      fr.onloadend = function(e) {
+        document.getElementById("portrait").src = e.target.result;
+      };
+      fr.readAsDataURL(file);
+    }
+  }
+</script>

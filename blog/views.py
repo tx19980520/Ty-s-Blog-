@@ -110,8 +110,14 @@ header='''
   <div class='col-md-2'></div>
 <div class='col-md-8'>
     '''
-tail='''</div><div class='col-md-2'>
-</div>/<body></html>'''
+tail='''
+<form action="" method='post'>
+<div class='form-group'><label><font size='3px'>comment</font></label>
+<input type='text' name="title" class='form-control' style='width:200px;' required><br>
+</div>
+</form>
+</div><div class='col-md-2'>
+</div>/<body></html>''' #I will add comment form here!
 # Create your views here.
 # Finally I choose to write normal html code in template and views just like back-end
 
@@ -122,26 +128,103 @@ def archive(request):
 def heartbeats(request):
     if  not request.user.is_authenticated:
         return HttpResponseRedirect('/login')
-    if request.POST:
-        bp = BlogPost()
-        bp.title=request.POST['title']
-        bp.body = request.POST['body']
-        bp.timestamp = datetime.now()
-        bp.save()
-        posts = BlogPost.objects.all();
-        return render(request, 'heartbeats.html',{'posts':posts})
+    if request.method=='POST':
+        is_search=False
+        if request.POST.has_key('search'):
+            is_search = True
+            words= request.POST['search']
+            search_title=BlogPost.objects.filter(title__contains=words)
+            search_body=BlogPost.objects.filter(body__contains=words)
+            posts =search_body|search_title
+            posts = list(posts)
+            relation_people=[]
+            for post in posts:
+                b=User.objects.get(username=post.author)
+                a=Profile.objects.get(user=b)
+                relation_people.extend([a])
+            posts = zip(posts,relation_people)
+            return render(request,'heartbeats.html',{'posts':posts,'is_search':is_search,'word':words})
+        if request.POST.has_key('body'):
+            bp = BlogPost()
+            bp.title=request.POST['title']
+            bp.body = request.POST['body']
+            bp.timestamp = datetime.now()
+            bp.save()
+            posts = BlogPost.objects.all();
+            posts = list(posts)
+            relation_people=[]
+            for post in posts:
+                b=User.objects.get(username=post.author)
+                a=Profile.objects.get(user=b)
+                relation_people.extend([a])
+            posts = zip(posts,relation_people)
+            return render(request, 'heartbeats.html',{'posts':posts,'is_search':is_search,'relation_people':relation_people})
     else:
         posts = BlogPost.objects.all();
-        return render(request, 'heartbeats.html',{'posts':posts})
+        posts = list(posts)
+        relation_people=[]
+        for post in posts:
+            b=User.objects.get(username=post.author)
+            a=Profile.objects.get(user=b)
+            relation_people.extend([a])
+        posts = zip(posts,relation_people)
+        return render(request, 'heartbeats.html',{'posts':posts,'relation_people':relation_people})
 
 def about(request):
     return render(request,'about.html',)
 
 
 def blog(request):
+        istag = False
         if request.method =='POST':
+            isfind = False
+            if request.POST.has_key('search'):
+                isfind=True
+                word = request.POST['search']
+                finds = Article.objects.filter(simple_production__contains=word)|Article.objects.filter(title__contains=word)|Article.objects.filter(author__contains=word)
+                find = list(finds)
+                paginator = Paginator(find, 3)
+                page = request.GET.get('page')
+                try:
+                    find = paginator.page(page)
+                    topics = find#Article.objects.all()[(int(page)-1)*3:int(page)*3]
+                    ta =[]
+                    for post in topics:
+                        str = post.tags.split(" ")
+                        ta.append(str)
+                    topics = zip(topics,ta)
+                    links = Article.objects.all()[:5]
+                except PageNotAnInteger:
+                    find = paginator.page(1)
+                    if finds.count()>3:
+                        topics = find[0:3]
+                        ta =[]
+                        for post in topics:
+                            str = post.tags.split(" ")
+                            ta.append(str)
+                        topics = zip(topics,ta)
+                        links = Article.objects.all()[:4]
+                    else:
+                        topics = find
+                        ta =[]
+                        for post in topics:
+                            str = post.tags.split(" ")
+                            ta.append(str)
+                        topics = zip(topics,ta)
+                        links = Article.objects.all()
+                except EmptyPage:
+                    print "e"
+                    find = paginator.page(1)
+                    topics = find
+                    ta =[]
+                    for post in topics:
+                        str = post.tags.split(" ")
+                        ta.append(str)
+                    topics = zip(topics,ta)
+                    links = Article.objects.all()
+                return render(request,'blog.html',{'posts':find,'topic':topics,'links':links,'word':word,'isfind':isfind,"istag":istag})
             total=Article.objects.all().count()
-            Article.objects.create(title=request.POST['title'],author=request.user.username,markdown=request.FILES.get('markdown'),simple_production=request.POST['simple_production'],Article_id=total+1,timestamp=datetime.now())
+            Article.objects.create(title=request.POST['title'],author=request.user.username,markdown=request.FILES.get('markdown'),simple_production=request.POST['simple_production'],Article_id=total+1,timestamp=datetime.now(),cover=request.FILES.get('cover'),tags=request.POST.get('tags'))
             goal =Article.objects.get(Article_id=total+1)
             input_file = codecs.open(settings.BASE_DIR+goal.markdown.url,'r',encoding='utf-8')
             text=input_file.read()
@@ -156,39 +239,56 @@ def blog(request):
             newhtml.write(html)
             newhtml.write(tail)
             newhtml.close()
-            posts = Article.objects.all()
-            return render(request,'blog.html',{'posts':posts})
-        if request.method=='GET':
-            posts = Article.objects.all()
-            paginator = Paginator(posts, 3)
-            page = request.GET.get('page')
-            try:
-                posts = paginator.page(page)
-                topics = Article.objects.all()[(int(page)-1)*3:int(page)*3]
-                links = Article.objects.all()[:5]
-            except PageNotAnInteger:
-                posts = paginator.page(1)
-                if Article.objects.all().count()>3:
-                    topics = Article.objects.all()[0:3]
-                    links = Article.objects.all()[:4]
-                else:
-                    topics = Article.objects.all()
-                    links = Article.objects.all()
-            except EmptyPage:
-                posts = paginator.page(pageinator.num_pages)
-                topics = Article.objects().all()[(pageinator.num_page-1)*3:pageinator.num_pages*3+1]
-            return render(request,'blog.html',{'posts':posts,'topic':topics,'links':links})
+
+        posts = Article.objects.all()
+        posts = list(posts)
+        paginator = Paginator(posts, 3)
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+            topics = Article.objects.all()[(int(page)-1)*3:int(page)*3]
+            ta =[]
+            for post in topics:
+                str = post.tags.split(" ")
+                ta.append(str)
+            topics = zip(topics,ta)
+            links = Article.objects.all()[:5]
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+            if Article.objects.all().count()>3:
+                topics = Article.objects.all()[0:3]
+                ta =[]
+                for post in topics:
+                    str = post.tags.split(" ")
+                    ta.append(str)
+                topics = zip(topics,ta)
+                links = Article.objects.all()[:4]
+            else:
+                topics = Article.objects.all()
+                ta =[]
+                for post in topics:
+                    str = post.tags.split(" ")
+                    ta.append(str)
+                topics = zip(topics,ta)
+                links = Article.objects.all()
+        except EmptyPage:
+            print
+            posts = paginator.page(paginator.num_pages)
+            topics = Article.objects().all()[(paginator.num_pages-1)*3:paginator.num_pages*3+1]
+            ta =[]
+            for post in topics:
+                str = post.tags.split(" ")
+                ta.append(str)
+            topics = zip(topics,ta)
+        return render(request,'blog.html',{'posts':posts,'topic':topics,'links':links,"istag":istag})
 #about log
 def alogin(request):
     errors= []
     account=None
     password=None
-    request.session['login_from'] = '/blog'
     if request.method=='GET':
-        request.session['login_from'] = request.META.get('HTTP_REFERER', '/')
-        if request.session['login_from'] == '/':
-            request.session['login_from'] = '/blog'
-    if request.method == 'POST' :
+        return render(request, 'login.html',{'errors':errors})
+    if request.method == 'POST':
         if not request.POST.get('account'):
             errors.append('Please Enter account')
         else:
@@ -198,18 +298,19 @@ def alogin(request):
         else:
             password= request.POST.get('password')
         if account is not None and password is not None :
-            try:
-                user = User.objects.get(username=account,password=password)#for check the name and the password
-            except ObjectDoesNotExist:
-                errors.append('invaild user')
-                return render(request, 'login.html',{'errors':errors})
-            if user is not None:
+            user = auth.authenticate(username=account, password=password)
+            myuser = User.objects.get(username=account)
+            check =myuser.check_password(password)
+            if user and check:
                 if user.is_active:
                     auth.login(request,user)
-                    return HttpResponseRedirect(request.session['login_from'])# for  redirect to previous web
+                    return render(request,'archive.html',)
+                else:
+                    errors.append("User is not active!")
+                    return render(request,'login.html',{'errors':errors})
             else:
-                return render(request,'archive.html')
-    return render(request, 'login.html',{'errors':errors})
+                errors.append("We don't have the user")
+                return render(request, 'login.html',{'errors':errors})
 
 def register(request):
     errors= []
@@ -274,15 +375,17 @@ def alogout(request):
 
 def showdetail(request,num):
     if request.user.is_authenticated:
-        u = 'article'+str(num)+'.html'
         if request.method=='GET':
-            return render(request,u)
+            u = 'article'+str(num)+'.html'
+            return render(request,u,)
+        elif request.method=='POST':
+            comment = comment.objects.create(witharticle=num,content=request.POST.get('comment'),)
     else:
         return HttpResponseRedirect('/login')
 def users(request):
     if request.method == 'GET':
         try:
-            myarticles = Article.objects.get(author=request.user.username)
+            myarticles=Article.objects.filter(author=request.user.username)
         except ObjectDoesNotExist:
             myarticles = []
         return render(request,'users.html',{'myarticles':myarticles})
@@ -308,7 +411,9 @@ def passwordchange(request):
             else :
                 errors.append('password2 is diff password')
         if password is not None and password2 is not None and CompareFlag :
-            User.objects.filter(username=request.user.username).update(password=password)
+            m = User.objects.filter(username=request.user.username)
+            m.set_password(password)
+            m.save()
             return HttpResponseRedirect('/login')
 def avatarchange(request):
     if request.method == 'POST':
@@ -323,3 +428,49 @@ def avatarchange(request):
         return HttpResponseRedirect('/')
     elif request.method == 'GET':
         return render(request,'avatarchange.html')
+
+def tags(request,t):
+    isfind = True
+    istag = True
+    search = Article.objects.filter(tags__contains=t)
+    search = list(search)
+    s = search
+    paginator = Paginator(search, 3)
+    page = request.GET.get('page')
+    try:
+        find = paginator.page(page)
+        topics = search#Article.objects.all()[(int(page)-1)*3:int(page)*3]
+        ta =[]
+        for post in topics:
+            str = post.tags.split(" ")
+            ta.append(str)
+        topics = zip(topics,ta)
+        links = Article.objects.all()[:4]
+    except PageNotAnInteger:
+        find = paginator.page(1)
+        if len(s)>3:
+            topics = find[0:3]
+            ta =[]
+            for post in topics:
+                str = post.tags.split(" ")
+                ta.append(str)
+            topics = zip(topics,ta)
+            links = Article.objects.all()[:4]
+        else:
+            topics = find
+            ta =[]
+            for post in topics:
+                str = post.tags.split(" ")
+                ta.append(str)
+            topics = zip(topics,ta)
+            links = Article.objects.all()
+    except EmptyPage:
+        find = paginator.page(1)
+        topics = find
+        ta =[]
+        for post in topics:
+            str = post.tags.split(" ")
+            ta.append(str)
+        topics = zip(topics,ta)
+        links = Article.objects.all()[:4]
+    return render(request,'blog.html',{'posts':find,'topic':topics,'links':links,'word':t,'isfind':isfind,'istag':istag})

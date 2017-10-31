@@ -6,3 +6,4 @@ from blog.models import *
 admin.site.register(BlogPost)
 admin.site.register(Profile)
 admin.site.register(Article)
+admin.site.register(comment)

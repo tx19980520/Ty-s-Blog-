@@ -29,7 +29,8 @@ urlpatterns = [
     url(r'^logout/$',views.alogout),
     url(r'^register/$',views.register),
     url(r'^users/$',views.users),
-    url(r'^detail/(.)+/$',views.showdetail),
+    url(r'^detail/(.+)$',views.showdetail),
     url(r'^passwordchange/$',views.passwordchange),
-    url(r'^avatarchange/$',views.avatarchange)
+    url(r'^avatarchange/$',views.avatarchange),
+    url(r'^tags/(.*)/$',views.tags),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

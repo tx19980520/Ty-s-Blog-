@@ -8,6 +8,19 @@
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
+  div.showimg {
+    position: relative;
+    top: 10px;
+    left: 0px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 75px;
+    height: 75px;
+  }
+
   .main {
     margin: 0 auto;
     background: hsla(0, 0%, 100%, .50) border-box;
@@ -85,8 +98,14 @@
       <br>
       <div class='form-group'><label class='col-sm-4'><font size='3px'>avatar</font></label>
         <div class="col-sm-6">
-          <input type='file' name="avatar">
+          <input type='file' onchange='shownew(this)'>
+          <div class='showimg'>
+            <img class='avatarshow img-circle' id='choose' />
+          </div>
         </div>
+        <br>
+        <br>
+        <br>
       </div>
       <br>
       <br>
@@ -104,3 +123,15 @@
 </body>
 
 </html>
+<script type="text/javascript">
+  function shownew(source) {
+    var file = source.files[0];
+    if (window.FileReader) {
+      var fr = new FileReader();
+      fr.onloadend = function(e) {
+        document.getElementById("choose").src = e.target.result;
+      };
+      fr.readAsDataURL(file);
+    }
+  }
+</script>

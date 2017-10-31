@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel='stylesheet' href='/static/css/code.css'>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+</style>
+<style>
+  .carousel-inner img {
+    width: 100%;
+  }
+</style>
+<body>
+  <div style='background:url(/static/image/homebg.jpg) !important;'>
+    <br>
+    <div>
+      <nav>
+        <div class="row">
+          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div style='float:right'>
+            {% if request.user.is_authenticated %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/logout'>logout</a>
+                  </li>
+                </ul>
+            </ul>
+            <div class='showimg'>
+              <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+            </div>
+            {% else %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/login'>login</a>
+                  </li>
+                  <li>
+                    <a href='/register'>register</a>
+                  </li>
+                </ul>
+            </ul>
+            {% endif %}
+          </div>
+          <div class="span8" style='float:right'>
+            <br>
+            <ul class="nav nav-pills">
+              <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+              <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+              <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+              <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <p class='text-center'>
+        <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+        <label class="text-center"><font color='white' size='4px'>technical otaku Save the world</font></label>
+      </p>
+    </div>
+  </div>
+  <div class='col-md-2'></div>
+<div class='col-md-8'>
+    <h1 id="kmp">KMP算法</h1>
+<p>一般情况我们在string里寻找子串就是暴力枚举，对比，这样的时间复杂程度最大是o（mn）（m，n分别为母串与子串的长度），而KMP算法可以将时间复杂度降到O（m）</p>
+<h3 id="kmp_1">KMP算法</h3>
+<p>利用字串的字串对称性进行匹配，生成一个失效数组，即p[j]指，在a[i]=b[j],但是a[i+1] != b[j]的时候j应当回到哪个位置，则利用的是子串自己的一个对称性，所以，可以遇见，这个p数组一定是一个可以用动态规划来写的函数</p>
+<p>p[j] = 1.j (j&gt;0 &amp;&amp;data[p[j]+1] != data[i])</p>
+<p>​     2.j&lt;0 p[i] = -1</p>
+<p>​    3.(j&gt;0 &amp;&amp; data[p[j]+1] == data[i])p[i] = p[j]+1</p>
+<p>在查找的过程中，如果-1出现了一次还是不能匹配，就只能j不懂，开始++i</p>
+<p>模拟动态内存储备：详见python中的数组中放元祖，你用数组读也可以，用链接读也可以。</p>
+<p>关于中缀式转换为后缀是的方法</p>
+<p>1.暴力“取消”运算符号的优先级，然后把运算符号右移一个括号，消除所有括号</p>
+<p>2.使用栈操作和输出</p>
+<p>a.左括号入栈，知道遇到右括号，括号范围完全出栈</p>
+<p>b.读到下一个想入栈的符号比现栈顶的运算等级低，则出栈输出。</p>
+<p>c.读到数字直接输出</p>
+<p>d.如果读入的是乘方，必定入栈，后面是除了其他运算以外的运算，则出栈输出</p>
+<h3 id="_1">关于用栈模拟递归的想法</h3>
+<p>基于栈这种越在栈底越大，越在栈顶越小的这样的设计构造，相当于是在用出栈入栈的顺序体现深度优先，递归的问题一定是深度优先，因而必然可以用这样的方法去做。则，关于深度优先的问题都已用栈去处理，但优势到底有什么呢。</p>
+<p>基友告诉我，不如不写，反正系统自己也这么处理。</p>
+<p>从某种角度上来讲，我觉得栈比一般递归好在于，有时候他能帮你储存一些结果。</p></div><div class='col-md-2'>
+</div>/<body></html>

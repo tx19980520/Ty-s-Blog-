@@ -6,17 +6,20 @@ import datetime
 # Create your models here.
 class BlogPost(models.Model):
     title = models.CharField(max_length=150)
+    author = models.CharField(max_length=50,default='admin')
     body = models.TextField()
     timestamp = models.DateTimeField()
     def __str__(self):
         return self.title#now we choose the way from web, but I think the way book had is more beautiful
 class Article(models.Model):
+    cover = models.ImageField(upload_to='article_cover',default='/article_cover/mo/normal.jpg')
     timestamp = models.DateTimeField(default=datetime.datetime.now())
     simple_production = models.CharField(max_length=200,default='')
     title= models.CharField(max_length=50)
     author = models.CharField(max_length=50)
     Article_id = models.IntegerField()
     markdown = models.FileField(upload_to='article_markdown')
+    tags = models.CharField(max_length=30,default='')
     def __str__(self):
         return self.title
 
@@ -37,3 +40,12 @@ class Profile(models.Model):
 #@receiver(post_save, sender=User)
 #def save_user_profile(sender, instance, **kwargs):
 #    instance.profile.save()
+class comment(models.Model):
+    timestamp = models.DateTimeField(default=datetime.datetime.now())
+    witharticle = models.IntegerField(default=-1)
+    father = models.IntegerField(default = 0)
+    floor = models.IntegerField(default = 0)
+    author = models.CharField(max_length=50,default='admin')
+    content = models.TextField(default='hi~')
+    def __str__(self):
+        return self.timestamp+"   "+self.author+"   "+self.timestamp

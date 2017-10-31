@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel='stylesheet' href='/static/css/code.css'>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+</style>
+<style>
+  .carousel-inner img {
+    width: 100%;
+  }
+</style>
+<body>
+  <div style='background:url(/static/image/homebg.jpg) !important;'>
+    <br>
+    <div>
+      <nav>
+        <div class="row">
+          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div style='float:right'>
+            {% if request.user.is_authenticated %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/logout'>logout</a>
+                  </li>
+                </ul>
+            </ul>
+            <div class='showimg'>
+              <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+            </div>
+            {% else %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/login'>login</a>
+                  </li>
+                  <li>
+                    <a href='/register'>register</a>
+                  </li>
+                </ul>
+            </ul>
+            {% endif %}
+          </div>
+          <div class="span8" style='float:right'>
+            <br>
+            <ul class="nav nav-pills">
+              <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+              <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+              <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+              <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <p class='text-center'>
+        <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+        <label class="text-center"><font color='white' size='4px'>technical otaku Save the world</font></label>
+      </p>
+    </div>
+  </div>
+  <div class='col-md-2'></div>
+<div class='col-md-8'>
+    <h1 id="ty">Ty爬虫计划</h1>
+<h2 id="_1">本项目的目的</h2>
+<p>为ACM班刘啸远同学的诗人AI提供原材料进行训练，为此要在古诗词网上爬去7万首古诗词。</p>
+<h2 id="_2">本项目所用到的技术</h2>
+<p>基于python3.5的threading库，asyncio库，requests库，json库，time库，re库。</p>
+<h2 id="_3">项目进程</h2>
+<h3 id="1018">10.18</h3>
+<p>首先我们制作了一个单线程的爬虫，测试了正则表达式的普适性，全网73280首诗除去网站自己删去的古诗词一共73156首古诗词，以.json文件的文件格式保存在本地。</p>
+<h3 id="1019">10.19</h3>
+<p>使用了asyncio库和threading库来支持多线程，在每一个线程中开启事件循环准备接受任务，主要的思想是主进程打包任务分配任务。我们知道python虚拟机支持I/O密集型的多线程，我们访问页面并获得HTML代码则是在多线程中进行的，再开一个线程进行后台的对文件的写入工作（这个工作相比于获得HTML代码是非常快的），按照这样的设计，我们进行1000首古诗的测试，多线程爬虫的用时为19秒，10月18日的单线程爬虫则用时53秒，整体的效率提升了到了原来的2.8倍（没有达到预期的三线程则提升三倍是因为害怕网站服务器警告或者拒绝访问，因而中途设计了一定量后sleep0.1秒）</p></div><div class='col-md-2'>
+</div>/<body></html>

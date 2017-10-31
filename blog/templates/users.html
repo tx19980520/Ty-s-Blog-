@@ -52,12 +52,13 @@
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
-          <div style='float:right; position:relative; left:-72px;'>
+          <div style='float:right; position:relative; left:-51px;'>
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>
+                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
@@ -84,11 +85,11 @@
             </ul>
             {% endif %}
           </div>
-          <div class="span8" style='float:right;position:relative;left:-71px;'>
+          <div class="span8" style='float:right;position:relative;left:-51px;'>
             <br>
             <ul class="nav nav-pills">
               <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
-              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+              <li><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
               <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
               <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
               <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
@@ -104,7 +105,7 @@
   </div>
   <div class='col-md-2'></div>
   <div class='col-md-8'>
-    <p class='' center>
+    <p class='text-center'>
       <label class="text-center"><font size='5px'>About yourself</font></label><br>
     </p>
     <label><font size='3px'>username:{{user.username}}</font></label><br>
@@ -117,9 +118,12 @@
     <br>
     <br>
     <br>
-    <br> {% for article in myarticles %}
+    <p>
+      <label class="text-center"><font size='5px'>Your Article</font></label><br>
+    </p>
+    <hr style=" height:2px;border:none;border-top:2px;background-color:black;" /> {% for article in myarticles %}
     <div class=''>
-      <h2 class="">{{article.title}}</h2>
+      <h3>{{article.title}}</h3>
       <p class=''><time datetime='{{post.timestamp}}'>{{article.timestamp}}</time></p>
       <p>{{article.simple_production}}</p>
       <p>
@@ -127,7 +131,7 @@
       </p>
       <hr style=" height:2px;border:none;border-top:2px;background-color:black;" />
     </div> {% endfor %}
-    <a href='/passwordchange'>change password</a><br>
+    <a href='/passwordchange'>change password</a><br><br>
     <a href='/avatarchange'>change avatar</a>
   </div>
   <div class='col-md-2'>

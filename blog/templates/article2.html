@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel='stylesheet' href='/static/css/code.css'>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+</style>
+<style>
+  .carousel-inner img {
+    width: 100%;
+  }
+</style>
+<body>
+  <div style='background:url(/static/image/homebg.jpg) !important;'>
+    <br>
+    <div>
+      <nav>
+        <div class="row">
+          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div style='float:right'>
+            {% if request.user.is_authenticated %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/logout'>logout</a>
+                  </li>
+                </ul>
+            </ul>
+            <div class='showimg'>
+              <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+            </div>
+            {% else %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/login'>login</a>
+                  </li>
+                  <li>
+                    <a href='/register'>register</a>
+                  </li>
+                </ul>
+            </ul>
+            {% endif %}
+          </div>
+          <div class="span8" style='float:right'>
+            <br>
+            <ul class="nav nav-pills">
+              <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+              <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+              <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+              <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <p class='text-center'>
+        <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+        <label class="text-center"><font color='white' size='4px'>technical otaku Save the world</font></label>
+      </p>
+    </div>
+  </div>
+  <div class='col-md-2'></div>
+<div class='col-md-8'>
+    <hr />
+<hr />
+<h1 id="quoridor">Quoridor</h1>
+<p>2017 SJTU ACM大作业试验robot</p>
+<h2 id="_1">游戏规则和提交方法</h2>
+<p>详见Quoridor_manual</p>
+<h2 id="_2">游戏设计</h2>
+<h3 id="_3">游戏规则及其难点的分析</h3>
+<p>该游戏中有这样一个规则，在放墙的时候不能将对方的路完全封死，这应该BFS能搞定</p>
+<p>以及大助教对于一次操作只能在1s内，我们的博弈树的层次不能太大，且我们要想尽可能的让博弈树深度加大，就得使用αβ剪枝。</p>
+<h3 id="_4">游戏操作</h3>
+<p>我们用一个class quoridor来完成返回一个pair给平台</p>
+<p>我们的大致框架为：</p>
+<p><img alt="system" src="system.png" /></p>
+<p>quoridor的声明如下：</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">quoridor</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span><span class="c1">//只是为了长期保存棋盘的现状</span>
+    <span class="kt">int</span> <span class="n">board</span><span class="p">[</span><span class="mi">20</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span><span class="c1">//简单的记录是否有墙</span>
+    <span class="kt">int</span> <span class="n">rest_of_my_wall</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">rest_of_an_wall</span><span class="p">;</span>
+    <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&gt;</span> <span class="n">my_pos</span><span class="p">;</span><span class="c1">//记录我方位置</span>
+    <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&gt;</span> <span class="n">an_pos</span><span class="p">;</span><span class="c1">//记录敌方位置</span>
+    <span class="n">quoridor</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="o">~</span><span class="n">quoridor</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">action</span><span class="p">();</span><span class="c1">//返回行动位置</span>
+    <span class="kt">void</span> <span class="nf">update_out</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="n">point</span><span class="p">);</span><span class="c1">//对于位置的更新</span>
+
+
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">struct</span> <span class="n">battleSituation</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">depth</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">alpha</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">beta</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="n">battlesNode</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">if_wall</span><span class="p">;</span><span class="c1">//if_wall的原型就是quoridor里的board</span>
+            <span class="kt">int</span> <span class="n">dijkstra_value</span><span class="p">;</span><span class="c1">//添加dijkstra_value是为了dijkstra时的比较</span>
+            <span class="c1">//pair&lt;int, int&gt; pre;这个pre是为了后面赋值函数的</span>
+        <span class="p">};</span>
+        <span class="n">battlesNode</span> <span class="n">wall_board</span><span class="p">[</span><span class="mi">20</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span><span class="c1">//意思是主要是看墙的放法的</span>
+        <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">my_now_pos</span><span class="p">;</span>
+        <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">an_now_pos</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">dijkstra</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span> <span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">point</span><span class="p">);</span> <span class="c1">//dijkstra用于赋值和判断时候还有路</span>
+        <span class="kt">bool</span> <span class="nf">noway</span><span class="p">();</span><span class="c1">//放墙的时候的问题，符合规则不能无路可走</span>
+        <span class="kt">int</span> <span class="n">rest_of_my_wall</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">rest_of_an_wall</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">addvalue</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="nf">knock_wall</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="kt">int</span> <span class="nf">gamesort</span><span class="p">(</span><span class="n">battleSituation</span> <span class="n">now</span><span class="p">);</span>
+    <span class="c1">//4 directions and 17*8 postions setting wall,I choose use stack to save space.</span>
+    <span class="c1">//the depth is 4 </span>
+    <span class="n">battleSituation</span> <span class="nf">pre_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">);</span><span class="c1">//拷贝一个现在的环境给battleSituation</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<h3 id="_5">博弈树系统</h3>
+<p>本系统的博弈树只有三层0，1，2。因为我们可能的行为只可能最多有132种（4种行走操作，128种放墙操作）</p>
+<p>我们在最开始就将120种操作存在maybeact数组中，方便后面能使用，我们使用BFS，满足最大最小搜索，每一层向上返回一个值，是最大值还是最小值通过depth确定，我们定义了final choose储存一个maybeact的下标，方面我们后期向judge输出，我们在第一层的遍历的时候在层间值改变时，也得把final choose 改变。</p>
+<p>第二层的函数直接返回一个数值，是对那个状态下的棋盘进行评估，这要启动赋值系统</p>
+<h3 id="_6">赋值系统</h3>
+<p>这个地方最让人担心的就是墙赋值系统和行进赋值系统两者之间的关系，不能太过“限制”或者“偏袒某一方”，我们这个地方是对整个棋盘进行评估，自然是双方都要评估，至于说是两方在数值上是不是有不同，我们后期再来讨论</p>
+<h4 id="_7">墙赋值系统</h4>
+<p>只能在能放墙的地方放墙，这个地方有个小的隐藏的bug，就是你之前可能在(14,7)这个位置放了墙，但后面遍历(12,7)的时候你回溯把(14,7)这个墙点也回溯了，很可能导致放墙的时候重复放墙。</p>
+<p>放墙得考虑墙的数量，墙的位置，之前在主写BFS的时候对于墙的考虑似乎是少了很多，只是想用一个反比例函数去描述。当时想的是，行进赋值系统中做Dijkstra会体现我们放墙的价值，似乎就不需要单独再体现墙的问题了，但最终的结果不如人意。我们还是要对放墙，和墙的位置进行强调。</p>
+<h4 id="_8">行进赋值系统</h4>
+<p>赋值函数的几个重点：</p>
+<p>敌我离的终点的距离（最短路）;</p>
+<p>这个距离对应一个类似于反比例函数（对敌），最后作差得到该结果的价值</p>
+<p>博弈树的实现之后我们在最底层启动赋值系统，并向上传值，注意手动回溯</p>
+<p>但这个地方有个问题，按照我们的写法，我们会有一系列的点，他们的value相同，只是位序不是靠后，按照我们的写法，这些位点很难被用到，我们是通过加强赋值系统来进一步表现点与点之间的差异，还是说我们对这些相同值的点随机化呢，这一点我们有待补充，但现目前最简单的是改变我们的赋值函数</p></div><div class='col-md-2'>
+</div>/<body></html>
