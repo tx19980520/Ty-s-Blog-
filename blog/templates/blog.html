@@ -109,9 +109,9 @@
             {% endif %}
           </div>
           {% if request.user.is_authenticated %}
-          <div class="span8" style='float:right;position:relative;top:-48px;left:16.8px;'>
+          <div class="span8" style='float:right;position:relative;top:-48px;left:16.7px;'>
             {% else %}
-            <div class="span8" style='float:right;position:relative;top:20px;left:16.8px;'>
+            <div class="span8" style='float:right;position:relative;left:16.7px;'>
               {% endif %}
               <ul class="nav nav-pills">
                 <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
@@ -129,8 +129,11 @@
       </p>
       </div>
     </div>
+  </div>
     <div class='col-md-1'></div>
     <div class='col-md-8'>
+      <div class="panel panel-default">
+      <div class="panel-body">
       {% if posts.number %}
       <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -183,11 +186,10 @@
             <input type='text' name="title" class='form-control' style='width:200px;' required><br>
           </div>
           <div class="form-group"><label><font size='3px'>simple_production</font></label><br>
-            <textarea class="form-control" rows="3" name='simple_production' required></textarea>
+            <textarea class="form-control" rows="3" name='simple_production' required></textarea><br>
           </div>
-          <div class="form-group"><label style='float:left;'><font size='3px'>tags</font></label>
-            <div class='form-group'><label><font size='3px'>tags</font></label>
-              <input type='text' name="tags" class='form-control' style='width:200px;' onblur='add(this)' required>
+          <div class="form-group"><label><font size='3px'>tags</font></label><br>
+              <input type='text' name="tags" class='form-control' style='width:200px;' onblur='add(this)' required><br>
               <p id='tags'></p>
             </div>
           </div>
@@ -203,29 +205,30 @@
             <br>
             <br>
             <br>
-            <button type="submit" value="提交" class='btn btn-default'>提交</button>
+
+            <button type="submit" value="提交" class='btn btn-default' style="position:relative;left:75px;">提交</button>
           </p>
         </form>
         {% endif %}
-      </div>
-      <p>
         <br>
         <br>
-        <ul class='pager'>
-          {% if posts.has_previous %}
-          <li class='previous'>
-            <a href="?page={{ posts.previous_page_number }}">Previous</a> {% endif %}
-          </li>
-          {% if posts.has_next %}
-          <li class='next'>
-            <a href="?page={{ posts.next_page_number }}">Next</a>
-          </li>
-          {% endif %}
-        </ul>
-        <div class='text-center'><b>Page {{ posts.number }} of {{ posts.paginator.num_pages }}</b></div>
-        <p>Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="http://hzwer.com">Ty.com</a>&nbsp;All Rights Reserved! Powered by Django </font>
-      </p>
     </div>
+  </div>
+  <ul class='pager'>
+    {% if posts.has_previous %}
+    <li class='previous'>
+      <a href="?page={{ posts.previous_page_number }}">Previous</a> {% endif %}
+    </li>
+    {% if posts.has_next %}
+    <li class='next'>
+      <a href="?page={{ posts.next_page_number }}">Next</a>
+    </li>
+    {% endif %}
+  </ul>
+  <div class='text-center'><b>Page {{ posts.number }} of {{ posts.paginator.num_pages }}</b></div>
+  <br>
+    <p class="text-center">Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="http://hzwer.com">Ty.com</a>&nbsp;All Rights Reserved! Powered by Django </p>
+  </div>
     <div class='col-md-3'>
       <aside>
         <div class="sidebar">
@@ -245,15 +248,13 @@
             {% for link in links %}
             <p>
               <a href='/detail/{{link.Article_id}}'>
-                <font>{{link.title}}</a>
+                {{link.title}}</a>
             </p>
             {% endfor %}
-            </font>
           </font>
         </div>
       </aside>
     </div>
-    <div class="footer" id="footer">
 </body>
 <script type="text/javascript">
   function shownew(source) {

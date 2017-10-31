@@ -1,7 +1,26 @@
 <form action="" method='post'>
 <div class='form-group'><label><font size='3px'>comment</font></label>
-<textarea type='text' name="comment" class='form-control' rows="3" required><br>
+<textarea type='text' name="comment" class='form-control' id="comment" rows="3" required></textarea><br>
 </div>
-
+<p class='text-center'>
+  <button type="submit" value="提交" class='btn btn-default'>提交</button>
+</p>
 </form>
 </div>
+
+
+
+{% if havecomment %}
+{% for com in comments %}
+<p>{{forloop.counter+1}}{{com.author}} <button class="btn btn-primary" onclick="reply({{forloop.counter+1}})">回复</button></p>
+<p>{{com.content}}</p>
+<hr style="height:2px;border:none;border-top:2px;background-color:black;">
+{% endfor %}
+{% endif %}
+<script type="text/javascript">
+  function reply(this){
+    var e = document.getElementById('comment');
+    e.innerHTML = '';
+    e.innerHTML = "reply num "+this.toString()+":";
+  }
+</script>

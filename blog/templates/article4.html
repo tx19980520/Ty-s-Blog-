@@ -11,6 +11,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
+h1{
+  text-align:center
+}
+.sidebar {
+  position: fixed;
+  padding-left: 10px;
+
+  border-left: solid;
+  border-color: black;
+  border-width: 2px;
+}
   div.showimg {
     position: relative;
     top: -45px;
@@ -23,31 +34,40 @@
     width: 65px;
     height: 65px;
   }
-</style>
-<style>
+  .showcover {
+  float: left;
+  width: 200px;
+  height: 150px;
+  margin: 5px;
+}
   .carousel-inner img {
     width: 100%;
   }
 </style>
 <body>
-  <div style='background:url(/static/image/homebg.jpg) !important;'>
+  <div style='background:url(/static/image/homebg.jpg)'>
     <br>
     <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
-          <div style='float:right'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div style='float:right; position:relative; left:17px;'>
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
-                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
                   </li>
+                  <li>
+                    <a href='/users'>your imformation</a>
+                  </li>
                 </ul>
+              </li>
             </ul>
             <div class='showimg'>
               <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
@@ -55,8 +75,9 @@
             {% else %}
             <ul class='navbar'>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
-                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/login'>login</a>
@@ -65,37 +86,302 @@
                     <a href='/register'>register</a>
                   </li>
                 </ul>
+              </li>
             </ul>
             {% endif %}
           </div>
-          <div class="span8" style='float:right'>
-            <br>
-            <ul class="nav nav-pills">
-              <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
-              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
-              <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
-              <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
-              <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
-            </ul>
+          {% if request.user.is_authenticated %}
+          <div class="span8" style='float:right;position:relative;top:-48px;left:16.8px;'>
+            {% else %}
+            <div class="span8" style='float:right;position:relative;top:20px;left:16.8px;'>
+              {% endif %}
+              <ul class="nav nav-pills">
+                <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+                <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+                <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+                <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+                <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+              </ul>
+            </div>
           </div>
-        </div>
       </nav>
       <p class='text-center'>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
-        <label class="text-center"><font color='white' size='4px'>technical otaku Save the world</font></label>
+        <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
+      </div>
     </div>
   </div>
-  <div class='col-md-2'></div>
-<div class='col-md-8'>
-    <h1 id="ty">Ty爬虫计划</h1>
-<h2 id="_1">本项目的目的</h2>
-<p>为ACM班刘啸远同学的诗人AI提供原材料进行训练，为此要在古诗词网上爬去7万首古诗词。</p>
-<h2 id="_2">本项目所用到的技术</h2>
-<p>基于python3.5的threading库，asyncio库，requests库，json库，time库，re库。</p>
-<h2 id="_3">项目进程</h2>
-<h3 id="1018">10.18</h3>
-<p>首先我们制作了一个单线程的爬虫，测试了正则表达式的普适性，全网73280首诗除去网站自己删去的古诗词一共73156首古诗词，以.json文件的文件格式保存在本地。</p>
-<h3 id="1019">10.19</h3>
-<p>使用了asyncio库和threading库来支持多线程，在每一个线程中开启事件循环准备接受任务，主要的思想是主进程打包任务分配任务。我们知道python虚拟机支持I/O密集型的多线程，我们访问页面并获得HTML代码则是在多线程中进行的，再开一个线程进行后台的对文件的写入工作（这个工作相比于获得HTML代码是非常快的），按照这样的设计，我们进行1000首古诗的测试，多线程爬虫的用时为19秒，10月18日的单线程爬虫则用时53秒，整体的效率提升了到了原来的2.8倍（没有达到预期的三线程则提升三倍是因为害怕网站服务器警告或者拒绝访问，因而中途设计了一定量后sleep0.1秒）</p></div><div class='col-md-2'>
-</div>/<body></html>
+  <div class='col-md-1'></div>
+<div class='col-md-8 panel panel-default'>
+  <div class="panel-body">
+    <h1 id="cs902">CS902</h1>
+<h2 id="921">9.21</h2>
+<p>按位与：都为一则为一</p>
+<p>按位或：两位有1则为1</p>
+<p>按位异：两位不同为1</p>
+<p>按位左移 &lt;&lt; :*2</p>
+<p>按位又移 &gt;&gt; :/2</p>
+<p>负数存储：用2的补码，反过来加1</p>
+<h2 id="1012">10.12</h2>
+<p>注意下python和cpp对于索引，切片都是左闭右开range也是最后一个不索引主义范围，相当于直接是小于符号</p>
+<p>注意python关于函数的操作，字典和列表等高级数据结构（可删减项）不是拷贝一次进入函数，而是直接进入传指针进去，但是string 数字等类型在python中认为是常量，定义了就无法删（加可以的），这样就得注意我们别像原来cpp一样的简单的传进去数组，以为不会改变。</p>
+<p>bool运算符的优先级 not &gt; and &gt; or</p>
+<p>raw_input 只会把接收到的东西弄成字符串，input则是对应有类型。但都很好转型，只要能够用int()</p>
+<p>chr()(Ascii to char) ord()(char to Ascii)</p>
+<p>可以用"\"将两行连接</p>
+<ol>
+<li>python函数定义中有这么两个特点</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">funcC</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+  <span class="k">print</span> <span class="n">a</span>
+  <span class="k">print</span> <span class="n">b</span>
+</pre></div>
+
+
+<p>b=0的意思是如果不传参数进来，函数默认此项为0</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">funcD</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">*</span><span class="n">c</span><span class="p">):</span>
+  <span class="k">print</span> <span class="n">a</span>
+  <span class="k">print</span> <span class="n">b</span>
+  <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+  <span class="k">print</span> <span class="n">c</span>
+<span class="n">funcD</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+
+<p>c 为(3,4,5)作为一个元组的形式出现</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">funcE</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">c</span><span class="p">):</span>
+  <span class="k">print</span> <span class="n">a</span>
+  <span class="k">print</span> <span class="n">b</span>
+  <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">x</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+<span class="n">funcE</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Ty&quot;</span><span class="p">,</span><span class="n">age</span> <span class="o">=</span><span class="s2">&quot;19&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>上述的函数中**c是当作一个dictionary来处理的，我们则可以用key-value的方式来检索，dictionary的实际实现是用hash表来实现的，整体来讲类似于STL map （不是multi-map，因为不能有重复的键值）</p>
+<p>python函数参数传递</p>
+<ol>
+<li>
+<p>按位置来</p>
+</li>
+<li>
+<p>按key-value模式</p>
+</li>
+</ol>
+<p>​</p>
+<p>变量的作用域：</p>
+<p>跟cpp不一样的是python的作用域直接阐述是如下的</p>
+<ul>
+<li>python能够改变变量作用域的代码段是def、class、lambda.</li>
+<li>if/elif/else、try/except/finally、for/while 并不能涉及变量作用域的更改，也就是说他们的代码块中的变量，在外部也是可以访问的</li>
+<li>变量搜索路径是：本地变量-&gt;全局变量</li>
+</ul>
+<p>这里要强调的是第二条，我们在cpp里面退出循环，else等等的，在其中声明的变量全部消亡。</p>
+<p>妈妈再也不用担心我声明变量在哪里了</p>
+<p>函数若需引用并修改外部变量,可声明全局变量</p>
+<div class="codehilite"><pre><span></span><span class="n">x</span><span class="o">=</span> <span class="mi">10</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+  <span class="k">global</span> <span class="n">x</span>
+  <span class="n">x</span> <span class="o">+=</span> <span class="mi">10</span>
+  <span class="k">print</span> <span class="n">x</span>
+<span class="k">print</span> <span class="n">x</span>
+</pre></div>
+
+
+<p>如果在local没有找到，在外层找，最后built-in里面去找</p>
+<p>新式类和旧式类的问题</p>
+<p>2.x中我们不显式的写继承于object都是旧式类，3.x中都默认为新式类</p>
+<p>新式类继承是广度优先，旧式类是深度优先</p>
+<div class="codehilite"><pre><span></span><span class="c1">#作者：刘康</span>
+<span class="c1">#链接：https://www.zhihu.com/question/22475395/answer/133787573</span>
+<span class="c1">#来源：知乎</span>
+<span class="c1">#著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s2">&quot;This is from A&quot;</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span>  <span class="s2">&quot;This is from C&quot;</span>
+<span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+<span class="n">fun</span> <span class="o">=</span>  <span class="n">D</span><span class="p">()</span>
+<span class="n">fun</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="c1">#经典类的答案： This is from A</span>
+<span class="c1">#新式类的答案： This is from C</span>
+<span class="c1">#发定义方式不同在Python 2.x 版本中，默认类都是旧式类，除非显式继承object。在Python 3.x 版本中，默认类就是新式类，无需显示继承object。在Python 2.x 中，定义旧式类的方式：class A:  # A是旧式类，因为没有显示继承object</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>  <span class="c1"># B是旧式类，因为B的基类A是旧式类</span>
+    <span class="k">pass</span> 
+</pre></div>
+
+
+<p>保持class与type的统一</p>
+<p>对新式类的实例执行a.__class__与type(a)的结果是一致的，对于旧式类来说就不一样了。</p>
+<p>了解一下__init__ ,__new__,__call___ 的区别</p>
+<p>init是常见的初始化函数的，但是他在new被调用之后在运行的</p>
+<p>一般情况我们不会自己写new，会调用父类的new，但必须知道其先于init</p>
+<p>call的意义在于去掉函数和对象的相对概念，你定义的call的函数既可以使用对象名直接写函数，比如：</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gender</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gender</span> <span class="o">=</span> <span class="n">gender</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">friend</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s1">&#39;My name is </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">print</span> <span class="s1">&#39;My friend is </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="n">friend</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Bob&#39;</span><span class="p">,</span><span class="s1">&#39;male&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="p">(</span><span class="s1">&#39;Tim&#39;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="n">My</span> <span class="n">name</span> <span class="ow">is</span> <span class="n">Bob</span><span class="o">...</span>
+<span class="n">My</span> <span class="n">friend</span> <span class="ow">is</span> <span class="n">Tim</span><span class="o">...</span>
+</pre></div>
+
+
+<p>你可以直接把你的类当作函数来使用，但在使用之前你要对其进行实例化</p>
+<p>在10-14通过实验得知</p>
+<p>关于python私有变量</p>
+<p>_使用于protected，__使用与private</p>
+<p>调用的时候都得是_类名__函数名()</p>
+<p>子类无法调用父类的private函数，这一点和cpp类似</p>
+<p>python的奇怪报错</p>
+<p>Recursion Error: maximum recursion depth exceeded</p>
+<p>python 默认的递归层数只有900层左右，如果需要大规模的递归，可以用以下语法</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setrecursionlimit</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
+</pre></div>
+
+
+<p>如果不是写面对对象的问题，则我们在函数名前面加一个_是为了表示这是一个以文件为类的函数，仍然为protected，只能在本文档中使用。</p>
+<h2 id="1015">10.15</h2>
+<p>如果你的类表现得像是一个列表，或者需要返回类中某重要列表的长度，则可以声明__len__函数，则你对外可以使用len(类的实例对象)来返回你想返回的值</p>
+<p>python中try/except/else/finally体系的写法：</p>
+<div class="codehilite"><pre><span></span><span class="k">try</span><span class="p">:</span>
+     <span class="n">Normal</span> <span class="n">execution</span> <span class="n">block</span><span class="c1">#首先运行该区域，如果出现异常，交给python解释器进行操作，返回错误，进入except大板块</span>
+<span class="k">except</span> <span class="n">A</span><span class="p">:</span><span class="c1">#下述对于指定的错误有一些输出</span>
+     <span class="ne">Exception</span> <span class="n">A</span> <span class="n">handle</span>
+<span class="k">except</span> <span class="n">B</span><span class="p">:</span>
+     <span class="ne">Exception</span> <span class="n">B</span> <span class="n">handle</span>
+<span class="k">except</span><span class="p">:</span><span class="c1">#当然枚举不是好的想法，就把剩下不重要的错都放到了这里</span>
+     <span class="n">Other</span> <span class="n">exception</span> <span class="n">handle</span>
+<span class="k">else</span><span class="p">:</span><span class="c1">#如果try中的语句完全没有问题，则执行else中的语句，当然你也可以不写</span>
+     <span class="k">if</span> <span class="n">no</span> <span class="n">exception</span><span class="p">,</span><span class="n">get</span> <span class="n">here</span>
+<span class="k">finally</span><span class="p">:</span><span class="c1">#不管出错还是没出错，有没有else finally中的语句是必须执行的</span>
+     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;finally&quot;</span><span class="p">)</span>   
+</pre></div>
+
+
+<p>总结一下python当中asyncio的用法，相当于是创建事件循环，你向其中丢任务即可，对于多线程来讲，尤其是python的处理I\O密集型（HTTP，读写磁盘文件），现我能掌握的方式（非底层的写Threading），则是创建多个现成，向其中抛入在进程中定义的event-loop，我们在进程中产生任务，然后分配给各个线程处理，这比较符合python多线程的实际应用（我的爬虫创建了三个线程来处理获得网页源码，主进程在完成了分配任务之后开始进行对数据的写入文件）</p>
+<p>python 标识符明明规则：</p>
+<p>1.第一位可以是字母和下划线</p>
+<p>2.后面是数字下划线字母都可以</p>
+<p>3.<strong>在3.x的Python中，标识符ASCII字母、下划线以及大多数非英文语言的字母，只要是Unicode编码的字母都可以充当引导字符，后续字符可以是任意引导符，或任意非空格字符，包括Unicode编码中认为是数字的任意字符。</strong></p>
+<p>记住反正是不能有空格的</p>
+<p>姑且总结一下最近接触的Django框架，python主流的网站框架</p>
+<p>Django是MTV的开发模式，我们之前使用PHP写网站的时候，网站的建立都有一个基本的根目录的概念，我之前一直认为所有的软件开发都是这个样子，然后我发现我被打脸了，Django的基本理念是产生app，你访问某个地址，首先调用的是正则对应的函数，所有的地址都是这样，在urls.py中去寻找对应的函数，包括静态的资源。这一点要去适应（我还没适应），因为这样的设置会很多。Django对于面对对象的管理是非常不错的，都是在models.py进行编写的，在HTML当中的“嵌入”也基本上和PHP如出一辙 ，另外在debug和线下测试方面，省去了xampp这一大坨东西，不用去模拟整个状态，直接在cmd里面manage.py runserver 感觉到非常的舒适。</p>
+<h2 id="1023">10.23</h2>
+<p>类中关于 __str__的使用</p>
+<p>这个函数主要是为print提供（或者一些特殊地方的类似print功能的调用和显示）的，你可以返回一些类中的信息。</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">user</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">age</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+  <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;My name is &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s2">&quot;, I&#39;m &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="o">+</span><span class="s1">&#39;.&#39;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">user</span><span class="p">(</span><span class="s1">&#39;Mike&#39;</span><span class="p">,</span><span class="s1">&#39;15&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">a</span>
+<span class="c1">#result My name is Mike, I&#39;m 15.</span>
+</pre></div>
+
+
+<h1 id="1026">10.26</h1>
+<p>首先面对对象的self不是必须的，只是第一位参数必须得是一个该类的对象，你只要自己知道就好了</p>
+<p>其次__repr__表示不调用print，你在交互模式当中写出一个对象的名字，它返回一个字符串并默认打印在屏幕上，如果你不重定义这个函数的话，将使用object的该函数，返回该对象的类型和地址等等额外的信息</p>
+<p>对于python的运算符重载他不同于cpp的运算符重载，定义方式都是函数的方式，例如重载加法：</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+  <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+    <span class="k">pass</span>
+  <span class="k">def</span> <span class="fm">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<p>如果不知道是什么函数了就去文档里面查，以及，如果你想让加法有很多种情况，请自行使用一些方法比如<code>isinstance(a,b)</code>表示判断a,b是不是同一个类型，当然你可以直接索取其类型<code>type(a)</code> 再去比较</p>
+<p>__dict__可以得到该对象的对应的类的所有函数方法，<code>hasattr()</code>判断是否有某个函数</p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% if hascomment %}
+<p><font size="5px;">Comments</font></p>
+{% for com in comments %}
+<p><font>{{forloop.counter}}
+{{com.0.author}} &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default" onclick="reply({{forloop.counter}})">reply</button>
+</p>
+<img src="{{com.1}}" class="avatarshow img-circle" style="position:relative;float:left;">
+<p style="margin-left:75px;"><font size="3x;">{{com.0.content}}</font></p>
+<br>
+<br>
+<time style="float:left;">{{com.0.timestamp}}</time>
+<hr style="height:2px;border:none;border-top:2px;background-color:black;">
+{% endfor %}
+{% endif %}
+<form action="" method='post'>
+{% csrf_token %}
+<div class='form-group'><label><font size='3px'>comment</font></label>
+<textarea type='text' id="editcomment" name='editcomment' class='form-control' rows="3" required></textarea><br>
+</div>
+<p class='text-center'>
+  <button type="submit" value="submit" class='btn btn-default'>comment</button>
+</p>
+</form></div></div>
+<div class="col-md-3">
+  <aside>
+    <div class="sidebar">
+      <font size='2.5px'>
+          <font size='5px'>ohter articles the author has</font>
+        </p>
+        {% for link in links %}
+        <p>
+          <a href='/detail/{{link.Article_id}}'>
+            {{link.title}}</a>
+        </p>
+        {% endfor %}
+        </font>
+      </font>
+    </div>
+  </aside>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+  function reply(counter){
+  var e = document.getElementById('editcomment');
+  e.innerHTML = "reply num "+counter.toString()+":";
+  }
+function thick(img)
+{
+img.style="border:solid;border-color:rgb(186, 187, 182);";
+}
+
+function thin(img)
+{
+img.style="";
+}
+</script>

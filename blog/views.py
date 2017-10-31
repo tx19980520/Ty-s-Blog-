@@ -4,14 +4,14 @@ sys.setdefaultencoding('utf-8')
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.shortcuts import render
-from blog.models import BlogPost,Article,Profile
+from blog.models import BlogPost,Article,Profile,Comment
 from django.views.decorators import csrf
 from datetime import *
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import logout
-#from django.contrib.auth.decorators import login_required
+import re
 import markdown
 import codecs
 from markdown.extensions import Extension
@@ -32,6 +32,17 @@ header='''
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
+h1{
+  text-align:center
+}
+.sidebar {
+  position: fixed;
+  padding-left: 10px;
+
+  border-left: solid;
+  border-color: black;
+  border-width: 2px;
+}
   div.showimg {
     position: relative;
     top: -45px;
@@ -44,31 +55,40 @@ header='''
     width: 65px;
     height: 65px;
   }
-</style>
-<style>
+  .showcover {
+  float: left;
+  width: 200px;
+  height: 150px;
+  margin: 5px;
+}
   .carousel-inner img {
     width: 100%;
   }
 </style>
 <body>
-  <div style='background:url(/static/image/homebg.jpg) !important;'>
+  <div style='background:url(/static/image/homebg.jpg)'>
     <br>
     <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
-          <div style='float:right'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div style='float:right; position:relative; left:17px;'>
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
-                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
                   </li>
+                  <li>
+                    <a href='/users'>your imformation</a>
+                  </li>
                 </ul>
+              </li>
             </ul>
             <div class='showimg'>
               <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
@@ -76,8 +96,9 @@ header='''
             {% else %}
             <ul class='navbar'>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
-                <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font><b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/login'>login</a>
@@ -86,38 +107,101 @@ header='''
                     <a href='/register'>register</a>
                   </li>
                 </ul>
+              </li>
             </ul>
             {% endif %}
           </div>
-          <div class="span8" style='float:right'>
-            <br>
-            <ul class="nav nav-pills">
-              <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
-              <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
-              <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
-              <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
-              <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
-            </ul>
+          {% if request.user.is_authenticated %}
+          <div class="span8" style='float:right;position:relative;top:-48px;left:16.8px;'>
+            {% else %}
+            <div class="span8" style='float:right;position:relative;top:20px;left:16.8px;'>
+              {% endif %}
+              <ul class="nav nav-pills">
+                <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+                <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+                <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+                <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+                <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+              </ul>
+            </div>
           </div>
-        </div>
       </nav>
       <p class='text-center'>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
-        <label class="text-center"><font color='white' size='4px'>technical otaku Save the world</font></label>
+        <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
+      </div>
     </div>
   </div>
-  <div class='col-md-2'></div>
-<div class='col-md-8'>
+  <div class='col-md-1'></div>
+<div class='col-md-8 panel panel-default'>
+  <div class="panel-body">
     '''
 tail='''
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% if hascomment %}
+<p><font size="5px;">Comments</font></p>
+{% for com in comments %}
+<p><font>{{forloop.counter}}
+{{com.0.author}} &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default" onclick="reply({{forloop.counter}})">reply</button>
+</p>
+<img src="{{com.1}}" class="avatarshow img-circle" style="position:relative;float:left;">
+<p style="margin-left:75px;"><font size="3x;">{{com.0.content}}</font></p>
+<br>
+<br>
+<time style="float:left;">{{com.0.timestamp}}</time>
+<hr style="height:2px;border:none;border-top:2px;background-color:black;">
+{% endfor %}
+{% endif %}
 <form action="" method='post'>
+{% csrf_token %}
 <div class='form-group'><label><font size='3px'>comment</font></label>
-<input type='text' name="title" class='form-control' style='width:200px;' required><br>
+<textarea type='text' id="editcomment" name='editcomment' class='form-control' rows="3" required></textarea><br>
 </div>
-</form>
-</div><div class='col-md-2'>
-</div>/<body></html>''' #I will add comment form here!
+<p class='text-center'>
+  <button type="submit" value="submit" class='btn btn-default'>comment</button>
+</p>
+</form></div></div>
+<div class="col-md-3">
+  <aside>
+    <div class="sidebar">
+      <font size='2.5px'>
+          <font size='5px'>ohter articles the author has</font>
+        </p>
+        {% for link in links %}
+        <p>
+          <a href='/detail/{{link.Article_id}}'>
+            {{link.title}}</a>
+        </p>
+        {% endfor %}
+        </font>
+      </font>
+    </div>
+  </aside>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+  function reply(counter){
+  var e = document.getElementById('editcomment');
+  e.innerHTML = "reply num "+counter.toString()+":";
+  }
+function thick(img)
+{
+img.style="border:solid;border-color:rgb(186, 187, 182);";
+}
+
+function thin(img)
+{
+img.style="";
+}
+</script>''' #I will add comment form here!
 # Create your views here.
 # Finally I choose to write normal html code in template and views just like back-end
 
@@ -234,7 +318,7 @@ def blog(request):
                                      'markdown.extensions.toc',
                                   ])
             input_file.close()
-            newhtml = codecs.open(settings.BASE_DIR+r'/blog/templates/article'+str(total+1)+'.html','w',encoding='utf-8')
+            newhtml = codecs.open(settings.BASE_DIR+r'/blog/templates/article%d.html'%(total+1),'w',encoding='utf-8')
             newhtml.write(header)
             newhtml.write(html)
             newhtml.write(tail)
@@ -374,14 +458,47 @@ def alogout(request):
     return HttpResponseRedirect('/')
 
 def showdetail(request,num):
-    if request.user.is_authenticated:
-        if request.method=='GET':
-            u = 'article'+str(num)+'.html'
-            return render(request,u,)
-        elif request.method=='POST':
-            comment = comment.objects.create(witharticle=num,content=request.POST.get('comment'),)
-    else:
-        return HttpResponseRedirect('/login')
+    if request.method=='GET':
+        hascomment = True
+        url = 'article'+str(num)+'.html'
+        tauthor = Article.objects.get(Article_id=num).author
+        links = Article.objects.filter(author=tauthor)
+        comments=Comment.objects.filter(witharticle=num).order_by('floor')
+        comments = list(comments)
+        avatars=[]
+        for c in comments:
+            user = User.objects.get(username=c.author)
+            profile = Profile.objects.get(user=user)
+            avatars.append(profile.avatar.url)
+        comments = zip(comments,avatars)
+        if len(comments)>=1:
+            hascomment = True
+        return render(request,url,{"comments":comments,"hascomment":hascomment,"links":links})
+    elif request.method=='POST':
+        tauthor = Article.objects.get(Article_id=num).author
+        links = Article.objects.filter(author=tauthor)
+        hascomment = True
+        cont = request.POST['editcomment']
+        go = re.match('reply num (.+):',cont)
+        if go == None:
+            getfloor = Comment.objects.filter(witharticle=num).count()+1
+            Comment.objects.create(witharticle=num,content=request.POST.get('editcomment'),floor=getfloor,father=0,author=request.user.username)
+        elif go != None:
+            father = int(go.group(1))
+            getfloor = Comment.objects.filter(witharticle=num).count()+1
+            Comment.objects.create(witharticle=num,content=request.POST.get('editcomment'),floor=getfloor,father=father,author=request.user.username)
+        url = 'article'+str(num)+'.html'
+        comments=Comment.objects.filter(witharticle=num).order_by('floor')
+        comments = list(comments)
+        avatars=[]
+        for c in comments:
+            user = User.objects.get(username=c.author)
+            profile = Profile.objects.get(user=user)
+            avatars.append(profile.avatar.url)
+        comments = zip(comments,avatars)
+        if len(comments)>=1:
+            hascomment = True
+        return render(request,url,{"comments":comments,"hascomment":hascomment,"links":links})
 def users(request):
     if request.method == 'GET':
         try:

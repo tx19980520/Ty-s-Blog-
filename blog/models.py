@@ -30,17 +30,7 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='photo')
     def __str__(self):
         return self.user.username
-#@receiver(post_save, sender=User)
-#def create_user_profile(sender, instance, created, **kwargs):
-#    if created:
-#        num = Profile.objects.all().count()+1
-#        a = post_save.avatar
-#        Profile.objects.create(user=instance,idnumber=num)
-
-#@receiver(post_save, sender=User)
-#def save_user_profile(sender, instance, **kwargs):
-#    instance.profile.save()
-class comment(models.Model):
+class Comment(models.Model):
     timestamp = models.DateTimeField(default=datetime.datetime.now())
     witharticle = models.IntegerField(default=-1)
     father = models.IntegerField(default = 0)
@@ -48,4 +38,4 @@ class comment(models.Model):
     author = models.CharField(max_length=50,default='admin')
     content = models.TextField(default='hi~')
     def __str__(self):
-        return self.timestamp+"   "+self.author+"   "+self.timestamp
+        return self.author+"   "
