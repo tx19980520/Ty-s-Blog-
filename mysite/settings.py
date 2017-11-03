@@ -23,7 +23,7 @@ SECRET_KEY = '8h9skdo5b*f*w5%j#av2=)_kf_7qdx(9aa9bgt!my)@g%f2$w8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["106.15.225.249","www.cqdulux.cn","127.0.0.1"]
 
 
 # Application definition

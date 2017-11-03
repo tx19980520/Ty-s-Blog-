@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel='stylesheet' href='/static/css/log.css'>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -64,7 +65,7 @@
       <br>
       <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>account</font></label>
         <div class="col-sm-6">
-          <input type='text' placeholder="Please input account" name="account" class='form-control'>
+          <input type='text' id="account" placeholder="输入4个字符以上" name="account" class='form-control' onblur="checknickname()">
         </div>
       </div>
       <br><br>
@@ -91,14 +92,14 @@
       <br>
       <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>phone</font></label>
         <div class="col-sm-6">
-          <input type='text' placeholder="Please input phone" name="phone" class='form-control'>
+          <input type='text' placeholder="Please input phone" name="phone" id="phone" class='form-control' onblur="checkPhone()">
         </div>
       </div>
       <br>
       <br>
       <div class='form-group'><label class='col-sm-4'><font size='3px'>avatar</font></label>
         <div class="col-sm-6">
-          <input type='file' onchange='shownew(this)'>
+          <input type='file' onchange='shownew(this)' name="avatar">
           <div class='showimg'>
             <img class='avatarshow img-circle' id='choose' />
           </div>
@@ -134,4 +135,32 @@
       fr.readAsDataURL(file);
     }
   }
+  function checknickname()
+  {
+    var text = document.getElementById("account").value;
+    var len1 = 0;
+    var len2 = 0;
+    for(var i=0;i<text.length;++i)
+    {
+      var c = text.charCodeAt(i);
+      if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f))
+      {
+       len1++;
+      }
+      else{
+        len2++;
+      }
+    }
+    if ((len1+len2)<4 && (len1+len2) != 0)
+    {
+      alert("请输入总共四个字符，可以是汉字、数字或者字母");
+    }
+  }
+  function checkPhone(){
+    var phone = document.getElementById('phone').value;
+    if(!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){
+        alert("手机号码有误，请重填");
+        return false;
+    }
+}
 </script>

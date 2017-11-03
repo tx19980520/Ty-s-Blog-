@@ -9,12 +9,23 @@
     Ty's Blog!
   </title>
   <!-- Bootstrap -->
+  <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:233px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:13.3px;
+}
   div.showimg {
     position: relative;
     top: -45px;
@@ -63,20 +74,20 @@
 </style>
 
 <body>
-  <div style='background:url(/static/image/homebg.jpg) '>
+  <div style="background:url(/static/image/homebg.jpg)">
     <br>
     <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div style='float:right; position:relative; left:17px;'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
@@ -108,11 +119,6 @@
             </ul>
             {% endif %}
           </div>
-          {% if request.user.is_authenticated %}
-          <div class="span8" style='float:right;position:relative;top:-48px;left:16.7px;'>
-            {% else %}
-            <div class="span8" style='float:right;position:relative;left:16.7px;'>
-              {% endif %}
               <ul class="nav nav-pills">
                 <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
                 <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
@@ -123,7 +129,8 @@
             </div>
           </div>
       </nav>
-      <p class='text-center'>
+      <p class='text-center' style="position:relative;left:8.3px;">
+        <br>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
@@ -133,8 +140,7 @@
     <div class='col-md-1'></div>
     <div class='col-md-8'>
       <div class="panel panel-default">
-      <div class="panel-body">
-      {% if posts.number %}
+      {% if posts.number is 1 %}
       <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
           <li data-target="#myCarousel" data-slide-to="0"></li>
@@ -179,7 +185,6 @@
           </div>
           <hr style=" height:2px;border:none;border-top:2px;background-color:black;" />
         </div> {% endfor %}
-        {% if request.user.is_authenticated %}
         <form action="blog/" method='post' enctype="multipart/form-data">
           {% csrf_token %}
           <div class='form-group'><label><font size='3px'>titile</font></label>
@@ -193,27 +198,28 @@
               <p id='tags'></p>
             </div>
           </div>
-          <!-- /.col-lg-6 -->
           <div class='form-group'><label><font size='3px'>markdown</font></label><br>
             <input type='file' id='markdown' name="markdown" onchange='checkmd(this)' required>
           </div>
           <div class='form-group'><label><font size='3px'>cover</font></label><br>
             <input type='file' name='cover' onchange='shownew(this)' required>
-            <img class='preshow' id="cover">
+            <img class='preshow' id="cover" style="position:relative;left:-330px;">
           </div>
           <p class='text-center'>
             <br>
             <br>
             <br>
-
+            {% if request.user.is_authenticated %}
             <button type="submit" value="提交" class='btn btn-default' style="position:relative;left:75px;">提交</button>
+            {% else %}
+            <label><font size="3px">If you wanna post,login first!</font></label>
+            {% endif %}
           </p>
         </form>
-        {% endif %}
         <br>
         <br>
     </div>
-  </div>
+  <br>
   <ul class='pager'>
     {% if posts.has_previous %}
     <li class='previous'>
@@ -223,16 +229,17 @@
     <li class='next'>
       <a href="?page={{ posts.next_page_number }}">Next</a>
     </li>
-    {% endif %}
+{% endif %}
   </ul>
   <div class='text-center'><b>Page {{ posts.number }} of {{ posts.paginator.num_pages }}</b></div>
   <br>
-    <p class="text-center">Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="http://hzwer.com">Ty.com</a>&nbsp;All Rights Reserved! Powered by Django </p>
+    <p class="text-center">Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="www.cqdulux.cn">www.cqdulux.cn</a>&nbsp;All Rights Reserved! Powered by Django </p>
   </div>
     <div class='col-md-3'>
       <aside>
         <div class="sidebar">
           <font size='2.5px'>
+            {% if request.user.is_authenticated %}
             <p>
               <form name='search' action='' method='post'>
                 {% csrf_token %}
@@ -251,6 +258,15 @@
                 {{link.title}}</a>
             </p>
             {% endfor %}
+            {% else %}
+            <p><font size="5px">About Me</font></p>
+            <p>网名：ty0207 | 毛毛大王</p>
+            <p>职业：学生 </p>
+            <p>学校：上海交通大学</p>
+            <p>籍贯：重庆市</p>
+            <p>电话：17710375409</p>
+            <p>邮箱：ty0207@sjtu.edu.cn</p>
+            {% endif %}
           </font>
         </div>
       </aside>

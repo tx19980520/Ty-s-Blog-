@@ -1,6 +1,7 @@
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
+import os
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.shortcuts import render
@@ -23,6 +24,7 @@ header='''
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel='stylesheet' href='/static/css/code.css'>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -32,6 +34,16 @@ header='''
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:233px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:13.3px;
+}
 h1{
   text-align:center
 }
@@ -66,20 +78,20 @@ h1{
   }
 </style>
 <body>
-  <div style='background:url(/static/image/homebg.jpg)'>
+  <div style="background:url(/static/image/homebg.jpg)">
     <br>
     <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div style='float:right; position:relative; left:17px;'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
@@ -111,11 +123,6 @@ h1{
             </ul>
             {% endif %}
           </div>
-          {% if request.user.is_authenticated %}
-          <div class="span8" style='float:right;position:relative;top:-48px;left:16.8px;'>
-            {% else %}
-            <div class="span8" style='float:right;position:relative;top:20px;left:16.8px;'>
-              {% endif %}
               <ul class="nav nav-pills">
                 <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
                 <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
@@ -133,7 +140,7 @@ h1{
       </div>
     </div>
   </div>
-  <div class='col-md-1'></div>
+    <div class='col-md-1'></div>
 <div class='col-md-8 panel panel-default'>
   <div class="panel-body">
     '''
@@ -159,13 +166,18 @@ tail='''
 <hr style="height:2px;border:none;border-top:2px;background-color:black;">
 {% endfor %}
 {% endif %}
+{% if request.user.is_authenticated %}
 <form action="" method='post'>
 {% csrf_token %}
 <div class='form-group'><label><font size='3px'>comment</font></label>
-<textarea type='text' id="editcomment" name='editcomment' class='form-control' rows="3" required></textarea><br>
+<textarea type='text' id="editcomment" name='editcomment' onblur="checkcomment()" class='form-control' rows="3" required></textarea><br>
 </div>
 <p class='text-center'>
+  {% if request.user.is_authenticated %}
   <button type="submit" value="submit" class='btn btn-default'>comment</button>
+  {% else %}
+  <p class="text-center"><font size="3px">If you wanna post,login first!</font></p>
+  {% endif %}
 </p>
 </form></div></div>
 <div class="col-md-3">
@@ -200,6 +212,16 @@ img.style="border:solid;border-color:rgb(186, 187, 182);";
 function thin(img)
 {
 img.style="";
+}
+function checkcomment()
+{
+    var text= document.getElementById("editcomment").value;
+    var patt1=new RegExp("<script>");
+    if (patt1.test(text))
+    {
+	    $("#editcomment").val("");
+        alert("No way!");
+    }
 }
 </script>''' #I will add comment form here!
 # Create your views here.
@@ -297,7 +319,6 @@ def blog(request):
                         topics = zip(topics,ta)
                         links = Article.objects.all()
                 except EmptyPage:
-                    print "e"
                     find = paginator.page(1)
                     topics = find
                     ta =[]
@@ -308,6 +329,9 @@ def blog(request):
                     links = Article.objects.all()
                 return render(request,'blog.html',{'posts':find,'topic':topics,'links':links,'word':word,'isfind':isfind,"istag":istag})
             total=Article.objects.all().count()
+            if (request.FILES.get('markdown').size/1000/1024)>10000:
+                return render(request,"archive.html")
+
             Article.objects.create(title=request.POST['title'],author=request.user.username,markdown=request.FILES.get('markdown'),simple_production=request.POST['simple_production'],Article_id=total+1,timestamp=datetime.now(),cover=request.FILES.get('cover'),tags=request.POST.get('tags'))
             goal =Article.objects.get(Article_id=total+1)
             input_file = codecs.open(settings.BASE_DIR+goal.markdown.url,'r',encoding='utf-8')
@@ -356,7 +380,6 @@ def blog(request):
                 topics = zip(topics,ta)
                 links = Article.objects.all()
         except EmptyPage:
-            print
             posts = paginator.page(paginator.num_pages)
             topics = Article.objects().all()[(paginator.num_pages-1)*3:paginator.num_pages*3+1]
             ta =[]
@@ -382,12 +405,13 @@ def alogin(request):
         else:
             password= request.POST.get('password')
         if account is not None and password is not None :
-            user = auth.authenticate(username=account, password=password)
             myuser = User.objects.get(username=account)
-            check =myuser.check_password(password)
-            if user and check:
-                if user.is_active:
-                    auth.login(request,user)
+            check = False
+            if myuser.password == password:
+                check = True
+            if check:
+                if myuser.is_active:
+                    auth.login(request,myuser)
                     return render(request,'archive.html',)
                 else:
                     errors.append("User is not active!")
@@ -465,14 +489,14 @@ def showdetail(request,num):
         links = Article.objects.filter(author=tauthor)
         comments=Comment.objects.filter(witharticle=num).order_by('floor')
         comments = list(comments)
-        avatars=[]
-        for c in comments:
-            user = User.objects.get(username=c.author)
-            profile = Profile.objects.get(user=user)
-            avatars.append(profile.avatar.url)
-        comments = zip(comments,avatars)
         if len(comments)>=1:
             hascomment = True
+            avatars=[]
+            for c in comments:
+                user = User.objects.get(username=c.author)
+                profile = Profile.objects.get(user=user)
+                avatars.append(profile.avatar.url)
+            comments = zip(comments,avatars)
         return render(request,url,{"comments":comments,"hascomment":hascomment,"links":links})
     elif request.method=='POST':
         tauthor = Article.objects.get(Article_id=num).author
@@ -536,11 +560,11 @@ def avatarchange(request):
     if request.method == 'POST':
         avatar = request.FILES.get('new_avatar')
         name = avatar.name
-        print name
-        totalname = settings.MEDIA_ROOT+'/photo/'+name;
+        totalname = settings.MEDIA_ROOT+"/photo/"+name
         with open(totalname, 'wb+') as destination:
             for chunk in avatar.chunks():
                 destination.write(chunk)
+        totalname = "/photo/"+name
         pro = Profile.objects.filter(idnumber=request.user.profile.idnumber).update(avatar=totalname)
         return HttpResponseRedirect('/')
     elif request.method == 'GET':

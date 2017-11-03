@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel='stylesheet' href='/static/css/code.css'>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:233px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:13.3px;
+}
+h1{
+  text-align:center
+}
+.sidebar {
+  position: fixed;
+  padding-left: 10px;
+
+  border-left: solid;
+  border-color: black;
+  border-width: 2px;
+}
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+  .showcover {
+  float: left;
+  width: 200px;
+  height: 150px;
+  margin: 5px;
+}
+  .carousel-inner img {
+    width: 100%;
+  }
+</style>
+<body>
+  <div style="background:url(/static/image/homebg.jpg)">
+    <br>
+    <div>
+      <nav>
+        <div class="row">
+          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
+            {% if request.user.is_authenticated %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+                  <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/logout'>logout</a>
+                  </li>
+                  <li>
+                    <a href='/users'>your imformation</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <div class='showimg'>
+              <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+            </div>
+            {% else %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/login'>login</a>
+                  </li>
+                  <li>
+                    <a href='/register'>register</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            {% endif %}
+          </div>
+              <ul class="nav nav-pills">
+                <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+                <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+                <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+                <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+                <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+              </ul>
+            </div>
+          </div>
+      </nav>
+      <p class='text-center'>
+        <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+        <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
+      </p>
+      </div>
+    </div>
+  </div>
+    <div class='col-md-1'></div>
+<div class='col-md-8 panel panel-default'>
+  <div class="panel-body">
+    <h1 id="django1116">基于Django1.11.6个人博客开发后期总结</h1>
+<h2 id="django1116_1">Django1.11.6项目简介</h2>
+<p>首先必须强调的是我是1.11.6的版本，其他版本是什么样子我一概不知，我也是在网上找博文然后学习的，其次我只保证按我说的去做一定会实现，但如果有更好的实现方法那你自行百度。</p>
+<p>想要看大段代码的点击下面的链接</p>
+<p>https://github.com/tx19980520/Ty-s-Blog-</p>
+<p>整个框架有几个很重要的基本文档，我给大家简单梳理一下：</p>
+<ol>
+<li>manage.py</li>
+</ol>
+<p>这个文档你可以简单的理解为一个指令库，在命令行界面（主意这里不是指的python的命令行界面，是系统的）操作，对整个框架进行调整，暂时你记得如下的几个操作就好，注意，使用下列指令是的命令行路径一定是要在manage.py的path。</p>
+<p><code>python
+   manage.py runserver
+   #模拟执行服务器运行，在浏览器中使用127.0.0.1可以对你的网页进行访问
+   manage.py makemigrations
+   manage.py migrate
+   #如果你不懂不要紧，你只需要知道在每次你修改完你的models.py文档后把这两个命令按先后顺序输入就好
+   manage.py createsuperuser
+   #创建一个超级用户，这指令输出后会让你填写一些基本信息
+   manage.py startproject xxx
+   #创建一个项目创建之后会在manage.py下生成一系列文件。
+   manage.py startapp yyy
+   #但是记得创建之后还是得在settings里面去设置（后面我会讲到）</code></p>
+<p>​</p>
+<ol>
+<li>settings.py</li>
+</ol>
+<p>这个文档是掌控整个项目的结构的，新手入门的话你只需要注意以下的地方</p>
+<p><code>BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+   #相当于是储存一个你项目的所在地
+   INSTALLED_APPS =[]
+   #django把每一个具体的项目（或者叫板块？）都定义为一个app，你之后会使用一个指令创建一个app，然后在这里手动添加其名字
+   DATABASE=｛｝
+   #这个地方主要是对于后台数据库的一个基本信息的填写，默认为sqlite3，你如果要改成mysql之类的数据库的话可以在网上自行百度，这个方面其余博客讲的没有语法错误
+   MEDIA_URL = '/media/'
+   MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+   #上两行设置的是你的本地服务器里面储存上传文件的地方会和后面的一个up_load配合使用
+   STATIC_URL = '/static/'
+   STATICFILES_DIRS = (
+       os.path.join(BASE_DIR, "static"),
+   #上两行设置的是你的本地服务器里面储存静态的一些图片和css，便于你后面添加到你的html中进行美化
+   )</code></p>
+<p>​</p>
+<ol>
+<li>urls.py</li>
+</ol>
+<p>这个文件只有一个用途，他只有一个函数。下面节选自我代码中的一段</p>
+<div class="codehilite"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^detail/(.+)$&#39;</span><span class="p">,</span><span class="n">views</span><span class="o">.</span><span class="n">showdetail</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sdsdaqdsa&quot;</span><span class="p">),</span>
+<span class="p">]</span><span class="o">+</span><span class="n">static</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_URL</span><span class="p">,</span> <span class="n">document_root</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_ROOT</span><span class="p">)</span>
+</pre></div>
+
+
+<p>首先url的第一个参数是一个正则表达，正则括号提取的东西会自动传到第二个参数——一个函数中去，当然你要在函数声明中写一个形式参数来表示它，最后的这个name如果各位能够理解的话可以使用，前面的正则是显现在地址栏里面给用户看的，如果我们在html里面写<code>&lt;a href='/detail/1'&gt;</code>这样的话如果我们想更改正则，我们得把所用用到的地方都给了，但是如果我们取一个相对固定的别名从别名找到这个地址，这就很简单了，这个地方具体实现的函数我们后面的重定义的地方写</p>
+<p>最后那个加号后面的是为了告诉项目，咱在后面讲到的一切地方的/media都是指的我们之前定义的那个地方。</p>
+<ol>
+<li>views.py</li>
+</ol>
+<p>这个地方接着讲上面的views.showdetail是什么，如果你之前部署过一个网站，不是用的这个框架，而是PHP之类的语言，你会知道有一个根目录的理解方式，那当然也非常的简单易懂，但这里django提出的方式是，使用正则匹配，匹配到对应的函数，至于反给你什么界面，做了什么操作，全看这个函数的写法。在你的app文件夹下面会存在有一个templates这个文件夹，如果没有你自己建，使用这样的调用方式，就可以把所有的html文件放置在该文件夹下（注，我不用django表单，这可能不是很拥抱这个框架，但是我觉得写正常表单在html中更加的明了）</p>
+<ol>
+<li>models</li>
+</ol>
+<p>顾名思义models是定义你的一些模型，这些模型都会放进你的数据库，为了方面记得定义str函数，之后我们会讲这有什么用。基本的板子如下：</p>
+<p><code>python
+   class BlogPost(models.Model):
+       title = models.CharField(max_length=150)
+       author = models.CharField(max_length=50,default='admin')
+       body = models.TextField()
+       timestamp = models.DateTimeField()
+       def __str__(self):
+           return self.title</code></p>
+<p>models.xxxxFiled()是创建各类元素的方式，这个地方强调下，default是如果没有的情况默认存在的值，记得这个值得和你定义的元素是一类的，不要定义个整数然后你去<code>default=''</code>这就会报错，当然如果你忘记了添加该项或者是<code>null=True</code>这一项，你在处理数据的时候会提醒你，并让你做出选择。</p>
+<p>我们这个地方要讲，我们要建立类和类之间的关系这里的关系有一对一（OnetoOneField）、一对多（ForeignKey）、多对多（ManyToManyField），这个地方我承认我的代码写丑了，我的博客里面的Comments和Article和User的关系没有写出来，这导致的是我在后端处理的时候使用数据库搜索的次数非常多，如果是一个大型网站，那么多次调用数据库很容易导致用电过高或者服务器的崩溃。</p>
+<p>我们之前学习过python的同学可以简单的把OneToOneField理解为在新定义的类中去添加一个原来定义的类，ForeignKey和ManyToManyField部分是建立数据库关系的重要部分，具体的语法你可以在一下的网站中习得：http://www.cnblogs.com/linxiyue/p/3667418.html，数据库操作水平高的同学会觉得这很方便。</p>
+<p>可以先讲一下我这网站中暂时用到的仅有的一次OneToOneField，是为了扩展本有的User，这也是其主要的功能，贴一下代码：</p>
+<p><code>python
+   class Profile(models.Model):
+       user = models.OneToOneField(User, on_delete=models.CASCADE)
+       idnumber = models.IntegerField(default=1)
+       phone = models.CharField(max_length=30)
+       avatar = models.ImageField(upload_to='photo')
+   #upload_to='photo'指的是你创建这个ImageField上传储存在/media/photo的目录里面，第一次上传会自动生成该文件夹
+       def __str__(self):
+           return self.user.username</code></p>
+<p>我们扩展了几个方面，主要是为了头像的添加。</p>
+<ol>
+<li>admin.py</li>
+</ol>
+<p>这个文件里面就一个函数是必须的，可能你在各个地方告诉过你一些优异的register的方式，我只讲最朴素的，直接register，只有一个参数，参数是你在models.py里面定义的class。</p>
+<p>register的目的都是为了一个东西，django自带的admin页面，你可以使用之前注册过的superuser到127.0.0.1/admin登陆进入页面，可以看到一个管理页面，是管理后台数据的（如果你用过PHPmyAdmin会觉得基本是一个套路，只不过更加的友善了</p>
+<p>简单的框架旧式这样具体的函数坑我们后面来讲</p>
+<h2 id="pythonhtml">python与HTML的结合</h2>
+<p>简单的讲我们html是静态的界面，我们需要用python（为了用户友好还是得用JS）去显示一些数据库调出来的东西，view.py的具体函数会在传回页面的时候传回一些参数供页面使用（具体怎么传，后面来讲）</p>
+<p>这里的具体语法我推荐这篇博客说的，至少是没错的，另外我不推荐一切的django表单，因为如果要改框架或语言，这似乎不太方便（当然这也让我一定程度上不去拥抱django框架）</p>
+<p>不要在html里面写太多的东西，最好是后台把东西都处理好了让前端简单处理下输出即可</p>
+<p>注意如果你要传值给js在传值的时候需要特殊化处理，这个后面再讲。</p>
+<h2 id="python">用python建立后台</h2>
+<h3 id="view">基本的view函数</h3>
+<p>我们的后端基本就是整个view.py，在这里面定义的每一个函数对应着一个或者一个系列的页面的处理。我给出一个最基本的模板代码：</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span><span class="c1">#request是默认的必带函数，说明你是接受了请求，这个请求会带回给后端一些必要的数据</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s1">&#39;about.html&#39;</span><span class="p">,)</span>
+</pre></div>
+
+
+<p>这是最简单的view函数，什么都不处理，直接返回一个页面。</p>
+<h3 id="view_1">view函数的丰富</h3>
+<p>我们不可能只是单独返回一个html文档，那真的是十分的单调。</p>
+<h4 id="_1">重定向的方式的丰富</h4>
+<p>首先我们丰富我们返回一个页面的方式，有如下几个方法，</p>
+<div class="codehilite"><pre><span></span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">template</span><span class="p">,{})</span>
+<span class="c1">#render函数有三个参数，第一个依旧是request，带着原请求的一些记录与信息进入新的页面，template是templates文件夹的的某个html文件，最后还有一个参数是一个字典，你可能在后端处理好了一些数据你要展现在前端，我们就通过这个字典传值到前端进行部署，最后一个参数也可以改为local()，相当于把该函数里面生成的所有对象对传给前端。还有render_to_response(),你可以理解为老板的render，render参数写法更让人觉得舒服</span>
+<span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="c1">#HttpResponseRedirect这个函数是直接重定义到你输入的字符串正则匹配的页面，通过在?x=2这种方式传值，但是会觉得很不明显，对你开发不是很友好。</span>
+<span class="c1">#redict有一下几个用法</span>
+<span class="n">redict</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+<span class="c1">#传给redict一个具体的对象，这个对象的类得定义了get_absolute_url()返回一个具体的字符串，重定义到具体的页面。</span>
+<span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;/people/</span><span class="si">%i</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+<span class="c1">#我们就重定向&quot;/people/self.id/&quot;</span>
+<span class="n">redict</span><span class="p">(</span><span class="s2">&quot;some-view-name&quot;</span><span class="p">,</span><span class="o">*</span><span class="n">agrs</span><span class="p">)</span>
+<span class="c1">#我们先介绍另外的一个函数</span>
+<span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;some-view-name&quot;</span><span class="p">)</span>
+<span class="c1">#我们之前提到过我们在urls.py定义name的问题，通过reverse函数返回对应name的url</span>
+<span class="c1">#所以redict的第二种用法里的第一个参数是reverse的参数，后面的args是一个元组，你可以传递一些参数给这个页面</span>
+<span class="n">redict</span><span class="p">(</span><span class="s2">&quot;/some/s&quot;</span><span class="p">)</span>
+<span class="c1">#第三种法相当于给出reverse之后的结果，通过urls.py的正则直接重定向</span>
+<span class="n">redict</span><span class="p">(</span><span class="s2">&quot;https://www.baidu.com&quot;</span><span class="p">)</span>
+<span class="c1">#第四种直接给网址当然是可以的，只不过只是网站内部跳转的话，这样显得很蠢</span>
+</pre></div>
+
+
+<p>对于萌新来讲我推荐使用render，参数的表达显而易见，萌新也是做小项目，要是真的改了正则匹配，要改的地方也不会太多，而且调试的时候肯定会报错，所以使用redict的意义不是太大。但redict(model.object)这个用法让人觉得非常的舒服，具有没学，比如你的Article类里面每一个文章都对应了一个文章html网页，这个网页是article+id.html，id是你文章的编号，那你完全可以在类里面把这个东西处理好，直接返回给view层面，非常的简洁。</p>
+<h4 id="python_1">数据库与python</h4>
+<p>如果你熟悉python的话，我们如果得到了数据你在view的函数里面处理即可，我们要获取数据，就是从数据库里面去提取数据，这个地方我们不需要去专门学习SQL的专门的语法，只要你在settings.py文档中写清楚了你的数据库信息，你可以直接调用python的函数去获得一些数据对象，下面简介一下各函数：</p>
+<div class="codehilite"><pre><span></span><span class="err">我们的对象暂定为</span>
+<span class="k">class</span> <span class="nc">people</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">model</span><span class="p">):</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  <span class="nb">id</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="err">添加对象：</span>
+<span class="n">people</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Amy&quot;</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#id可以不写，那么默认为1</span>
+<span class="err">得到对象：</span>
+<span class="n">people</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="c1">#得到所有的对象</span>
+<span class="n">people</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Amy&quot;</span><span class="p">)</span>
+<span class="n">people</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name__contains</span><span class="o">=</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+<span class="c1">#这个地方有一个坑，get只会返回一个数据，filter会返回一个set，主义这个地方返会的对象是set，如果你想按顺序遍历，你需要使用list()进行转换</span>
+<span class="c1">#你如果了解数据库的相关知识你会知道我们的搜索方式不止一种，甚至是正则匹配，我们一下会给出一个网站，里面的相关字段会给出得比较全，这种东西随查随用。</span>
+<span class="err">修改对象：</span>
+<span class="n">people</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Amy&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+<span class="err">删除对象：</span>
+<span class="n">people</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Amy&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+<span class="err">排序：</span>
+<span class="n">people</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">name</span><span class="p">,)</span>
+<span class="c1">#首先强调，这个排序可以有多个字段，重要程度按函数参数顺序递减，字符串的比较是按位比较ascii码</span>
+</pre></div>
+
+
+<p>注意一定要少用数据库查询，在大数据的情况下这样的代价是真的不能忽视的。</p>
+<p>我之后在寒假会重构该部分，把几个model的关系写清楚</p>
+<h4 id="view_2">view代码中文件的问题</h4>
+<p>这个问题出现的主要原因是我在添加avatar元素的时候发生的一系列问题，我在用户注册的时候的avatar上传出现了一些坑我们一个一个来题说：</p>
+<ol>
+<li>图片的显示</li>
+</ol>
+<p>显示图片很简单，我们html的标签里面有img标签，src我却不知道怎么写，后来进行无数种可能的尝试之后终于得出结论，在django项目的app中，都是以appname的文件夹为根目录，我们默认存储的地方是media/photo，media是默认的储存上传文件的地址。我之前会觉得我是不是还要存储一个字符串来记录其地址，后来发现你可以直接调用avatar.url来得到上传的静态文件的url你可以直接写在img标签的src="{{profile.avatar.url}}"</p>
+<p>注意一下div和body的background的写法</p>
+<div class="codehilite"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;background:url(/static/image/homebg.jpg)&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span> <span class="na">background</span><span class="o">=</span><span class="s">&quot;/static/image/homebg.jpg&quot;</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<ol>
+<li>更换头像的操作</li>
+</ol>
+<p>更换涉及到文件的上传，我们得到文件的方式是通过html表单上传得到的这和改名字和改密码不一样，改名字和密码是直接修改数据库里面的文件，但是其实我们的图片和其他的文件都是在储存在固定的文件夹中的。我选择的方式是普通的用‘wb’的方式把图片文档写入我们的制定的static的photo文件夹，然后再更新我们的数据库信息（虽然文件是在数据库外面，但是我们调用图片是走数据库的）。虽然我们的网站不大，但是我们也得考虑删除原来的头像，在更新数据库之前我们还得先获取原来头像的信息，之后使用os.remove(path)把这个文件删除，代码如下</p>
+<div class="codehilite"><pre><span></span><span class="n">avatar</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;new_avatar&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">avatar</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">totalname</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_ROOT</span><span class="o">+</span><span class="s1">&#39;/photo/&#39;</span><span class="o">+</span><span class="n">name</span><span class="p">;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">totalname</span><span class="p">,</span> <span class="s1">&#39;wb+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">destination</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">avatar</span><span class="o">.</span><span class="n">chunks</span><span class="p">():</span>
+                <span class="n">destination</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="n">pro</span> <span class="o">=</span> <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">idnumber</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">idnumber</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pro</span><span class="p">:</span>
+            <span class="n">origin</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">avatar</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">pro</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">avatar</span><span class="o">=</span><span class="n">totalname</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+</pre></div>
+
+
+<p>本博客的重中之重是写博文，得好使用，不复杂，我们就选择了处理本来就类html文档的md文档来生成网页，这其中涉及到处理一个代码高亮。我们使用了python的markdown库进行处理，基本的思路就是转化为html代码之后我们把这部分代码结合article.html的开头（你会看见我在views.py中最开始一大段的字符串都是写在新的html文档里面的），代码如下：</p>
+<div class="codehilite"><pre><span></span><span class="n">total</span><span class="o">=</span><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+            <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span><span class="n">author</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">,</span><span class="n">markdown</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;markdown&#39;</span><span class="p">),</span><span class="n">simple_production</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;simple_production&#39;</span><span class="p">],</span><span class="n">Article_id</span><span class="o">=</span><span class="n">total</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">timestamp</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span><span class="n">cover</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cover&#39;</span><span class="p">),</span><span class="n">tags</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">))</span>
+            <span class="n">goal</span> <span class="o">=</span><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Article_id</span><span class="o">=</span><span class="n">total</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">input_file</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">BASE_DIR</span><span class="o">+</span><span class="n">goal</span><span class="o">.</span><span class="n">markdown</span><span class="o">.</span><span class="n">url</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">input_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">html</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">extensions</span><span class="o">=</span><span class="p">[</span>
+                                     <span class="s1">&#39;markdown.extensions.extra&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;markdown.extensions.codehilite&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;markdown.extensions.toc&#39;</span><span class="p">,</span>
+                                  <span class="p">])</span>
+            <span class="n">input_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">newhtml</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">BASE_DIR</span><span class="o">+</span><span class="sa">r</span><span class="s1">&#39;/blog/templates/article</span><span class="si">%d</span><span class="s1">.html&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">total</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">newhtml</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+            <span class="n">newhtml</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+            <span class="n">newhtml</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+            <span class="n">newhtml</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+
+<h3 id="_2">用户管理</h3>
+<p>自带用户管理是Django的一大特点，你可以登陆127.0.0.1/admin用superuser的username和passowrd登陆进入管理页面，这个页面管理的东西都是你在admin.py中register的model以及默认的user（对，User是人register的，如果你想做一些炫酷的操作让User和之前我们定义的Profile和并在一起展示的话，你可以选择先把其解除register，这个部分留着以后改善的时候改善，不算难，方法也很多，也不是坑点）</p>
+<p>但注意你在这个上面实现的文件的改动有一个问题，不会去删除已经上传的文件（我们之前的更换头像的删除是我们自己写的）可能需要管理员自己去删，后面我的改动会把用户，文章，评论三者写按找model的模型之间的关系重写的。</p>
+<h2 id="_3">写法中的一些小手段</h2>
+<h3 id="model">仅选择某个model的某些数据</h3>
+<p>比如我们只需要特定条件下User的姓名和id，你为了不返回给实际页面一个大的QuerySet，你可以单独把这两列选出来，转化为list（使用list()），然后使用zip函数，可以把两个相同长度的列表相同位序的元素组成一个元组，然后放在一个新的list中，你可以直接返回这个新的列表，还有元祖的顺序遍历是用x.0，x为元组，这是在python表单里面的写法，我怀疑对于list的非iterator遍历也是list.1这样的写法。</p>
+<h3 id="htmlform">处理同一个html文件中的多个form</h3>
+<p>这个问题的产生主要是我的blog.html页面同时拥有搜索页面和提交新的的form，我如何去区分他们的呢，这个地方选择的是我去使用has_key("xxx")这个函数，你需要给两个表单的special input 元素写一个name（当然也是必须写的），然后你可以判定这次提交上来的表单里面是不是具有这个name，来判定是哪一个form，代码如下：</p>
+<div class="codehilite"><pre><span></span><span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;search&#39;</span><span class="p">):</span>
+  <span class="k">pass</span>
+<span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">):</span>
+  <span class="k">pass</span>
+</pre></div>
+
+
+<h3 id="_4">处理分页的问题</h3>
+<p>我们的文可能有很多条，我们如果用一个界面来展示所有的部分，这样会很不好看，也不友好，为此我使用了本身的Django的分页系统，并且结合了bootstrap的样式来实现了分页，具体代码如下：</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span><span class="p">,</span> <span class="n">EmptyPage</span><span class="p">,</span> <span class="n">PageNotAnInteger</span>
+<span class="c1">#我的代码都是复制原文档的，缩进可能略有问题，但不存在读不出层次结构，见谅</span>
+<span class="n">posts</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="c1">#获得所有文章对象</span>
+<span class="n">posts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">posts</span><span class="p">)</span><span class="c1">#转化为list</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">posts</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="c1">#生成一个Paginator用来的分的是posts这个列表，每页3个</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span><span class="c1">#前端在翻页的时候会返回一个page的页数</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">posts</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="c1">#获得定位该页的信息</span>
+            <span class="n">topics</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[(</span><span class="nb">int</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">]</span><span class="c1">#获得具体这一页的文章</span>
+            <span class="n">ta</span> <span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
+                <span class="nb">str</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="n">ta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">topics</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">topics</span><span class="p">,</span><span class="n">ta</span><span class="p">)</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>
+        <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span><span class="c1">#下面是处理一些文章比较少的情况</span>
+            <span class="n">posts</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">:</span>
+                <span class="n">topics</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">ta</span> <span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
+                    <span class="nb">str</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                    <span class="n">ta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+                <span class="n">topics</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">topics</span><span class="p">,</span><span class="n">ta</span><span class="p">)</span>
+                <span class="n">links</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[:</span><span class="mi">4</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">topics</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="n">ta</span> <span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
+                    <span class="nb">str</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                    <span class="n">ta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+                <span class="n">topics</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">topics</span><span class="p">,</span><span class="n">ta</span><span class="p">)</span>
+                <span class="n">links</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">EmptyPage</span><span class="p">:</span>
+            <span class="k">print</span>
+            <span class="n">posts</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="p">)</span>
+            <span class="n">topics</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()[(</span><span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">:</span><span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">ta</span> <span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
+                <span class="nb">str</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="n">ta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">topics</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">topics</span><span class="p">,</span><span class="n">ta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s1">&#39;blog.html&#39;</span><span class="p">,{</span><span class="s1">&#39;posts&#39;</span><span class="p">:</span><span class="n">posts</span><span class="p">,</span><span class="s1">&#39;topic&#39;</span><span class="p">:</span><span class="n">topics</span><span class="p">,</span><span class="s1">&#39;links&#39;</span><span class="p">:</span><span class="n">links</span><span class="p">,</span><span class="s2">&quot;istag&quot;</span><span class="p">:</span><span class="n">istag</span><span class="p">})</span>
+</pre></div>
+
+
+<p>我觉得整个东西的逻辑也不是很难，简单的一个切片，但是用Django的原生Paginator比较方便。</p>
+<h3 id="_5">搜索功能和标签功能</h3>
+<p>搜索功能现在的开发水平还很低，我只用了最简单的字符串匹配，我后期可能会使用正则进行匹配，但似乎这样的效率还是很低，可能会选择使用python现有的搜索引擎的植入，在中文分词方面使用jieba</p>
+<p>标签功能其实比较简单，简单的添加一个charField，tags之间用空格分开，使用的时候用split()函数把他们分开，点击标签可以进行搜索，这个方面后期也可以考虑下使用model关系之间联系一下各个部分</p>
+<h2 id="_6">结语</h2>
+<p>我保证我传到github上面的代码一定可用，我只是具体的点到了各个部分，具体的语法要不就参照原代码，或者你们参照我给的链接的语法，以上。</p>
+<p>​                                                                                                                                        2017年11月1日</p>
+<p>​                                                                                                                                                  谭骁</p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% if hascomment %}
+<p><font size="5px;">Comments</font></p>
+{% for com in comments %}
+<p><font>{{forloop.counter}}
+{{com.0.author}} &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default" onclick="reply({{forloop.counter}})">reply</button>
+</p>
+<img src="{{com.1}}" class="avatarshow img-circle" style="position:relative;float:left;">
+<p style="margin-left:75px;"><font size="3x;">{{com.0.content}}</font></p>
+<br>
+<br>
+<time style="float:left;">{{com.0.timestamp}}</time>
+<hr style="height:2px;border:none;border-top:2px;background-color:black;">
+{% endfor %}
+{% endif %}
+<form action="" method='post'>
+{% csrf_token %}
+<div class='form-group'><label><font size='3px'>comment</font></label>
+<textarea type='text' id="editcomment" onblur="checkcomment()" name='editcomment' class='form-control' rows="3"  required></textarea><br>
+</div>
+<p class='text-center'>
+  {% if request.user.is_authenticated %}
+  <button type="submit" value="submit" class='btn btn-default'>comment</button>
+  {% else %}
+  <label><font size="3px">If you wanna post,login first!</font></label>
+  {% endif %}
+</p>
+</form></div></div>
+<div class="col-md-3">
+  <aside>
+    <div class="sidebar">
+      <font size='2.5px'>
+          <font size='5px'>ohter articles the author has</font>
+        </p>
+        {% for link in links %}
+        <p>
+          <a href='/detail/{{link.Article_id}}'>
+            {{link.title}}</a>
+        </p>
+        {% endfor %}
+        </font>
+      </font>
+    </div>
+  </aside>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+  function reply(counter){
+  var e = document.getElementById('editcomment');
+  e.innerHTML = "reply num "+counter.toString()+":";
+  }
+function thick(img)
+{
+img.style="border:solid;border-color:rgb(186, 187, 182);";
+}
+
+function thin(img)
+{
+img.style="";
+}
+function checkcomment()
+{
+    var text= document.getElementById("editcomment").value;
+    var patt1=new RegExp("<script>");
+    if (patt1.test(text))
+    {
+	    $("#editcomment").val("");
+        alert("No way!");
+    }
+}
+</script>

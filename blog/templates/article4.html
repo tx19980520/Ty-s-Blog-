@@ -11,6 +11,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:233px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:13.3px;
+}
 h1{
   text-align:center
 }
@@ -45,20 +55,20 @@ h1{
   }
 </style>
 <body>
-  <div style='background:url(/static/image/homebg.jpg)'>
+  <div style="background:url(/static/image/homebg.jpg)">
     <br>
     <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div style='float:right; position:relative; left:17px;'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
@@ -90,11 +100,6 @@ h1{
             </ul>
             {% endif %}
           </div>
-          {% if request.user.is_authenticated %}
-          <div class="span8" style='float:right;position:relative;top:-48px;left:16.8px;'>
-            {% else %}
-            <div class="span8" style='float:right;position:relative;top:20px;left:16.8px;'>
-              {% endif %}
               <ul class="nav nav-pills">
                 <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
                 <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
@@ -112,7 +117,7 @@ h1{
       </div>
     </div>
   </div>
-  <div class='col-md-1'></div>
+    <div class='col-md-1'></div>
 <div class='col-md-8 panel panel-default'>
   <div class="panel-body">
     <h1 id="cs902">CS902</h1>
@@ -223,7 +228,7 @@ h1{
     <span class="k">pass</span>
 
 <span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>  <span class="c1"># B是旧式类，因为B的基类A是旧式类</span>
-    <span class="k">pass</span> 
+    <span class="k">pass</span>
 </pre></div>
 
 
@@ -278,7 +283,7 @@ h1{
 <span class="k">else</span><span class="p">:</span><span class="c1">#如果try中的语句完全没有问题，则执行else中的语句，当然你也可以不写</span>
      <span class="k">if</span> <span class="n">no</span> <span class="n">exception</span><span class="p">,</span><span class="n">get</span> <span class="n">here</span>
 <span class="k">finally</span><span class="p">:</span><span class="c1">#不管出错还是没出错，有没有else finally中的语句是必须执行的</span>
-     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;finally&quot;</span><span class="p">)</span>   
+     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;finally&quot;</span><span class="p">)</span>
 </pre></div>
 
 
@@ -345,10 +350,14 @@ h1{
 <form action="" method='post'>
 {% csrf_token %}
 <div class='form-group'><label><font size='3px'>comment</font></label>
-<textarea type='text' id="editcomment" name='editcomment' class='form-control' rows="3" required></textarea><br>
+<textarea type='text' id="editcomment" name='editcomment' onblur="checkcomment()" class='form-control' rows="3" required></textarea><br>
 </div>
 <p class='text-center'>
+  {% if request.user.is_authenticated %}
   <button type="submit" value="submit" class='btn btn-default'>comment</button>
+  {% else %}
+  <p class="text-center"><font size="3px">If you wanna post,login first!</font></p>
+  {% endif %}
 </p>
 </form></div></div>
 <div class="col-md-3">
@@ -383,5 +392,15 @@ img.style="border:solid;border-color:rgb(186, 187, 182);";
 function thin(img)
 {
 img.style="";
+}
+function checkcomment()
+{
+    var text= document.getElementById("editcomment").value;
+    var patt1=new RegExp("<script>");
+    if (patt1.test(text))
+    {
+	    $("#editcomment").val("");
+        alert("No way!");
+    }
 }
 </script>

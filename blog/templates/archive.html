@@ -3,11 +3,22 @@
 <html>
 
 <head>
+  <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:250px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:30px;
+}
   div.showimg {
     position: relative;
     top: -45px;
@@ -28,13 +39,13 @@
     <div class="row">
       <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
-      <div style='float:right'>
+      <div class="top">
         {% if request.user.is_authenticated %}
         <ul class='navbar'>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
-              <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+              <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li>
                 <a href='/logout'>logout</a>
@@ -64,7 +75,7 @@
         </ul>
         {% endif %}
       </div>
-      <div class="span8" style='float:right'>
+      <div class="span8" class="nav">
         <br>
         <ul class="nav nav-pills">
           <li class='active'><a href="/"><b style='font-size:18px'>Home</b></a></li>
@@ -89,7 +100,7 @@
       <p>
         <br><br>
         <font color='white' size='3.5px'>
-          <p>Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="http://hzwer.com">Ty.com</a>&nbsp;All Rights Reserved! Powered by Django </font>
+          <p>Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="http://www.cqdulux.com">www.cqdulux.com</a>&nbsp;All Rights Reserved! Powered by Django </font>
         </p>
     </div>
   </div>

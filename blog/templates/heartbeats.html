@@ -10,11 +10,22 @@
   </title>
   <!-- Bootstrap -->
   <!--<link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/img/favicon.ico">-->
+  <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:233px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:13.3px;
+}
   div.showimg {
     position: relative;
     top: -45px;
@@ -28,6 +39,10 @@
     height: 65px;
   }
 
+  .carousel-inner img {
+    width: 100%;
+  }
+
   .sidebar {
     position: fixed;
     padding-left: 10px;
@@ -37,26 +52,47 @@
     border-width: 2px;
   }
 
-  .highlight {
-    color: 'red';
+  .showcover {
+    float: left;
+    width: 200px;
+    height: 150px;
+    margin: 5px;
+  }
+
+  .preshow {
+    float: right;
+    position: relative;
+    top: -111px;
+    left: -400px;
+    width: 150px;
+    height: 150px;
+  }
+
+  .showword {
+    margin: 5px;
+  }
+  #showname{
+    width: 30px;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
   }
 </style>
 
 <body>
-  <div style='background:url(/static/image/homebg.jpg) '>
+  <div style="background:url(/static/image/homebg.jpg)">
     <br>
-    <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div style='float:right; position:relative; left:17px;'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
@@ -88,11 +124,6 @@
             </ul>
             {% endif %}
           </div>
-          {% if request.user.is_authenticated %}
-          <div class="span8" style='float:right;position:relative;top:-48px;left:16.7px;'>
-            {% else %}
-            <div class="span8" style='float:right;position:relative;left:16.7px;'>
-              {% endif %}
               <ul class="nav nav-pills">
                 <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
                 <li><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
@@ -101,15 +132,13 @@
                 <li class='active'><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
               </ul>
             </div>
-          </div>
       </nav>
-      <p class='text-center'>
+      <p class='text-center' style="position:relative;left:8.3px;">
+        <br>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
       </div>
-    </div>
-  </div>
     <div class='col-md-1'></div>
   <div class='col-md-8'>
     <div class="panel panel-default">
@@ -123,6 +152,8 @@
           <h5>{% for w in post.0.body %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>
           <hr style=" height:2px;border:none;border-top:2px;background-color:black;">
         </div>{% endfor %}
+        </div>
+        </div>
         <form action="" method='post' enctype="multipart/form-data">
           {% csrf_token %}
           <font size='5px'>title:</font>
@@ -134,8 +165,9 @@
             <button type="submit" value="提交" class='btn btn-default'>提交</button>
           </p>
         </form>
-      </div>
-    </div>
+        <br>
+        <br>
+          <p class="text-center">Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="www.cqdulux.cn">www.cqdulux.cn</a>&nbsp;All Rights Reserved! Powered by Django </p>
   </div>
   <div class='col-md-3'>
     <aside>

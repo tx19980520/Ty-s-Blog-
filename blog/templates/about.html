@@ -3,6 +3,10 @@
 <html>
 
 <head>
+  <title>
+    About Me!
+  </title>
+  <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -32,8 +36,16 @@
     filter: blur(20px);
     max-width: 30em;
   }
-</style>
-<style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:250px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:30px;
+}
   div.showimg {
     position: relative;
     top: -45px;
@@ -48,63 +60,66 @@
   }
 </style>
 
-
-<body background='/static/image/homebg.jpg' style='background-repeat: no-repeat;'>
-  <br>
-  <nav>
-    <div class="row">
-      <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
-      <div style='float:right'>
-        {% if request.user.is_authenticated %}
-        <ul class='navbar'>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              <font color='#337ab7' size='3px'><b>Welcome!&nbsp;&nbsp;{{user.username}}</b></font>
-              <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <ul class="dropdown-menu">
-              <li>
-                <a href='/logout'>logout</a>
-                </a>
-              </li>
-              <li>
-                <a href='/users'>your imformation</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <div class='showimg'>
-          <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
-        </div> {% else %}
-        <ul class='navbar'>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
-              <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <ul class="dropdown-menu">
-              <li>
-                <a href='/login'>login</a>
-              </li>
-              <li>
-                <a href='/register'>register</a>
+<body>
+  <div style="background:url(/static/image/homebg.jpg)">
+    <br>
+      <nav>
+        <div class="row">
+          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
+            {% if request.user.is_authenticated %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+                  <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/logout'>logout</a>
+                  </li>
+                  <li>
+                    <a href='/users'>your imformation</a>
+                  </li>
+                </ul>
               </li>
             </ul>
-        </ul>
-        {% endif %}
-      </div>
-      <div class="span8" style='float:right'>
+            <div class='showimg'>
+              <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+            </div>
+            {% else %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
+                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/login'>login</a>
+                  </li>
+                  <li>
+                    <a href='/register'>register</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            {% endif %}
+          </div>
+              <ul class="nav nav-pills">
+                <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+                <li><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+                <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+                <li class='active'><a href="/about"><b style='font-size:18px'>About</b></a></li>
+                <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+              </ul>
+            </div>
+      </nav>
+      <p class='text-center'>
         <br>
-        <ul class="nav nav-pills">
-          <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
-          <li><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
-          <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
-          <li class='active'><a href="/about"><b style='font-size:18px'>About</b></a></li>
-          <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <hr width='100%'>
+        <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+        <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
+      </p>
+  </div>
   <div class='col-md-1'>
   </div>
   <div class='col-md-10'>
