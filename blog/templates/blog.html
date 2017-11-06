@@ -17,6 +17,12 @@
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
+.showQRcode{
+  position:relative;
+  right:auto;
+  width:200px;
+  height:200px;
+}
 .nav{
   position:absolute;
   top:43px;
@@ -194,15 +200,15 @@
             <textarea class="form-control" rows="3" name='simple_production' required></textarea><br>
           </div>
           <div class="form-group"><label><font size='3px'>tags</font></label><br>
-              <input type='text' name="tags" class='form-control' style='width:200px;' onblur='add(this)' required><br>
+              <input type='text' name="tags" id="tags" class='form-control' style='width:200px;' onblur='add(this)' onfocus="tagshint()" data-placement="right" data-content='两个标签之间用空格间隔' required><br>
               <p id='tags'></p>
             </div>
           </div>
           <div class='form-group'><label><font size='3px'>markdown</font></label><br>
-            <input type='file' id='markdown' name="markdown" onchange='checkmd(this)' required>
+            <input type='file' id='markdown' style="width:100px;"name="markdown" onchange='checkmd(this)' onfocus="mdhint()"style="width=100px;"  data-placement="right" data-content='文件应小于5MB,本地名为英文' required>
           </div>
           <div class='form-group'><label><font size='3px'>cover</font></label><br>
-            <input type='file' name='cover' onchange='shownew(this)' required>
+            <input type='file' name='cover' onchange='shownew(this)' onfocus="filehint()" id="coverinput" style="width:100px;" data-placement="right" data-content='文件应小于2MB,本地名为英文' required>
             <img class='preshow' id="cover" style="position:relative;left:-330px;">
           </div>
           <p class='text-center'>
@@ -273,7 +279,6 @@
 	</div>
   {% endfor %}
 </div>
-
             {% else %}
             <p><font size="5px">About Me</font></p>
             <p>网名：ty0207 | 毛毛大王</p>
@@ -283,6 +288,9 @@
             <p>电话：17710375409</p>
             <p>邮箱：ty0207@sjtu.edu.cn</p>
             {% endif %}
+            <br>
+            <p><font size="5px;">关注我的个人公众号</font></p>
+            <img src="/static/image/QRcode.jpg" class="showQRcode">
           </font>
         </div>
       </aside>

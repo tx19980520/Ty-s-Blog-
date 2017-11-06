@@ -1,6 +1,12 @@
 
   function shownew(source) {
     var file = source.files[0];
+    if((file.size/1024.0/1024.0)>2)
+    {
+      alert("It's too big to upload!");
+      $("#avatar").val("");
+      return false;
+    }
     if (window.FileReader) {
       var fr = new FileReader();
       fr.onloadend = function(e) {
