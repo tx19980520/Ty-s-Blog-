@@ -11,6 +11,7 @@
   <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel='stylesheet' href='/static/css/log.css'>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/javascript/changeavatar.js"></script>
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -68,11 +69,11 @@
       <br>
       <br>
       <label class='control-label col-sm-4'><font size='3px'>your avatar</font></label><br>
-      <div class='showimg col-sm-4' style='position:relative;top:-40px;'><img class='img-circle avatarshow' id='portrait' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'></div>
+      <div class='showimg col-sm-8' style='position:relative;top:-40px;'><img class='img-circle avatarshow' id='portrait' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'></div>
       <br><br>
       <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>new avatar choose</font></label>
-        <div class="col-sm-6">
-          <input type='file' id='upload' onchange='shownew(this)' name="new_avatar">
+        <div class="col-sm-8">
+          <input type='file' style="width:100px;" id='upload' onchange='shownew(this)' onfocus="filehint()" onblur="closefilehint()" name="new_avatar" data-placement="right" data-content='图片文件大小不要超过2MB' id="file" required>
         </div>
       </div>
       <br>
@@ -92,19 +93,3 @@
 </script>
 
 </html>
-<script type="text/javascript">
-  function shownew(source) {
-    var file = source.files[0];
-    if (window.FileReader) {
-      if (!/image\/\w+/.test(file.type)) {
-        alert("We need pictrues!");
-        return false;
-      }
-      var fr = new FileReader();
-      fr.onloadend = function(e) {
-        document.getElementById("portrait").src = e.target.result;
-      };
-      fr.readAsDataURL(file);
-    }
-  }
-</script>

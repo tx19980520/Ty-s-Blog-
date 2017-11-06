@@ -54,6 +54,7 @@
     {% endif %}
     <form action="" method="post" class='text-center main'>
       <br>
+      <input type="hidden" name = "next" value="{{next}}">
       <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>account</font></label>
         <div class="col-sm-6">
           <input type='text' placeholder="昵称请输入4个以上的字符（或汉字），不然你的页面会爆炸" name="account" class='form-control'>

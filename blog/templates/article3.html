@@ -4,6 +4,7 @@
 <head>
   <link rel='stylesheet' href='/static/css/code.css'>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/javascript/article.js"></script>
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <meta charset="utf-8">
@@ -19,7 +20,7 @@
 .top{
   position:absolute;
   top:20px;
-  right:13.3px;
+  right:66.3px;
 }
 h1{
   text-align:center
@@ -87,7 +88,7 @@ h1{
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/login'>login</a>
@@ -110,6 +111,7 @@ h1{
             </div>
           </div>
       </nav>
+	  <br>
       <p class='text-center'>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
@@ -231,7 +233,7 @@ h1{
   <aside>
     <div class="sidebar">
       <font size='2.5px'>
-          <font size='5px'>ohter articles the author has</font>
+          <font size='4px'>Others the author has</font>
         </p>
         {% for link in links %}
         <p>
@@ -246,28 +248,3 @@ h1{
 </div>
 </body>
 </html>
-<script type="text/javascript">
-  function reply(counter){
-  var e = document.getElementById('editcomment');
-  e.innerHTML = "reply num "+counter.toString()+":";
-  }
-function thick(img)
-{
-img.style="border:solid;border-color:rgb(186, 187, 182);";
-}
-
-function thin(img)
-{
-img.style="";
-}
-function checkcomment()
-{
-    var text= document.getElementById("editcomment").value;
-    var patt1=new RegExp("<script>");
-    if (patt1.test(text))
-    {
-	    $("#editcomment").val("");
-        alert("No way!");
-    }
-}
-</script>

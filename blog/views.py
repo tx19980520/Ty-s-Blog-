@@ -2,6 +2,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import os
+from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.shortcuts import render
@@ -27,6 +28,7 @@ header='''
 <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel='stylesheet' href='/static/css/code.css'>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/javascript/article.js"></script>
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <meta charset="utf-8">
@@ -42,7 +44,7 @@ header='''
 .top{
   position:absolute;
   top:20px;
-  right:13.3px;
+  right:66.3px;
 }
 h1{
   text-align:center
@@ -110,10 +112,10 @@ h1{
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href='/login'>login</a>
+                    <a href='/login?next={{request.path}}'>login</a>
                   </li>
                   <li>
                     <a href='/register'>register</a>
@@ -133,6 +135,7 @@ h1{
             </div>
           </div>
       </nav>
+      <br>
       <p class='text-center'>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
@@ -166,7 +169,6 @@ tail='''
 <hr style="height:2px;border:none;border-top:2px;background-color:black;">
 {% endfor %}
 {% endif %}
-{% if request.user.is_authenticated %}
 <form action="" method='post'>
 {% csrf_token %}
 <div class='form-group'><label><font size='3px'>comment</font></label>
@@ -179,12 +181,13 @@ tail='''
   <p class="text-center"><font size="3px">If you wanna post,login first!</font></p>
   {% endif %}
 </p>
-</form></div></div>
+</form>
+{% endif %}</div></div>
 <div class="col-md-3">
   <aside>
     <div class="sidebar">
       <font size='2.5px'>
-          <font size='5px'>ohter articles the author has</font>
+          <font size='4px'>Others the author has</font>
         </p>
         {% for link in links %}
         <p>
@@ -199,31 +202,7 @@ tail='''
 </div>
 </body>
 </html>
-<script type="text/javascript">
-  function reply(counter){
-  var e = document.getElementById('editcomment');
-  e.innerHTML = "reply num "+counter.toString()+":";
-  }
-function thick(img)
-{
-img.style="border:solid;border-color:rgb(186, 187, 182);";
-}
-
-function thin(img)
-{
-img.style="";
-}
-function checkcomment()
-{
-    var text= document.getElementById("editcomment").value;
-    var patt1=new RegExp("<script>");
-    if (patt1.test(text))
-    {
-	    $("#editcomment").val("");
-        alert("No way!");
-    }
-}
-</script>''' #I will add comment form here!
+''' #I will add comment form here!
 # Create your views here.
 # Finally I choose to write normal html code in template and views just like back-end
 
@@ -254,6 +233,7 @@ def heartbeats(request):
             bp = BlogPost()
             bp.title=request.POST['title']
             bp.body = request.POST['body']
+            bp.author= request.user.username
             bp.timestamp = datetime.now()
             bp.save()
             posts = BlogPost.objects.all();
@@ -289,7 +269,7 @@ def blog(request):
                 word = request.POST['search']
                 finds = Article.objects.filter(simple_production__contains=word)|Article.objects.filter(title__contains=word)|Article.objects.filter(author__contains=word)
                 find = list(finds)
-                paginator = Paginator(find, 3)
+                paginator = Paginator(find, 5)
                 page = request.GET.get('page')
                 try:
                     find = paginator.page(page)
@@ -302,14 +282,14 @@ def blog(request):
                     links = Article.objects.all()[:5]
                 except PageNotAnInteger:
                     find = paginator.page(1)
-                    if finds.count()>3:
-                        topics = find[0:3]
+                    if finds.count()>4:
+                        topics = find[0:5]
                         ta =[]
                         for post in topics:
                             str = post.tags.split(" ")
                             ta.append(str)
                         topics = zip(topics,ta)
-                        links = Article.objects.all()[:4]
+                        links = Article.objects.all()[:5]
                     else:
                         topics = find
                         ta =[]
@@ -350,42 +330,42 @@ def blog(request):
 
         posts = Article.objects.all()
         posts = list(posts)
-        paginator = Paginator(posts, 3)
+        paginator = Paginator(posts, 5)
         page = request.GET.get('page')
         try:
             posts = paginator.page(page)
-            topics = Article.objects.all()[(int(page)-1)*3:int(page)*3]
+            topics = Article.objects.all()[(int(page)-1)*5:int(page)*5]
             ta =[]
             for post in topics:
-                str = post.tags.split(" ")
-                ta.append(str)
+                strs = post.tags.split(" ")
+                ta.append(strs)
             topics = zip(topics,ta)
             links = Article.objects.all()[:5]
         except PageNotAnInteger:
             posts = paginator.page(1)
-            if Article.objects.all().count()>3:
-                topics = Article.objects.all()[0:3]
+            if Article.objects.all().count()>4:
+                topics = Article.objects.all()[0:4]
                 ta =[]
                 for post in topics:
-                    str = post.tags.split(" ")
-                    ta.append(str)
+                    strs = post.tags.split(" ")
+                    ta.append(strs)
                 topics = zip(topics,ta)
                 links = Article.objects.all()[:4]
             else:
                 topics = Article.objects.all()
                 ta =[]
                 for post in topics:
-                    str = post.tags.split(" ")
-                    ta.append(str)
+                    strs = post.tags.split(" ")
+                    ta.append(strs)
                 topics = zip(topics,ta)
                 links = Article.objects.all()
         except EmptyPage:
             posts = paginator.page(paginator.num_pages)
-            topics = Article.objects().all()[(paginator.num_pages-1)*3:paginator.num_pages*3+1]
+            topics = Article.objects().all()[(paginator.num_pages-1)*4:paginator.num_pages*4+1]
             ta =[]
             for post in topics:
-                str = post.tags.split(" ")
-                ta.append(str)
+                strs = post.tags.split(" ")
+                ta.append(strs)
             topics = zip(topics,ta)
         return render(request,'blog.html',{'posts':posts,'topic':topics,'links':links,"istag":istag})
 #about log
@@ -394,7 +374,8 @@ def alogin(request):
     account=None
     password=None
     if request.method=='GET':
-        return render(request, 'login.html',{'errors':errors})
+        pre_web = request.GET.get('next')
+        return render(request, 'login.html',{'errors':errors,"next":pre_web})
     if request.method == 'POST':
         if not request.POST.get('account'):
             errors.append('Please Enter account')
@@ -412,7 +393,10 @@ def alogin(request):
             if check:
                 if myuser.is_active:
                     auth.login(request,myuser)
-                    return render(request,'archive.html',)
+                    pre_web = request.POST.get('next')
+                    if pre_web == 'None':
+                        return render(request,"archive.html")
+                    return redirect(pre_web)
                 else:
                     errors.append("User is not active!")
                     return render(request,'login.html',{'errors':errors})
@@ -429,6 +413,7 @@ def register(request):
     CompareFlag=False
     avatar=False
     phone=None
+    size = True
     if request.method == 'POST':
         if not request.POST.get('account'):
             errors.append('Please Enter account')
@@ -465,7 +450,10 @@ def register(request):
                 CompareFlag = True
             else :
                 errors.append('password2 is diff password')
-        if account is not None and password is not None and password2 is not None and email is not None and CompareFlag and avatar :
+        if (request.FILES.get('avatar').size/1024/1024)>2:
+            size = false;
+            erros.append('your avatar file is too big to upload!')
+        if account is not None and password is not None and password2 is not None and email is not None and CompareFlag and avatar and size :
             user=User.objects.create(username=account,password=password,email=email)
             user.is_active=True
             user.save
@@ -526,7 +514,13 @@ def showdetail(request,num):
 def users(request):
     if request.method == 'GET':
         try:
-            myarticles=Article.objects.filter(author=request.user.username)
+            t=[]
+            myarticles=Article.objects.filter(author=request.user.username).order_by("timestamp")
+            myarticles = list(myarticles)
+            for a in myarticles:
+                strs = a.tags.split(" ")
+                t.append(strs)
+            myarticles = zip(myarticles,t)
         except ObjectDoesNotExist:
             myarticles = []
         return render(request,'users.html',{'myarticles':myarticles})

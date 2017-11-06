@@ -12,6 +12,7 @@
   <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/javascript/blog.js"></script>
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -24,7 +25,7 @@
 .top{
   position:absolute;
   top:20px;
-  right:13.3px;
+  right:66.3px;
 }
   div.showimg {
     position: relative;
@@ -44,7 +45,6 @@
   }
 
   .sidebar {
-    position: fixed;
     padding-left: 10px;
 
     border-left: solid;
@@ -106,10 +106,10 @@
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href='/login'>login</a>
+                    <a href='/login?next={{request.path}}'>login</a>
                   </li>
                   <li>
                     <a href='/register'>register</a>
@@ -171,7 +171,7 @@
           <a href='/detail/{{post.0.Article_id}}'><img class='showcover' id='mycover'src={{post.0.cover.url}} onmouseover='thick(this)' onmouseout="thin(this)"></a>
           <div class='showword'>
             {% if not istag %}
-            <h2>{% for w in post.0.title %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h2>
+            <a href='/detail/{{post.0.Article_id}}'><h2>{% for w in post.0.title %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h2></a>
             <h5>{% for w in post.0.author %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>
             <p><time datetime='{{post.0.timestamp}}'>{{post.0.timestamp}}</time></p>
             <h5>{% for w in post.0.simple_production %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>{% else %}<h2>{{post.0.title}}</h2>
@@ -212,7 +212,9 @@
             {% if request.user.is_authenticated %}
             <button type="submit" value="提交" class='btn btn-default' style="position:relative;left:75px;">提交</button>
             {% else %}
+            <P style="position:relative;right:-300px;">
             <label><font size="3px">If you wanna post,login first!</font></label>
+          </p>
             {% endif %}
           </p>
         </form>
@@ -252,12 +254,26 @@
             <p>
               <font size='5px'>其他人还在看</font>
             </p>
-            {% for link in links %}
-            <p>
-              <a href='/detail/{{link.Article_id}}'>
-                {{link.title}}</a>
-            </p>
-            {% endfor %}
+            <div class="panel-group" id="accordion">
+              {% for link in links %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion"
+				   href="#collapse{{forloop.counter}}">
+					{{link.title}}
+				</a>
+			</h4>
+		</div>
+		<div id="collapse{{forloop.counter}}" class="panel-collapse collapse">
+			<div class="panel-body">
+				<a href="/detail/{{link.Article_id}}">{{link.simple_production}}</a>
+			</div>
+		</div>
+	</div>
+  {% endfor %}
+</div>
+
             {% else %}
             <p><font size="5px">About Me</font></p>
             <p>网名：ty0207 | 毛毛大王</p>
@@ -272,57 +288,4 @@
       </aside>
     </div>
 </body>
-<script type="text/javascript">
-  function shownew(source) {
-    var file = source.files[0];
-    if (window.FileReader) {
-      if (!/image\/\w+/.test(file.type)) {
-        alert("We need pictrues!");
-        $('#newcover').val("");
-        return false;
-      }
-      var fr = new FileReader();
-      fr.onloadend = function(e) {
-        document.getElementById("cover").src = e.target.result;
-      };
-      fr.readAsDataURL(file);
-    }
-  }
-
-  function checkmd(source) {
-    file = source.value.substr(source.value.lastIndexOf(".")).toLowerCase();
-    if (file != '.md') {
-      alert("We need .md file!");
-      $('#markdown').val("");
-      return false;
-    }
-  }
-
-  function add(tag) {
-    a = tag.value;
-    tags = a.split(" ");
-    var e = document.getElementById('tags');
-    e.innerHTML = '';
-    for (var i = 0; i < tags.length; ++i) {
-      var span = document.createElement('span');
-      span.className = "label label-info";
-      span.style = "font-size:15px;";
-      var node = document.createTextNode(tags[i]);
-      span.appendChild(node);
-      var element = document.getElementById('tags');
-      element.appendChild(span);
-    }
-  }
-
-  function thick(img)
-  {
-    img.style="border:solid;border-color:rgb(186, 187, 182);";
-  }
-
-  function thin(img)
-  {
-    img.style="";
-  }
-</script>
-
 </html>

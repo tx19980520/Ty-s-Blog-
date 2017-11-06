@@ -44,7 +44,7 @@
 .top{
   position:absolute;
   top:20px;
-  right:30px;
+  right:83.3px;
 }
   div.showimg {
     position: relative;
@@ -92,10 +92,10 @@
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href='/login'>login</a>
+                    <a href='/login?next={{request.path}}'>login</a>
                   </li>
                   <li>
                     <a href='/register'>register</a>

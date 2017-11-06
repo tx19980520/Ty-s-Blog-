@@ -6,16 +6,27 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-    your information
+    Ty's Blog!
   </title>
   <!-- Bootstrap -->
-  <!--<link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/img/favicon.ico">-->
   <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
+  <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/javascript/blog.js"></script>
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:233px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:66.3px;
+}
   div.showimg {
     position: relative;
     top: -45px;
@@ -28,38 +39,55 @@
     width: 65px;
     height: 65px;
   }
-</style>
-<style>
+
   .carousel-inner img {
     width: 100%;
   }
-</style>
-<style>
+
   .sidebar {
-    position: fixed;
     padding-left: 10px;
 
     border-left: solid;
     border-color: black;
     border-width: 2px;
   }
+
+  .showcover {
+    float: left;
+    width: 200px;
+    height: 150px;
+    margin: 5px;
+  }
+
+  .preshow {
+    float: right;
+    position: relative;
+    top: -111px;
+    left: -400px;
+    width: 150px;
+    height: 150px;
+  }
+
+  .showword {
+    margin: 5px;
+  }
 </style>
 
 <body>
-  <div style='background:url(/static/image/homebg.jpg) '>
+  <div style="background:url(/static/image/homebg.jpg)">
     <br>
     <div>
       <nav>
         <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div style='float:right; position:relative; left:17px;'>
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/logout'>logout</a>
@@ -78,10 +106,10 @@
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href='/login'>login</a>
+                    <a href='/login?next={{request.path}}'>login</a>
                   </li>
                   <li>
                     <a href='/register'>register</a>
@@ -91,14 +119,9 @@
             </ul>
             {% endif %}
           </div>
-          {% if request.user.is_authenticated %}
-          <div class="span8" style='float:right;position:relative;top:-48px;left:16.8px;'>
-            {% else %}
-            <div class="span8" style='float:right;position:relative;top:20px;left:16.8px;'>
-              {% endif %}
               <ul class="nav nav-pills">
                 <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
-                <li><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+                <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
                 <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
                 <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
                 <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
@@ -106,13 +129,15 @@
             </div>
           </div>
       </nav>
-      <p class='text-center'>
+      <p class='text-center' style="position:relative;left:8.3px;">
+        <br>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
       </div>
     </div>
-  <div class='col-md-2'></div>
+  </div>
+    <div class='col-md-2'></div>
   <div class='col-md-8'>
     <p class='text-center'>
       <label class="text-center"><font size='5px'>About yourself</font></label><br>
@@ -133,16 +158,18 @@
     </p>
     <hr style=" height:2px;border:none;border-top:2px;background-color:black;" /> {% for article in myarticles %}
     <div>
-      <h3>{{article.title}}</h3>
-      <p><time datetime='{{post.timestamp}}'>{{article.timestamp}}</time></p>
-      <p>{{article.simple_production}}</p>
+      <a href='/detail/{{article.0.Article_id}}'><img class='showcover' id='mycover'src={{article.0.cover.url}} onmouseover='thick(this)' onmouseout="thin(this)"></a>
+      <a href='/detail/{{article.0.Article_id}}'><h3>{{article.0.title}}</h3></a>
+      <p><time datetime='{{article.0.timestamp}}'>{{article.0.timestamp}}</time></p>
+      <p>{{article.0.simple_production}}</p>
       <p>
-        <a href='/detail/{{article.Article_id}}'>more&thinsp;detail</a>
+        <a href='/detail/{{article.0.Article_id}}'>more&thinsp;detail</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='tagpos' class='glyphicon glyphicon-tags'></span>&nbsp;&nbsp;{% for tag in article.1 %}<a href="/tags/{{tag}}"><span class="label label-info" style='font-size:12px;'>{{tag}}</span></a>&nbsp;&nbsp;{% endfor %}
       </p>
+      <br>
       <hr style=" height:2px;border:none;border-top:2px;background-color:black;" />
     </div> {% endfor %}
-    <a href='/passwordchange'>change password</a><br><br>
-    <a href='/avatarchange'>change avatar</a>
+    <button href='/passwordchange' class="btn btn-default">change password</button><br><br>
+    <button href='/avatarchange' class="btn btn-default">change avatar</button>
   </div>
   <div class='col-md-2'>
   </div>

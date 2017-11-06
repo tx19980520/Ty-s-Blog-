@@ -5,14 +5,15 @@
   <link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
   <link rel='stylesheet' href='/static/css/log.css'>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/javascript/register.js"></script>
   <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
   div.showimg {
     position: relative;
-    top: 10px;
-    left: 0px;
+    top: -35px;
+    left: 120px;
     width: 25px;
     height: 20px;
   }
@@ -63,59 +64,54 @@
     {% endif %}
     <form action="" method="post" class='text-center main' enctype="multipart/form-data">
       <br>
-      <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>account</font></label>
-        <div class="col-sm-6">
-          <input type='text' id="account" placeholder="输入4个字符以上" name="account" class='form-control' onblur="checknickname()">
+      <div class='form-group'><label class='col-sm-3 control-label'><font size='3px'>account</font></label>
+        <div class="col-sm-9">
+          <input type='text' style="width:200px;" id="account" placeholder="输入4个字符以上" name="account" class='form-control' onfocus="attention()" onblur="checknickname()" data-placement="right" data-content='请输入四个及其以上的汉字、字母和数字' required>
         </div>
       </div>
       <br><br>
-      <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>password</font></label>
-        <div class="col-sm-6">
-          <input type='password' placeholder="Please input password" name="password" class='form-control'>
+      <div class='form-group'><label class='col-sm-3 control-label'><font size='3px'>password</font></label>
+        <div class="col-sm-9">
+          <input type='password' style="width:200px;" placeholder="Please input password" id="password" name="password" class='form-control' onfocus="hintone()" onblur="checkpassowrd()" data-placement="right" data-content='密码中必须包含字母、数字、特称字符，至少8个字符，最多30个字符' required>
         </div>
       </div>
       <br>
       <br>
-      <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>password2</font></label>
-        <div class="col-sm-6">
-          <input type='password' placeholder="Please input password2" name="password2" class='form-control'>
+      <div class='form-group'><label class='col-sm-3 control-label'><font size='3px'>password2</font></label>
+        <div class="col-sm-9">
+          <input type='password' style="width:200px;" placeholder="Please input password2" id="password2" name="password2" class='form-control' onfocus="hinttwo()" onblur="checksame()" data-placement="right" data-content='保证与上面一致' required>
         </div>
       </div>
       <br>
       <br>
-      <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>e-mail</font></label>
-        <div class="col-sm-6">
-          <input type='email' placeholder="Please input e-mail" name="email" class='form-control'>
+      <div class='form-group'><label class='col-sm-3 control-label'><font size='3px'>e-mail</font></label>
+        <div class="col-sm-9">
+          <input type='email' style="width:200px;" placeholder="Please input e-mail" name="email" class='form-control'>
         </div>
       </div>
       <br>
       <br>
-      <div class='form-group'><label class='col-sm-4 control-label'><font size='3px'>phone</font></label>
-        <div class="col-sm-6">
-          <input type='text' placeholder="Please input phone" name="phone" id="phone" class='form-control' onblur="checkPhone()">
+      <div class='form-group'><label class='col-sm-3 control-label'><font size='3px'>phone</font></label>
+        <div class="col-sm-9">
+          <input type='text' style="width:200px;" placeholder="Please input phone" name="phone" id="phone" class='form-control' onfocus="phonehint()" onblur="checkPhone()" data-placement="right" data-content='请输入大陆地区正常11位电话号码' required>
         </div>
       </div>
       <br>
       <br>
-      <div class='form-group'><label class='col-sm-4'><font size='3px'>avatar</font></label>
-        <div class="col-sm-6">
-          <input type='file' onchange='shownew(this)' name="avatar">
+      <div class='form-group'><label class='col-sm-3'><font size='3px'>avatar</font></label>
+        <div class="col-sm-9">
+          <input type='file' onchange='shownew(this)' onfocus="filehint()" onblur="closefilehint()" name="avatar" style="width:100px;" data-placement="right" data-content='图片文件大小不要超过2MB' id="file" required>
           <div class='showimg'>
             <img class='avatarshow img-circle' id='choose' />
           </div>
         </div>
         <br>
         <br>
-        <br>
       </div>
-      <br>
       <br>
       <div class='text-center col-sm-11'>
         <button type='submit' placeholder="Register" value="Register" class='btn btn-default'>Register</button>
       </div>
-      <br>
-      <br>
-      <br>
   </div>
   {% csrf_token %}
   </form>
@@ -124,43 +120,3 @@
 </body>
 
 </html>
-<script type="text/javascript">
-  function shownew(source) {
-    var file = source.files[0];
-    if (window.FileReader) {
-      var fr = new FileReader();
-      fr.onloadend = function(e) {
-        document.getElementById("choose").src = e.target.result;
-      };
-      fr.readAsDataURL(file);
-    }
-  }
-  function checknickname()
-  {
-    var text = document.getElementById("account").value;
-    var len1 = 0;
-    var len2 = 0;
-    for(var i=0;i<text.length;++i)
-    {
-      var c = text.charCodeAt(i);
-      if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f))
-      {
-       len1++;
-      }
-      else{
-        len2++;
-      }
-    }
-    if ((len1+len2)<4 && (len1+len2) != 0)
-    {
-      alert("请输入总共四个字符，可以是汉字、数字或者字母");
-    }
-  }
-  function checkPhone(){
-    var phone = document.getElementById('phone').value;
-    if(!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){
-        alert("手机号码有误，请重填");
-        return false;
-    }
-}
-</script>

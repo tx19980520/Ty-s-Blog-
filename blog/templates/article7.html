@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="icon" sizes="any" mask href="http://www.cqdulux.cn/media/favicon.ico">
+  <link rel='stylesheet' href='/static/css/code.css'>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="/static/javascript/article.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+.nav{
+  position:absolute;
+  top:43px;
+  right:233px;
+}
+.top{
+  position:absolute;
+  top:20px;
+  right:66.3px;
+}
+h1{
+  text-align:center
+}
+.sidebar {
+  position: fixed;
+  padding-left: 10px;
+
+  border-left: solid;
+  border-color: black;
+  border-width: 2px;
+}
+  div.showimg {
+    position: relative;
+    top: -45px;
+    left: 85px;
+    width: 25px;
+    height: 20px;
+  }
+
+  .avatarshow {
+    width: 65px;
+    height: 65px;
+  }
+  .showcover {
+  float: left;
+  width: 200px;
+  height: 150px;
+  margin: 5px;
+}
+  .carousel-inner img {
+    width: 100%;
+  }
+</style>
+<body>
+  <div style="background:url(/static/image/homebg.jpg)">
+    <br>
+    <div>
+      <nav>
+        <div class="row">
+          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+          <div class="top">
+            {% if request.user.is_authenticated %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='#337ab7' size='3px'><b>{{user.username}}</b></font>
+                  <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/logout'>logout</a>
+                  </li>
+                  <li>
+                    <a href='/users'>your imformation</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <div class='showimg'>
+              <img class='avatarshow img-circle' src='{{request.user.profile.avatar.url}}' ,alt='{{request.user.profile.phone}}'>
+            </div>
+            {% else %}
+            <ul class='navbar'>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
+                  <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href='/login?next={{request.path}}'>login</a>
+                  </li>
+                  <li>
+                    <a href='/register'>register</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            {% endif %}
+          </div>
+              <ul class="nav nav-pills">
+                <li><a href="/"><b style='font-size:18px'>Home</b></a></li>
+                <li class='active'><a href="/blog"><b style='font-size:18px'>Blog</b></a></li>
+                <li><a href="https://github.com/tx19980520"><b style='font-size:18px'>GitHub</b></a></li>
+                <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
+                <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
+              </ul>
+            </div>
+          </div>
+      </nav>
+	  <br>
+      <p class='text-center'>
+        <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
+        <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
+      </p>
+      </div>
+    </div>
+  </div>
+    <div class='col-md-1'></div>
+<div class='col-md-8 panel panel-default'>
+  <div class="panel-body">
+    <h1 id="pythoncpp">python和cpp面对对象写法的对比</h1>
+<p>python和cpp都是面对对象的语言，python作为动态语言，在关于地址和引用方面选择了全体引用，但是cpp不是这样，这加大了写cpp的难度，但也显得它非常的精妙。</p>
+<p>对，我自己开始整理这些的时候我本来以为自己只是会个C with class，后来发现class也不会，C也不会。</p>
+<p>我们接下来简单的从成员，函数，类整体两个角度来讲一下这两个语言之间的不一样。</p>
+<h2 id="_1">成员</h2>
+<h3 id="_2">成员的分类</h3>
+<p>python</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">people</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="vm">__slots__</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="s2">&quot;age&quot;</span><span class="err">，</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+  <span class="n">secret</span><span class="o">=</span><span class="s2">&quot;hhh,no!&quot;</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="n">b</span>
+
+    <span class="c1">#关于类似const的方式的实现方法</span>
+<span class="k">class</span> <span class="nc">_const</span><span class="p">:</span>
+  <span class="k">class</span> <span class="nc">ConstError</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span> <span class="k">pass</span>
+  <span class="k">class</span> <span class="nc">ConstCaseError</span><span class="p">(</span><span class="n">ConstError</span><span class="p">):</span> <span class="k">pass</span>
+
+  <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span><span class="c1">#如果之前一定定义过了这个name的量</span>
+          <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ConstError</span><span class="p">(</span><span class="s2">&quot;can&#39;t change const </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span><span class="c1">#抛出错误</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">isupper</span><span class="p">():</span><span class="c1">#一般要求常量都是大写字母，这个看你自己的需求</span>
+          <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ConstCaseError</span><span class="p">(</span><span class="s1">&#39;const name &quot;</span><span class="si">%s</span><span class="s1">&quot; is not all uppercase&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="c1">#如果这个量之前都没用过，那就初始化</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">_const</span><span class="p">()</span><span class="c1">#在这之后你import const就可以使用该类功能了</span>
+<span class="c1">#当然你写在类某个类的里面也ok，不过这样用起来真的爽不爽就仁者见仁智者见智</span>
+</pre></div>
+
+
+<p>首先是成员的定义，这个地方再给各位安利一下<em><strong>slot</strong>_的语法，这很像cpp的变量定义，python的类的成员在什么地方都可以声明，为了这种可添加性，python付出的是更多的空间，她需要给一个具体对象分配一个字典，但如果我们使用了</em>_slots__语法的话，取消在其他地方添加成员的机会，但是大大的减少了一个对象的需要的内存。</p>
+<p>回到python的成员上，定义上就直接写，也不需要定义类型，虽然我想也没多少人会用太多的不同类型的同一个量，变量都可以被改变，当然还是存在公共变量，私有变量和可继承变量的不同。公共变量就正常以字母开头定义，可继承变量以一个下划线开头，被继承之后就在子类里面是私有变量，私有变量不可被继承，并且不刻被访问。当然所有的变量你都可以用函数的形式开端口使用。就我而言，我一直是把init函数当作成员变量定义的地方来使用，没有说在外额外定义成员变量，因为这不好管理，特别是稍微大一点的项目你就得自己专门写个文档来记录，想改个名字还找不到。为了节省空间，我们可以在函数一开始就定义一个变量作为整个类的共有变量。当然，如果在外定义很节约你的内存，嗯嗯。 </p>
+<p>cpp</p>
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">people</span><span class="p">{</span>
+    <span class="k">static</span> <span class="n">home_secret</span><span class="p">;</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">printname</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+        <span class="n">print</span> <span class="n">name</span>
+    <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="k">const</span> <span class="n">string</span> <span class="n">firstname</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+
+
+<p>cpp非常显示的定义了public，private，protected这三个成员的类型，作为一个强类型的语言，其对变量的分类更多，这里从定义域上介绍const和static在类中的应用。注意cpp不需要在函数定义里面定义一个类似于self的形式参数，在类里面定义，直接使用你定义的变量就可以了不需要self.xxx这种调用方式。</p>
+<p>const</p>
+<p>用来修饰变量的时候是告诉编译器这个量只能被初始化，之后就不能再改变了，同样的如果你要用这个值在某个函数里面在这个函数声明要在函数名后面写上const，相当于许可证，也是提醒自己某些量不能再改变其值了。const在python里面的操作方式最好是单独写一个文件里面专门放，或者骚操作用我们在之前讲的定义const类的方式</p>
+<p>static</p>
+<p>static在类中成员定义的主要目的是共用，也是一旦被初始化之后不可变就基本意思就是类似于一个家族，他们的姓都是“刘”，那这样刘对于这个家族的每一个人都适用，没有必要给每个人都定义一个姓，初始化为“刘”，我们就公用一个姓，则我们就用static关键字修饰这个变量的定义，具体的实现是在这个类出现了一个实例了之后就会在内存中某个地方放置这个量，直到所有的该类的对象都不见了。</p>
+<div class="codehilite"><pre><span></span><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">print</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">&quot;count&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">count</span><span class="o">--&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+ <span class="p">}</span>
+ <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+ <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="mi">10</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">print</span><span class="p">();</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;i&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span> 
+</pre></div>
+
+
+<p>当然你定义在具体的函数里面的话，相当于是一个在一个函数里面永生，其被声明并初始化是在该函数第一次被调用的时候，之后你虽然每次都调用了这个函数，但是这个声明和初始化已经不起作用了,运行上面的代码你就会知道我在说什么）。</p>
+<h2 id="_3">函数</h2>
+<p>python</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">people</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">age</span><span class="p">):</span>
+    <span class="k">pass</span>
+  <span class="k">def</span> <span class="nf">example</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+    <span class="k">pass</span>
+  <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<p>python的函数没有函数声明，直接就是函数定义，类里面固定第一位的变量不管是不是交self均是该类的具体的一个对象。python的对象都是继承于object，object这个基层，里面已经定义了很多的默认的函数，我们这个地方需要拿来重写，比如你对运算符重载这个系列的东西（详见），我们再说两个特殊的双杠函数call和str，call这个函数的具体用途是你如果直接使用类名+(self,xxx,xxx)则调用call函数例子如下：</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">abs</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">num</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="o">-</span><span class="n">num</span><span class="p">;</span>
+<span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="mi">123</span><span class="p">)</span>
+</pre></div>
+
+
+<p>这是python把函数和类归为一同的方式，下面我们再讲讲__str__函数，当你想print某个对象的时候，都是调用其背后的str函数（在调用的时候可以就写str）</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">people</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;sds&quot;</span>
+</pre></div>
+
+
+<p>返回的是一个字符串，str(people)也是对people的__str__的调用</p>
+<p>cpp</p>
+<p>cpp要求的是准确，对各个方面都有全面的定义（包括之前提到的const和static，static作为函数的关键字会在这里具体讲）</p>
+<p>首先是返回类型，比较正常的我们就不讲了，我们这里讲一讲返回指针的函数和返回引用的函数</p>
+<p>首先是返回指针的函数，定义的方式很简单，就是在函数名前面加上一个*，代表的具体意义是返回一个地址头，相当于这个函数对某个部分的内存进行了一些操作，然后返回给你，指给你，就这块地方是你想要的，然后你在主程序中或者全局变量的一个对应类型的指针指向这个地方，注意这个地方如果你不是new出来的指针的话，这个内存里的内容会在函数调用完了之后消失，相当于函数告诉了你这地方有，他跑了，你跑去看这啥都没有。</p>
+<div class="codehilite"><pre><span></span><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">char</span><span class="o">*</span> <span class="nf">print</span><span class="p">()</span>
+<span class="p">{</span> 
+    <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="o">=</span> <span class="k">new</span> <span class="kt">char</span> <span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="c1">//c里面可以使用malloc</span>
+    <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;s&#39;</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">str</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">str</span><span class="p">;</span>
+ <span class="p">}</span>
+ <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+ <span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">print</span><span class="p">();</span>
+    <span class="n">cout</span>  <span class="o">&lt;&lt;</span><span class="s">&quot;p is &quot;</span><span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span> 
+</pre></div>
+
+
+<p>返回引用的函数，这个地方的主要用是为了左值，经常用于你选取了一个位置，然后你以引用的形式返回这个位置（主要是能对该位置实际有改动，我觉得体现得最实际的是对[]的重载）权且可以认为加了&amp;就可以对不拷贝进一切地方，直接传的地址头进去，一般能传引用回去的都是在这个函数里面不会消亡的东西。</p>
+<div class="codehilite"><pre><span></span><span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
+<span class="kt">int</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">index</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">index</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="c1">//得到的结果是20</span>
+</pre></div>
+
+
+<p>主要是为了得到左值。</p>
+<p>运算符重载，这个地方主要的主要模式为<code>friend operator xxx()</code>，重载函数都必须写在class内部，但具体的还是有几个地方要注意，一是对于部分的运算符需要使用&amp;（简单记的话你返回*this指针的时候就得加&amp;），其原理是之前讲的部分，比如赋值构造函数，--前缀,++前缀运算符都是需要加&amp;（后缀不需要加）。（你可以把++i想成i += 1，这就和=的重载合二为一了）</p>
+<h2 id="_4">继承</h2>
+<p>python</p>
+<p>python所有类都继承于object，记住如果你继承于一个你写过的类，你要在init里面去添加一句父类的init还有，python3里面的继承是BFS，python2里面的继承是DFS。</p>
+<p>cpp</p>
+<p>继承的基本格式为<code>class A:public B</code>B为其父类，A的构造函数里面要调用B的构造函数，大多数是使用初始化列表来写这部分。</p>
+<p>两者共同的点在于，函数方面你你在子类重构了，子类调用就用子类所重构的，如果子类没有该方法，则调用父类的对应的方法，对象也是这样，发现在子类里面没有定义，则去父类里面找。</p>
+<h2 id="_5">多态</h2>
+<p>python</p>
+<p>可能对python来讲这只能用hasattr()来实现判断，只能自己去构建整个多态的系统，相当于是在每一种子类里面去实现相同的函数。</p>
+<p>cpp</p>
+<p>在父类里面写虚函数，在子类里去具体定义。父类里面声明该函数的时候使用virtual关键字，你可以写一些在每个子类都会做的事情在这个虚函数里面，也可以什么都不做，声明为纯虚函数 需要在函数声明最后加上“= 0 ”</p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% if hascomment %}
+<p><font size="5px;">Comments</font></p>
+{% for com in comments %}
+<p><font>{{forloop.counter}}
+{{com.0.author}} &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default" onclick="reply({{forloop.counter}})">reply</button>
+</p>
+<img src="{{com.1}}" class="avatarshow img-circle" style="position:relative;float:left;">
+<p style="margin-left:75px;"><font size="3x;">{{com.0.content}}</font></p>
+<br>
+<br>
+<time style="float:left;">{{com.0.timestamp}}</time>
+<hr style="height:2px;border:none;border-top:2px;background-color:black;">
+{% endfor %}
+{% endif %}
+<form action="" method='post'>
+{% csrf_token %}
+<div class='form-group'><label><font size='3px'>comment</font></label>
+<textarea type='text' id="editcomment" name='editcomment' onblur="checkcomment()" class='form-control' rows="3" required></textarea><br>
+</div>
+<p class='text-center'>
+  {% if request.user.is_authenticated %}
+  <button type="submit" value="submit" class='btn btn-default'>comment</button>
+  {% else %}
+  <p class="text-center"><font size="3px">If you wanna post,login first!</font></p>
+  {% endif %}
+</p>
+</form></div></div>
+<div class="col-md-3">
+  <aside>
+    <div class="sidebar">
+      <font size='2.5px'>
+          <font size='4px'>Others the author has</font>
+        </p>
+        {% for link in links %}
+        <p>
+          <a href='/detail/{{link.Article_id}}'>
+            {{link.title}}</a>
+        </p>
+        {% endfor %}
+        </font>
+      </font>
+    </div>
+  </aside>
+</div>
+</body>
+</html>

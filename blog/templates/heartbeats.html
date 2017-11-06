@@ -24,7 +24,7 @@
 .top{
   position:absolute;
   top:20px;
-  right:13.3px;
+  right:66.3px;
 }
   div.showimg {
     position: relative;
@@ -111,7 +111,7 @@ text-overflow: ellipsis;
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <font color='white' size='3px'><b>Welcome!&nbsp;&nbsp;guy!</b></font>
-                  <b class="caret"></b></a>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href='/login'>login</a>
@@ -139,15 +139,16 @@ text-overflow: ellipsis;
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
       </div>
-    <div class='col-md-1'></div>
-  <div class='col-md-8'>
+    <div class='col-md-1 col-sm-1 col-xs-1'></div>
+  <div class='col-md-8 col-sm-1 col-xs-8'>
     <div class="panel panel-default">
       <div class="panel-body">
         {% if is_search %}
         <p style='font-size:25px;'>The result of searching <b>{{word}}</b> is :</p><br>{% endif %}{% for post in posts %}
         <div>
+          <h5>{{forloop.counter}}楼</h5>
           <h2>{% for w in post.0.title %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h2>
-          <p>{{post.timestamp}}</p>
+          <p>{{post.0.timestamp}}</p>
           <img class='avatarshow img-circle' src="{{post.1.avatar.url}}">
           <h5>{% for w in post.0.body %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>
           <hr style=" height:2px;border:none;border-top:2px;background-color:black;">
@@ -169,7 +170,7 @@ text-overflow: ellipsis;
         <br>
           <p class="text-center">Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="www.cqdulux.cn">www.cqdulux.cn</a>&nbsp;All Rights Reserved! Powered by Django </p>
   </div>
-  <div class='col-md-3'>
+  <div class='col-md-3 col-sm-3 col-xs-3'>
     <aside>
       <div class="sidebar">
         <p>
