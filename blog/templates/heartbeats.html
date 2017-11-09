@@ -157,9 +157,9 @@ text-overflow: ellipsis;
         </div>
         <form action="" method='post' enctype="multipart/form-data">
           {% csrf_token %}
-          <font size='5px'>title:</font>
+          <font size='3px'><span class="glyphicon glyphicon-subtitles" style="color: rgb(0, 0, 0);"> title</span></font>
           <input type='text' name="title" class='form-control' style='width:200px;'><br><br>
-          <font size='5px'>Body:</font>
+          <font size='3px'><span class="glyphicon glyphicon-pencil" style="color: rgb(0, 0, 0);"> body</span></font>
           <textarea placeholder="Write your thoughts here!" class="form-control" name="body"></textarea>
           <p class='text-center'>
             <br>
@@ -176,7 +176,7 @@ text-overflow: ellipsis;
         <p>
           <form name='search' action='' method='post'>
             {% csrf_token %}
-            <font size='5px'>Search</font><input type='text' class='form-control' name="search" style='width=100px;'>
+            <font size='5px'>Search</font><input type='text' class='form-control' name="search" style='width:200px;'>
             <br>
             <button type="submit" class='btn btn-default'>Search</button>
             <br>

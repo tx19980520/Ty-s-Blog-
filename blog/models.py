@@ -11,6 +11,8 @@ class BlogPost(models.Model):
     timestamp = models.DateTimeField()
     def __str__(self):
         return self.title#now we choose the way from web, but I think the way book had is more beautiful
+    class Meta:
+        ordering = ['-timestamp']
 class Article(models.Model):
     cover = models.ImageField(upload_to='article_cover',default='/article_cover/mo/normal.jpg')
     timestamp = models.DateTimeField(default=datetime.datetime.now())
@@ -20,8 +22,11 @@ class Article(models.Model):
     Article_id = models.IntegerField()
     markdown = models.FileField(upload_to='article_markdown')
     tags = models.CharField(max_length=30,default='')
+    click = models.IntegerField(default=0)
     def __str__(self):
         return self.title
+    class Meta:
+        ordering = ['-timestamp']
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -39,3 +44,5 @@ class Comment(models.Model):
     content = models.TextField(default='hi~')
     def __str__(self):
         return self.author+"   "
+        class Meta:
+            ordering = ['floor']

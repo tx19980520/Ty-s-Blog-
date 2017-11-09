@@ -99,7 +99,7 @@ h1{
                     <a href='/logout'>logout</a>
                   </li>
                   <li>
-                    <a href='/users'>your imformation</a>
+                    <a href='/users?username={{request.user.username}}'>your imformation</a>
                   </li>
                 </ul>
               </li>
@@ -236,7 +236,7 @@ def heartbeats(request):
             bp.author= request.user.username
             bp.timestamp = datetime.now()
             bp.save()
-            posts = BlogPost.objects.all();
+            posts = BlogPost.objects.all()
             posts = list(posts)
             relation_people=[]
             for post in posts:
@@ -273,11 +273,11 @@ def blog(request):
                 page = request.GET.get('page')
                 try:
                     find = paginator.page(page)
-                    topics = find#Article.objects.all()[(int(page)-1)*3:int(page)*3]
+                    topics = find
                     ta =[]
                     for post in topics:
-                        str = post.tags.split(" ")
-                        ta.append(str)
+                        strs = post.tags.split(" ")
+                        ta.append(strs)
                     topics = zip(topics,ta)
                     links = Article.objects.all()[:5]
                 except PageNotAnInteger:
@@ -286,16 +286,16 @@ def blog(request):
                         topics = find[0:5]
                         ta =[]
                         for post in topics:
-                            str = post.tags.split(" ")
-                            ta.append(str)
+                            strs = post.tags.split(" ")
+                            ta.append(strs)
                         topics = zip(topics,ta)
                         links = Article.objects.all()[:5]
                     else:
                         topics = find
                         ta =[]
                         for post in topics:
-                            str = post.tags.split(" ")
-                            ta.append(str)
+                            strs = post.tags.split(" ")
+                            ta.append(strs)
                         topics = zip(topics,ta)
                         links = Article.objects.all()
                 except EmptyPage:
@@ -303,8 +303,8 @@ def blog(request):
                     topics = find
                     ta =[]
                     for post in topics:
-                        str = post.tags.split(" ")
-                        ta.append(str)
+                        strs = post.tags.split(" ")
+                        ta.append(strs)
                     topics = zip(topics,ta)
                     links = Article.objects.all()
                 return render(request,'blog.html',{'posts':find,'topic':topics,'links':links,'word':word,'isfind':isfind,"istag":istag})
@@ -473,9 +473,12 @@ def showdetail(request,num):
     if request.method=='GET':
         hascomment = True
         url = 'article'+str(num)+'.html'
-        tauthor = Article.objects.get(Article_id=num).author
+        at = Article.objects.get(Article_id=num)
+        at.click = at.click+1
+        at.save()
+        tauthor = at.author
         links = Article.objects.filter(author=tauthor)
-        comments=Comment.objects.filter(witharticle=num).order_by('floor')
+        comments=Comment.objects.filter(witharticle=num)
         comments = list(comments)
         if len(comments)>=1:
             hascomment = True
@@ -500,7 +503,7 @@ def showdetail(request,num):
             getfloor = Comment.objects.filter(witharticle=num).count()+1
             Comment.objects.create(witharticle=num,content=request.POST.get('editcomment'),floor=getfloor,father=father,author=request.user.username)
         url = 'article'+str(num)+'.html'
-        comments=Comment.objects.filter(witharticle=num).order_by('floor')
+        comments=Comment.objects.filter(witharticle=num)
         comments = list(comments)
         avatars=[]
         for c in comments:
@@ -513,9 +516,12 @@ def showdetail(request,num):
         return render(request,url,{"comments":comments,"hascomment":hascomment,"links":links})
 def users(request):
     if request.method == 'GET':
+        username = request.GET.get("username")
         try:
             t=[]
-            myarticles=Article.objects.filter(author=request.user.username).order_by("timestamp")
+            u = User.objects.get(username = username)
+            p = Profile.objects.get(user = u)
+            myarticles=Article.objects.filter(author=username)
             myarticles = list(myarticles)
             for a in myarticles:
                 strs = a.tags.split(" ")
@@ -523,7 +529,7 @@ def users(request):
             myarticles = zip(myarticles,t)
         except ObjectDoesNotExist:
             myarticles = []
-        return render(request,'users.html',{'myarticles':myarticles})
+        return render(request,'users.html',{'myarticles':myarticles,"u":p})
 def passwordchange(request):
     if request.method=='GET':
         return render(request,'password.html')

@@ -4,8 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     Ty's Blog!
   </title>
   <!-- Bootstrap -->
@@ -80,11 +79,10 @@
 </style>
 
 <body>
-  <div style="background:url(/static/image/homebg.jpg)">
+    <div class="row">
+    <div style="background:url(/static/image/homebg.jpg)">
     <br>
-    <div>
       <nav>
-        <div class="row">
           <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
           <div class="top">
@@ -99,7 +97,7 @@
                     <a href='/logout'>logout</a>
                   </li>
                   <li>
-                    <a href='/users'>your imformation</a>
+                    <a href='/users?username={{request.user.username}}'>your imformation</a>
                   </li>
                 </ul>
               </li>
@@ -132,19 +130,15 @@
                 <li><a href="/about"><b style='font-size:18px'>About</b></a></li>
                 <li><a href='/heartbeats'><b style='font-size:18px'>Heart Beats</b></a></li>
               </ul>
-            </div>
-          </div>
       </nav>
       <p class='text-center' style="position:relative;left:8.3px;">
         <br>
         <label class='text-center'><font color='white' size='4px'>For more Technology</font></label><br>
         <label class="text-center"><font color='white' size='4px'>Technical otaku save the world</font></label>
       </p>
-      </div>
     </div>
-  </div>
-    <div class='col-md-1'></div>
-    <div class='col-md-8'>
+    <div class='col-md-1 col-lg-1'></div>
+    <div class='col-md-8 col-lg-8 col-xs-12'>
       <div class="panel panel-default">
       {% if posts.number is 1 %}
       <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -177,37 +171,38 @@
           <a href='/detail/{{post.0.Article_id}}'><img class='showcover' id='mycover'src={{post.0.cover.url}} onmouseover='thick(this)' onmouseout="thin(this)"></a>
           <div class='showword'>
             {% if not istag %}
-            <a href='/detail/{{post.0.Article_id}}'><h2>{% for w in post.0.title %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h2></a>
-            <h5>{% for w in post.0.author %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>
+            <h2><a href='/detail/{{post.0.Article_id}}'>{% for w in post.0.title %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</a></h2>
+            <h5><a href="/users?username={{post.0.author}}">{% for w in post.0.author %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</a></h5>
             <p><time datetime='{{post.0.timestamp}}'>{{post.0.timestamp}}</time></p>
             <h5>{% for w in post.0.simple_production %}{% if w in word %}<font color="red">{{w}}</font>{% else %}{{w}}{% endif %}{% endfor %}</h5>{% else %}<h2>{{post.0.title}}</h2>
-            <h5>{{post.0.author}}</h5>
             <p><time datetime='{{post.0.timestamp}}'>{{post.0.timestamp}}</time></p>
             <h5>{{post.0.simple_production}}</h5>
             {% endif %}
             <p>
               <a href='/detail/{{post.0.Article_id}}'>more&thinsp;detail</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='tagpos' class='glyphicon glyphicon-tags'></span>&nbsp;&nbsp;{% for tag in post.1 %}<a href="/tags/{{tag}}"><span class="label label-info" style='font-size:12px;'>{{tag}}</span></a>&nbsp;&nbsp;{% endfor %}
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-comment" style="color: rgb(0, 0, 0);">&nbsp;{{post.0.click}}</span>
             </p>
           </div>
           <hr style=" height:2px;border:none;border-top:2px;background-color:black;" />
         </div> {% endfor %}
         <form action="blog/" method='post' enctype="multipart/form-data">
           {% csrf_token %}
-          <div class='form-group'><label><font size='3px'>titile</font></label>
+          <div class='form-group'><label><font size='3px'><span class="glyphicon glyphicon-subtitles" style="color: rgb(0, 0, 0);"> title</span></font></label>
             <input type='text' name="title" class='form-control' style='width:200px;' required><br>
           </div>
-          <div class="form-group"><label><font size='3px'>simple_production</font></label><br>
+          <div class="form-group"><label><font size='3px'><span class="glyphicon glyphicon-edit" style="color: rgb(0, 0, 0);"> simple production</span></font></label><br>
             <textarea class="form-control" rows="3" name='simple_production' required></textarea><br>
           </div>
-          <div class="form-group"><label><font size='3px'>tags</font></label><br>
+          <div class="form-group"><label><font size='3px'><span class="glyphicon glyphicon-tags" style="color: rgb(0, 0, 0);"> Tags</span></font></label><br>
               <input type='text' name="tags" id="tags" class='form-control' style='width:200px;' onblur='add(this)' onfocus="tagshint()" data-placement="right" data-content='两个标签之间用空格间隔' required><br>
               <p id='tags'></p>
             </div>
           </div>
-          <div class='form-group'><label><font size='3px'>markdown</font></label><br>
+          <div class='form-group'><label><font size='3px'><span class="glyphicon glyphicon-book" style="color: rgb(0, 0, 0);"> markdown</span></font></label><br>
             <input type='file' id='markdown' style="width:100px;"name="markdown" onchange='checkmd(this)' onfocus="mdhint()"style="width=100px;"  data-placement="right" data-content='文件应小于5MB,本地名为英文' required>
           </div>
-          <div class='form-group'><label><font size='3px'>cover</font></label><br>
+          <br>
+          <div class='form-group'><label><font size='3px'><span class="glyphicon glyphicon-picture" style="color: rgb(0, 0, 0); "> avatar</span></font></label><br>
             <input type='file' name='cover' onchange='shownew(this)' onfocus="filehint()" id="coverinput" style="width:100px;" data-placement="right" data-content='文件应小于2MB,本地名为英文' required>
             <img class='preshow' id="cover" style="position:relative;left:-330px;">
           </div>
@@ -231,11 +226,11 @@
   <ul class='pager'>
     {% if posts.has_previous %}
     <li class='previous'>
-      <a href="?page={{ posts.previous_page_number }}">Previous</a> {% endif %}
+      <a href="?page={{ posts.previous_page_number }}"><span class="glyphicon glyphicon-backward" style="color: rgb(0, 0, 0);"> Previous</span></a> {% endif %}
     </li>
     {% if posts.has_next %}
     <li class='next'>
-      <a href="?page={{ posts.next_page_number }}">Next</a>
+      <a href="?page={{ posts.next_page_number }}"><span class="glyphicon glyphicon-forward" style="color: rgb(0, 0, 0);"> Next</span></a>
     </li>
 {% endif %}
   </ul>
@@ -243,7 +238,7 @@
   <br>
     <p class="text-center">Copyright&nbsp;&#169;&nbsp;2017&nbsp;<a href="www.cqdulux.cn">www.cqdulux.cn</a>&nbsp;All Rights Reserved! Powered by Django </p>
   </div>
-    <div class='col-md-3'>
+    <div class='col-md-3 col-lg-3 col-xs-3'>
       <aside>
         <div class="sidebar">
           <font size='2.5px'>
@@ -251,10 +246,15 @@
             <p>
               <form name='search' action='' method='post'>
                 {% csrf_token %}
-                <font size='5px'>Search</font><input type='text' class='form-control' name="search" style='width=50px;'>
+                <font size='5px'><span class="glyphicon glyphicon-search" style="color: rgb(0, 0, 0); font-size: 14px;"> Search</span></font>
                 <br>
-                <button type="submit" class='btn btn-default'>Search</button>
                 <br>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">search</button>
+                    </span>
+                </div>
               </form>
             </p>
             <p>
@@ -295,5 +295,6 @@
         </div>
       </aside>
     </div>
+  </div>
 </body>
 </html>
