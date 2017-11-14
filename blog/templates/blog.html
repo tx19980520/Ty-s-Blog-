@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+  <title>
     Ty's Blog!
   </title>
   <!-- Bootstrap -->
@@ -79,12 +80,13 @@
 </style>
 
 <body>
-    <div class="row">
     <div style="background:url(/static/image/homebg.jpg)">
     <br>
       <nav>
-          <font color='white' size='7px'>&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div style="position:relative; right:-4px;">
+          <font color='white' size='7px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Xiao Tan</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <font color='white' size='4px'>Practice curves is always <b>e<sup>x</sup></b></font>
+        </div>
           <div class="top">
             {% if request.user.is_authenticated %}
             <ul class='navbar'>
@@ -190,16 +192,16 @@
           <div class='form-group'><label><font size='3px'><span class="glyphicon glyphicon-subtitles" style="color: rgb(0, 0, 0);"> title</span></font></label>
             <input type='text' name="title" class='form-control' style='width:200px;' required><br>
           </div>
-          <div class="form-group"><label><font size='3px'><span class="glyphicon glyphicon-edit" style="color: rgb(0, 0, 0);"> simple production</span></font></label><br>
+          <div class="form-group"><label><font size='3px'><span class="glyphicon glyphicon-edit" style="color: rgb(0, 0, 0);"> simple introduction</span></font></label><br>
             <textarea class="form-control" rows="3" name='simple_production' required></textarea><br>
           </div>
           <div class="form-group"><label><font size='3px'><span class="glyphicon glyphicon-tags" style="color: rgb(0, 0, 0);"> Tags</span></font></label><br>
-              <input type='text' name="tags" id="tags" class='form-control' style='width:200px;' onblur='add(this)' onfocus="tagshint()" data-placement="right" data-content='两个标签之间用空格间隔' required><br>
-              <p id='tags'></p>
+              <input type='text' name="tags" id="tags" class='form-control' style='width:200px;' onchange='add(this)' onfocus="tagshint()" data-placement="right" data-content='两个标签之间用空格间隔' required><br>
+              <p id='tagshow'></p>
             </div>
           </div>
           <div class='form-group'><label><font size='3px'><span class="glyphicon glyphicon-book" style="color: rgb(0, 0, 0);"> markdown</span></font></label><br>
-            <input type='file' id='markdown' style="width:100px;"name="markdown" onchange='checkmd(this)' onfocus="mdhint()"style="width=100px;"  data-placement="right" data-content='文件应小于5MB,本地名为英文' required>
+            <input type='file' id='markdown' style="width:100px;" name="markdown" onchange='checkmd(this)' onfocus="mdhint()" style="width=100px;"  data-placement="right" data-content='文件应小于5MB,本地名为英文' required>
           </div>
           <br>
           <div class='form-group'><label><font size='3px'><span class="glyphicon glyphicon-picture" style="color: rgb(0, 0, 0); "> avatar</span></font></label><br>
@@ -295,6 +297,5 @@
         </div>
       </aside>
     </div>
-  </div>
 </body>
 </html>

@@ -182,7 +182,7 @@ tail='''
   {% endif %}
 </p>
 </form>
-{% endif %}</div></div>
+</div></div>
 <div class="col-md-3">
   <aside>
     <div class="sidebar">
